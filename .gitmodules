@@ -1,3 +1,6 @@
-[submodule "src/external/logging"]
-	path = src/external/logging
-	url = https://github.com/rxi/log.c.git
+[submodule "deps/unity"]
+	path = deps/unity
+	url = https://github.com/ThrowTheSwitch/Unity
+[submodule "deps/log.c"]
+	path = deps/log.c
+	url = https://github.com/rxi/log.c

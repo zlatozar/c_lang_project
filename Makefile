@@ -34,17 +34,17 @@ VALGRINDX=
 endif
 
 ifeq ($(VALGRINDX),yes)
-VALGRINDX=valgrind --leak-check=full --show-leak-kinds=all --suppressions=./valgrind.supp 
-endif     
+VALGRINDX=valgrind --leak-check=full --show-leak-kinds=all --suppressions=./valgrind.supp
+endif
 
 # -------------------------------------
 # Sources
 # -------------------------------------
 
-SRCFILES = 
+SRCFILES =
 
-CTESTS   = 
-TESTFILES= # main-tests.c	$(CTESTS)				 
+CTESTS   =
+TESTFILES= # main-tests.c	$(CTESTS)
 
 # -------------------------------------
 # Main targets
@@ -79,7 +79,11 @@ bench: init staticlib benchmain
 # other targets
 # -------------------------------------
 
-docs: 
+sync_submodules:
+	@git submodule init
+	@git submodule update
+
+docs:
 
 clean:
 	rm -rf $(CONFIGDIR)/*/*
@@ -101,7 +105,7 @@ help:
 	@echo "Targets:"
 	@echo "  main        : Build a static library (default)"
 	@echo "  tests       : Run tests"
-	@echo "  bench       : Run benchmarks, use 'VARIANT=release'"	
+	@echo "  bench       : Run benchmarks, use 'VARIANT=release'"
 	@echo "  clean       : Clean output directory"
 	@echo "  depend      : Generate dependencies"
 	@echo ""

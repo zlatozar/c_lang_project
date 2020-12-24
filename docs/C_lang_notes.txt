@@ -205,8 +205,8 @@
       statement in a header file todeclare a type for other parts of the
       program, and hide the definition of that type.
 
-[TIP] Having a long ​main ​function indicates a lack of abstraction, meaning that
-      your code has notbeen sufficiently split into logical, smaller functions.
+[TIP] Having a long ​main​ function indicates a lack of abstraction, meaning that
+      your code has not been sufficiently split into logical, smaller functions.
 
 [TIP]           int a[10][20];
                 int *b[10];     // lazy initialization
@@ -649,3 +649,49 @@
        must be an int). For example, to print at most max characters from a
        string s:
              printf("%.*s", max, s);
+
+[TIP] In C every unit test contains various "main methods" - push
+      different input and checks if result is correct.
+
+[TIP] Functions that return something that could be interpreted as length
+      should return size_t.
+
+[TIP] If you delete something from a data structure then do not forget to
+      call free()!
+
+[TIP] struct should include typedef to remove the need to include "struct"
+      keyword through the code.
+
+[TIP] typedefs that "hide" complex function pointers should have suffix '_fn'.
+
+[TIP] Forward declaration is a declaration preceeding an actual definition,
+      usually for the purpose of being able to reference the declared type
+      when the definition is not available. Such type is called incomplete,
+      and there are a number of restrictions on its usage. This can be useful
+      e.g. to break circular dependencies, or cut down the compilation time.
+      For example:
+           truct X;               // forward declaration
+           void f(struct X*) { }  // usage of the declared, undefined structure
+        // void f(struct X) { }         // ILLEGAL
+        // struct X x;                  // ILLEGAL
+        // int n = sizeof(struct X);    // ILLEGAL
+        // Later, or somewhere else altogether
+           struct X { /* ... */ };
+
+[TIP] To read complex declarations, go to the right from the variable name as
+      long as you can - that is, until you run into a semicolon or a closing
+      right parenthesis. When you reach one of these stops, start going left
+      until you reach an opening left parenthesis (or the basic type, in which
+      case you're done). Each time you see a new modifier (either going right or
+      left), attach it to the end of the current declaration sentence.
+             int **x[5][2];
+      x is an array[5] of array[2] of pointer to pointer to int
+
+[TIP] setjmp instantiates exception handler(stop and check), longjmp raises an
+      exception and jmp_buff represents exception stack. That's why:
+              if (setjmp(jmp_buf) == 0) { <handle exception> }
+      setjmp do kind of 'ping-pong'. Stops and transfer control to the longjmp -
+      first return, second return is the result of longjmp return(it's second
+      paramenter). If longjmp(jmp_buf, 1) we have to process exception.
+
+[TIP] Use NDEBUG to disable assert().

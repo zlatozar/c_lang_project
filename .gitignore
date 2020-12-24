@@ -5,6 +5,10 @@
 \#*\#
 .\#*
 
+# Command line
+*.bak
+*.tmp
+
 # Prerequisites
 *.d
 
@@ -54,7 +58,9 @@
 *.cmd
 .tmp_versions/
 
+# Others
+build/
 modules.order
 Module.symvers
-Mkfile.old
+Makefile.old
 dkms.conf
