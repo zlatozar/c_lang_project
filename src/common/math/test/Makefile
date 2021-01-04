@@ -1,5 +1,5 @@
 ## Project Root
-DEPS_ROOT = ../../../../../deps
+DEPS_ROOT = ../../../../deps
 
 # Should contains 'unity.h' and 'unity_internals.h'
 UNITY_H   = $(DEPS_ROOT)/builds/unity/include
@@ -23,7 +23,7 @@ IGNORED = `grep -s IGNORE $(BUILD_RES)*.tmp`
 
 .PHONY: test
 test: $(BUILD) $(BUILD_OBJ) $(BUILD_RES) $(test_results)
-	@echo -e "\nFAILURED:\n--------------------------------------------------"
+	@echo -e "\nFAILED:\n--------------------------------------------------"
 	@echo "$(FAILED)"
 	@echo -e "\nPassed:\n--------------------------------------------------"
 	@echo "$(PASSED)"

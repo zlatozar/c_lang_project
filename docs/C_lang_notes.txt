@@ -2,7 +2,7 @@
 
 [STYLE] Struct names and typedef's in camelcase: GtkWidget, TrackingOrder.
 
-[STYLE] Functions that operate on structs: gtk_widget_show(), tracking_order_process().
+[STYLE] Functions that operate on structs: GtkWidget_show(), TrackingOrder_process().
 
 [TIP] Don't use global variables. They are evil.
 
@@ -19,8 +19,8 @@
 
 [LANG] External and static variables are initialized to zero by default.
 
-[STYLE] Use 'const' to show that you are not going to change value, especially
-        in functions parameters: int strlen(const char[])
+[STYLE] Use 'const' to show that you are not going to change value passed by
+        reference, especially in functions parameters: int strlen(const char[])
 
 [LANG] Precedence of '&&' is higher than that of '||'.
 
@@ -28,6 +28,7 @@
       in 'char' variables.
 
 [LANG] Logical operations in C are 0 or 1. '!' operator inverts them.
+       Everything that is not 0/NULL is true: assert(!"Impossible")
 
 [LANG] 'floats' are not automatically converted to 'double'.
 
@@ -36,7 +37,7 @@
 [LANG] x = f() + g() C do not define which function will be evaluated first.
        It is the same for function arguments.
 
-[LANG] Non-zero means true.
+[LANG] Non-zero means true: assert("Pass")
 
 [STYLE] When there is no initialization and re-initialization prefer 'while'.
 
@@ -44,12 +45,12 @@
         chance of unwanted interactions is minimized and the pieces may even
         be useful in other programs.
 
-[TIP] Always limit C programs input with upper bound.
+[TIP] Always limit C programs input with upper bounds.
 
 [TIP] C programs are flat so functions are visible to any part of the entire
       program. Make functions kind of private as declare them 'static'
 
-[TIP] Stick to onion architecture - layer can "see" only first below it.
+[STYLE] Stick to onion architecture - layer can "see" only first below it.
 
 [TIP] The structure of the project is very important - it explains the
       visibility. Do not make tricks with compilation order and keep it
@@ -78,32 +79,32 @@
           ...
       }
 
-[STYLE] Use #include "foo.h" for your modules and #include <..> for external.
+[STYLE] Use #include "foo.h" for your modules and #include <..> for standard.
 
-[TIP] Prefer this type of declaration int *i;
-      Is a mnemonic - what i points to has type int.
+[TIP] Prefer this type of declaration int *p_value;
+      Is a mnemonic - what p_value points to has type int.
 
 [STYLE] The single most important rule when writing code is this: check the
         surrounding code and try to imitate it. As a maintainer it is dismaying
         to receive a patch that is obviously in a different coding style to the
         surrounding code. This is disrespectful, like someone tromping into a
-        spotlessly-clean house with muddy shoes. So, whatever this document
-        recommends, if there is already written code and you are patching it,
-        keep its current style consistent even if it is not your favorite style.
+        spotlessly-clean house with muddy shoes. If there is already written
+        code and you are patching it, keep its current style consistent even if
+        it is not your favorite style.
 
-[LANG]    (*ip)++  // to increment value that ip points to
+[LANG]    (*p_value)++  // to increment value that p_value points to
        The parentheses are necessary; without them, the expression would
-       increment 'ip' instead of what it points to, because unary operators
+       increment 'p_value' instead of what it points to, because unary operators
        like * and ++ associate right to left.
 
 [LANG] In some cases it is better to look at &x as anonymous pointer rather
-       than address of x. Example: void swap(&x, &y) or int* ip; ip = &a[0];
+       than address of x. Example: void swap(&x, &y) or int *ip; ip = &a[0];
 
 [TIP] It is common for functions to use passed pointer as "wire" to set
       values as function side-effect.
 
 [LANG] &a[i] and a+i are identical: a+i is the address of the i-th element
-       beyond a. a[i] C language converts it to *(a + i) - pointer and offset
+       beyond a. a[i] C language converts it to *(a + i) - pointer and offset.
 
 [LANG] char s[]; and char *s; are equivalent. Prefer latter. When an array name
        is passed to a function, the function can at its convenience believe
@@ -120,7 +121,7 @@
 
 [LANG] The main reason for using float is to save storage in large arrays.
 
-[LANG] The input or output, regardless of where it originates ore where it goes to,
+[LANG] The input or output, regardless of where it originates or where it goes to,
        is dealt with as stream of characters.
 
 [LANG] In C, any assignment, is an expression and returns a value, which is the
@@ -129,8 +130,7 @@
        string. At the end assignment will return '\0' (same as 0) and the cycle
        will exit.
 
-[TIP] Programs should act intelligently when given zero-length input or to
-      defend itself with assert()
+[TIP] Programs should act intelligently when given zero-length input.
 
 [LANG] By definition, chars are just small integers, so char variables and
        constants are identical to ints in arithmetic expressions.
@@ -138,11 +138,8 @@
 [TIP] Prefer small functions. With properly designed functions, it is possible
       to ignore how a job is done; knowing what is done is sufficient.
 
-[TIP] C language is like a Latin - gives you the base everything else are rules,
+[TIP] C language is like a Latin - gives you the base, everything else are rules,
       conventions, project structure, autotools magic and proper macros.
-
-[LANG] Function definitions can appear in any order, and in one source file or
-       several, although no function can be split between files.
 
 [LANG] Since main is a function like any other, it may return a value to its
        caller, which is in effect the environment in which the program was
@@ -154,7 +151,7 @@
 
 [LANG] "Definition" refers to the place where the variable is created or
        assigned storage; "declaration" refers to places where the nature of the
-       variable is stated but no storage is allocated.
+       variable is stated but no storage is allocated usually in header files.
 
 [LANG] The first name in an enum has value 0, the next 1, and so on, unless
        explicit values are specified.
@@ -197,12 +194,15 @@
       changeable steps in a workflow with functions. During testing you can
       pass fake/mocked one.
 
+[TIP] Dependencies injection could be reached using - 'Dependency rejection' and
+      'Dependency parameterization'
+
 [TIP] Header files are sometimes also an appropriate location for ​struct​
-      definitions. If other parts ofthe program will make direct use of the
-      ​struct​ fields, then the definition of that ​structnecessarily must appear
+      definitions. If other parts of the program will make direct use of the
+      ​struct​ fields, then the definition of that ​struct necessarily must appear
       in the header file. If that is not the case, it is better to hide the
       ​struct definition in a .​c​ file. A common practice is to use a ​typedef​
-      statement in a header file todeclare a type for other parts of the
+      statement in a header file to declare a type for other parts of the
       program, and hide the definition of that type.
 
 [TIP] Having a long ​main​ function indicates a lack of abstraction, meaning that
@@ -234,7 +234,7 @@
       or model. Using it you can easily find out its parts or save at particular
       place. Using it the memory becomes a city with documented infrastructure.
 
-[TIP] Glue C program during compilation through include/header_file.h.
+[TIP] Glue C program during compilation through include/module/header_file.h.
 
 [TIP] If you constantly ask for a particular field in a struct automate access
       with a macro e.g. #define OFFSET(s) (((struct symtab *) s) -> s_offset)
@@ -244,13 +244,15 @@
 [TIP] Start writing program(or it's fragments) as first define 'in structures'
       and 'out structures' then concentrate on actions.
 
-[LANG] Struct declaration defines as a type.
+[LANG] Struct declaration defines as a type (using typedef)
 
 [LANG] A structure declaration that is not followed by a list of variables
        reserves no storage; it merely describes a template or the shape of a
        structure.
 
-[LANG] Structures may not be compared.
+[LANG] Structures may not be compared. C provides no language facilities to do
+       this - you have to do it yourself and compare each structure member by
+       member.
 
 [LANG] The only legal operations on a structure are copying it or assigning to
        it as a unit, taking its address with &, and accessing its members. Copy
@@ -264,7 +266,7 @@
 [TIP] If a large structure is to be passed to a function, it is generally more
       efficient to pass a pointer than to copy the whole structure.
 
-[TIP] Always use '->' to access structure fields.
+[STYLE] Always use '->' to access structure fields.
 
 [LANG] Note that the typedef name doesn't become visible until the end of the
        declaration. If the structure contains a pointer to itself, you have use the
@@ -310,7 +312,7 @@
        write:
             struct foo;
             void doit(struct foo *ptr);
-       without having to have access to the definition.
+       without having to have access to the definition use just the name.
 
 [LANG] The following code creates an anonymous struct with the alias MyStruct:
             typedef struct {
@@ -345,7 +347,7 @@
             and what I/O needs to be done (without actually doing it). Then you
             can interpret the DSL differently in real and test mode.
           - Use pipelines for each workflow. Write a "Lego blocks" that could be
-            combined in various ways.
+            combined in various ways - Dependency rejection
           - During development plan not only production but also and testing
             workflow.
 
@@ -371,7 +373,7 @@
 
 [TIP] When calculate space to save a new string do not forget to include in
       calculation '\0':
-           (char *) malloc(strlen(s) + 1); // +1 for '\0'
+           (char *) malloc(strlen(s) + 1);  // +1 for '\0'
 
 [TIP] When write a function that do some operation on a structure always as
       first argument pass the structure:
@@ -391,8 +393,8 @@
           ....
           root = addtreex(root, word, num, &found);
 
-[TIP]      do { ... } while(0);
-      idiom ensures that the code acts like a statement - function call;
+[TRACK]        do { ... } while(0);
+        idiom ensures that the code acts like a statement - function call;
 
 [TIP] The reading time for programs is much more than the writing time.
       Make reading easy to do.
@@ -481,7 +483,8 @@
       yours.
 
 [TIP] Isolate input and output in modules specialized for that purpose. Do not
-      make them side effects of modules that do other tasks.
+      make them side effects of modules that do other tasks. They should be
+      at the beginning and at the end of your program logic.
 
 [TIP] Above all elsef clarity. Don't be afraid to violate any general principle
       for the sake of clarity.
@@ -490,7 +493,8 @@
         program contains no global variables, one knows that each function
         manipulates only the data that is passed in the form of parameters.
 
-[STYLE] Use abstract data types (ADT).
+[STYLE] Use abstract data types (ADT) - define types and possible operations
+        on them.
 
 [TIP] Write generic/polymorphic functions. Although they often take slightly
       longer to write, they are far more likely to be reusable. This way, a "tool
@@ -506,9 +510,9 @@
 [STYLE] Avoid explicit literals. Explicit literals (character, numeric, and string
         values) make programs hard to modify. Use #define'd symbolic names instead.
 
-[STYLE] C provides great freedom. Use it responsibly. Avoid side effects in logical
-        tests. Avoid being overly compact at the expense of clarity. Avoid
-        following the "convention" of using truncated cryptic names.
+[STYLE] C provides great freedom. Use it responsibly. Avoid side effects in
+        logical tests. Avoid being overly compact at the expense of clarity.
+        Avoid following the "convention" of using truncated cryptic names.
 
 [TIP] Think twice before optimizing. Programming time is a precious resource.
       First consider using a different algorithm altogether. If the program must
@@ -542,7 +546,7 @@
 [STYLE] Don’t use macros to create your own personal programming language.
 
 [STYLE] Don’t put closing braces more than one screen away from the matching
-       opening brace.
+        opening brace.
 
 [TIP] Do not use global variables instead pass a pointer to local variable
       to the next function e.g. root = addtreex(root, word, num, &found);
@@ -557,7 +561,7 @@
                  node *front;
                  node *rear;
              } queue;
-             *define FRONT(Q) ((Q)->front)
+             #define FRONT(Q) ((Q)->front)
              #define REAR(Q)  ((Q)->rear)
 
 [TIP] Do not forget to use strdup(s) when store string e.g.
@@ -584,6 +588,8 @@
       doing this is to make a structure containing two fields: the union and a "type"
       field to specify which union member is currently stored.
 
+[LANG] Unions are sum types, structures are product types.
+
 [LANG] The same place regardless of its type this is the purpose of a union -
        a single variable that can legitimately hold any one of several types.
 
@@ -606,14 +612,14 @@
               case INTS:    // s->s_ints
               case DOUBLE:  // s->s_double
 
-[TIP] Unions allow data members which are mutually exclusive to share the same memory.
-      Following union will take up the space of a single int, rather than 3
-      separate int values:
-           union {
-               int a;
-               int b;
-               int c;
-           } u;
+[LANG] Unions allow data members which are mutually exclusive to share the same memory.
+       Following union will take up the space of a single int, rather than 3
+       separate int values:
+            union {
+                int a;
+                int b;
+                int c;
+            } u;
 
 [TIP] Mask usage example:
           enum { KEYWORD=01, EXTERNAL=02, STATIC=04 };
@@ -636,9 +642,8 @@
 [TIP] Two goals in developing functions are to make the interfaces as clean as
       possible and to make the source code as readable as possible.
 
-[TIP] Thinks of the types as kind of shaped piece of memory that could be
-      chained (pointers as signpost). Path in this maze will give you program
-      logic and direct access is vie pointers.
+[TIP] Think of the C types as kind of shaped piece of memory that is labeled.
+      With them memory became mapped.
 
 [LANG] It would be more correct to say that stdin, stdout, and stderr are "I/O
        streams" rather than files. But the Unix philosophy, as far as I/O is
@@ -694,4 +699,80 @@
       first return, second return is the result of longjmp return(it's second
       paramenter). If longjmp(jmp_buf, 1) we have to process exception.
 
-[TIP] Use NDEBUG to disable assert().
+[LANG] Set NDEBUG to disable assert().
+
+[TIP] If a function accepts pointer to a structure this is a hint
+      that this function will change the structure as side-effect.
+
+[LANG] If you have function and macro with the same name, function
+       name should be in parentheses to suppress macro expansion.
+
+[TRICK] Use gcc -S main.c to see assembler code.
+
+[TIP] assert to check for situations that "can't happen", e.g. that violate the
+      invariants or postconditions of an algorithm, but probably not for input
+      validation (certainly not in libraries). When detecting invalid input from
+      clients, be friendly and return an error code.
+
+[TIP] What asserts basically boil down to is "Why bother catching errors you
+      can't handle? Just abort.". Your program logic should never reach such a
+      situation.
+
+[TIP] You can compare memory directly with memcmp because of possible different
+      padding. E.g.
+            typedef struct Foo {
+                char a;
+                /* padding(aligning) */
+                double d;
+                /* padding */
+                char e;
+            } Foo ;
+
+[LANG] If an object that has static storage duration is not initialized
+       explicitly, then:
+         — if it has pointer type, it is initialized to a null pointer;
+         — if it has arithmetic type, it is initialized to (positive or unsigned) zero;
+         — if it is an aggregate, every member is initialized (recursively)
+           according to these rules; There is no partial initialization everything
+           or nothing.
+         — if it is a union, the first named member is initialized (recursively)
+           according to these rules.
+
+[TIP] Stepping through a C program is less productive than thinking harder and adding
+      output statements and self-checking code at critical places. Kernighan once
+      wrote that the most effective debugging tool is still careful thought, coupled
+      with judiciously placed print statements.
+
+[TIP] If you dive into the bug, you tend to fix the local issue in the code, but
+      if you think about the bug first, how the bug came to be, you often find and
+      correct a higher-level problem in the code that will improve the design and
+      prevent further bugs.
+
+[TIP] Debuggers don’t remove bugs. They only show them in slow motion.
+
+[LANG] C structure alignment is based on the biggest size native type in the
+       structure, at least generally. Keep in mind also:
+          - structures are allowed to have padding(at the end) between their members
+          - arrays are not allowed to have padding between their elements
+
+[MAKE] $@ The name of the full target name of the current target
+          (the one before the colon)
+       $< The name of the member of the current dependency
+          (the first, next, etc. one after the colon)
+       $^ The names of all the prerequisite (space separated)
+          Same as previous but take all not one by one
+       $* Refers to the current target name with its suffix deleted
+       %  Used in target names means match anything
+
+[MAKE] Make is a project building programming language.
+
+[LANG] There is no issue in returning a struct. It will be passed by value.
+
+[LANG] Since C lacks namespaces, you're left with prefixing the names of global
+       functions and variables. Most libraries pick some short and "unique"
+       prefix, and hope that no clashes occur.
+
+[LANG] If you use in your library another one except .o you need its header
+       file too.
+
+[LANG] Order of header files matters.

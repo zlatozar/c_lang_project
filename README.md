@@ -88,6 +88,7 @@ examples/    usage examples
 - cmake
 - autotools
 - lex/yacc
+- valgrind
 
 ## Dependencies
 

@@ -1,6 +1,3 @@
-/* $Id */
-
-// Convention - DIRECTORY_NAME_H
 #ifndef MACROS_STRING_H
 #define MACROS_STRING_H
 

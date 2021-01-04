@@ -1,6 +1,13 @@
-static char rcsid[] = "$Id$";
-
 #include "common/math/arith.h"
+
+
+int Arith_max(int x, int y) {
+  return x > y ? x : y;
+}
+
+int Arith_min(int x, int y) {
+  return x > y ? y : x;
+}
 
 int Arith_div(int x, int y) {
   if (-13/5 == -2	&& (x < 0) != (y < 0) && x%y != 0)

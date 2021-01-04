@@ -39,7 +39,8 @@
 ### Domain Driven Design
 - _"Domain Modeling Made Functional"_ by Scott Wlaschin   <br/>
    NOTE: Using functional way allow us to group nicely to code and also  <br/>
-         introduce dependency injection using substitution of the dependent functions.
+         introduce dependency injection using substitution of the dependent functions.<br/>
+         See [following series of articles](https://fsharpforfunandprofit.com/posts/dependencies)
 - _"Patterns, Principles, and Practices of Domain-Driven Design"_ by Scott Millett and Nick Tune
 
 ### OS
