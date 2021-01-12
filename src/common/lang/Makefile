@@ -3,7 +3,9 @@ BUILD_DIR = build
 vpath %.c src
 vpath %.o $(BUILD_DIR)/obj
 
-CFLAGS  := -I include -std=c99 -pedantic-errors -Wall -Wextra -Werror
+CFLAGS  := -I include -std=c99 -pedantic-errors -Wall \
+           -Wextra -Werror -Wshadow -Wundef -Wconversion -fno-common
+
 LDFLAGS := -L $(BUILD_DIR)/lib
 ARFLAGS := r
 
@@ -28,11 +30,13 @@ endif
 lib_objs := $(foreach obj, $(lib_src:.c=.o), $(BUILD_DIR)/obj/$(obj))
 lib_deps := $(foreach dep, $(lib_src:.c=.d), $(BUILD_DIR)/obj/$(dep))
 
+MACROS_H  = -I../../macros/include
+
 # ______________________________________________________________________________
 #                                                                       Targets
 
 .PHONY: dev
-dev: CFLAGS += -DDEBUG -g
+dev: CFLAGS += -DDEBUG -g $(MACROS_H)
 dev: all
 
 all: $(BUILD_DIR)/lib/$(LIB_NAME)
@@ -54,7 +58,7 @@ $(BUILD_DIR)/obj/%.o: %.c
 
 debug: clean dev
 
-release: CFLAGS += -O2
+release: CFLAGS += -O2 $(MACROS_H)
 release: clean all
 
 .PHONY: clean
@@ -90,3 +94,4 @@ help:
 	@echo "    Development:            make                 "
 	@echo "    Releases:               make release         "
 	@echo "    More serious problems:  make debug DEBUG=true"
+	@echo

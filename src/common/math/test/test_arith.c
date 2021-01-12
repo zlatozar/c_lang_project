@@ -1,12 +1,8 @@
 #include "deps/test/unity.h"
 #include "common/math/arith.h"
 
-
-void setUp () {
-}
-
-void tearDown () {
-}
+void setUp () {}
+void tearDown () {}
 
 // _____________________________________________________________________________
 //                                                                   Unit Tests

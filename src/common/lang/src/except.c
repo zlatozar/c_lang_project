@@ -1,27 +1,28 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include <stdlib.h>  /* abort                   */
+#include <stdio.h>   /* fprintf, stderr, fflush */
 
 #include "common/lang/assert.h"
 #include "common/lang/except.h"
 
-Except_Frame *Except_stack = NULL;
+/* Initialize exception stack before usage */
+Except_Frame* Except_stack = NULL;
 
-void Except_raise(const Except_T *e, const char *file,	int line) {
-
-  Except_Frame *p = Except_stack;
+void Except_raise(const Except_T* e, const char* file, unsigned line)
+{
+  Except_Frame* p = Except_stack;
 
   Assert(e);
 
   if (p == NULL) {
     fprintf(stderr, "Uncaught exception!");
 
-    if (e->reason)
-      fprintf(stderr, " %s", e->reason);
+    if (e->message)
+      fprintf(stderr, " %s", e->message);
     else
       fprintf(stderr, " at 0x%p", (void *)e);
 
     if (file && line > 0)
-      fprintf(stderr, " raised at [%s:%d]\n", file, line);
+      fprintf(stderr, " raised at [%s: %d]\n", file, line);
 
     fprintf(stderr, "Aborting...\n");
     fflush(stderr);

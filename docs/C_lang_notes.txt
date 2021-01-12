@@ -776,3 +776,51 @@
        file too.
 
 [LANG] Order of header files matters.
+
+[TIP]           ar -t build/lib/<libname>.a
+      Will list object files that are part of the static library.
+                nm build/lib/<libname>.a
+      Show what is exported from every object file.
+
+[TIP] Use macros if it possible to simplify complex APIs
+
+[TIP] The utility 'ldd' examines an executable and displays a list of the shared
+      libraries that it needs.
+
+[STYLE] Even in gcc command line have to keep some convention:
+            1. .h file corresponding to this .c file (if applicable)
+            2. headers from the same component
+            3. headers from other components
+            4. system headers
+
+[TIP] For objects, use the prefix operator(++obj) instead of the postfix operator
+      (obj++) because the prefix operator does not need a temporary copy.
+
+[TIP] If source files becomes more than ~500 lines may be it is time to divide
+      it logically through many .c files.
+
+[LANG] When d and data pointed to by d both could not be modified
+             void my_func(const void* const d)
+
+[LANG] (char *)0 is not a "pointer to a character at address 0". In C (char *)0
+       is treated in a special way - it is guaranteed to produce a null-pointer
+       value of type char*
+
+[MAKE] Each line in Makefile runs in a separate shell so for example
+       you can change directory without need to return.
+
+[TIP] xs = List_tail(xs); is a way to go forward in a list.
+
+[LANG] When a function deletes the last reference to a block of store, this
+       block of store must be deallocated first.
+
+[STYLE] The header files must be self-contained, idempotent and minimal:
+          1. self-contained — all necessary types are defined by including
+             relevant headers if need be.
+          2. idempotent — compilations don't break even if it is included
+             multiple times.
+          3. minimal — it doesn't define anything that is not needed by code
+             that uses the header to access the facilities defined by the header.
+
+[GCC] In gcc, you can enable specific warnings in gcc with -Wxxxx and
+      disable them with -Wno-xxxx.

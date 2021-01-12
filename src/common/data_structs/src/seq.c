@@ -1,6 +1,5 @@
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
+#include <stdarg.h>  /* va_list, va_start */
+#include <string.h>  /* memcpy            */
 
 #include "macros/lang.h"
 #include "common/lang/assert.h"
@@ -16,22 +15,21 @@ struct Seq_T {
   int head;
 };
 
-LOCAL void expand(Seq_T seq) {
+LOCAL void expand(Seq_T seq)
+{
   int n = seq->array.length;
   Array_resize(&seq->array, 2*n);
 
   if (seq->head > 0) {
-    void **old = &((void **)seq->array.mem_array)[seq->head];
-    memcpy(old+n, old, (n - seq->head)*sizeof (void *));
+    void** old = &((void **)seq->array.mem_array)[seq->head];
+    memcpy(old + n, old, (n - seq->head) * sizeof (void *));
     seq->head += n;
   }
 }
 
-Seq_T Seq_new(int hint) {
+Seq_T Seq_new(size_t hint)
+{
   Seq_T seq;
-
-  Assert(hint >= 0);
-
   NEW_0(seq);
 
   if (hint == 0)
@@ -42,7 +40,8 @@ Seq_T Seq_new(int hint) {
   return seq;
 }
 
-Seq_T Seq_seq(void *x, ...) {
+Seq_T Seq_seq(void* x, ...)
+{
   va_list ap;
 
   Seq_T seq = Seq_new(0);
@@ -57,27 +56,31 @@ Seq_T Seq_seq(void *x, ...) {
   return seq;
 }
 
-void Seq_free(Seq_T *seq) {
+void Seq_free(Seq_T* seq)
+{
   Assert(seq && *seq);
-  Assert((void *)*seq == (void *)&(*seq)->array);
+  Assert((void *)*seq == (void *) & (*seq)->array);
 
   Array_free((Array_T *)seq);
 }
 
-int Seq_length(Seq_T seq) {
+size_t Seq_length(Seq_T seq)
+{
   Assert(seq);
   return seq->length;
 }
 
-void *Seq_get(Seq_T seq, unsigned i) {
+void* Seq_get(Seq_T seq, unsigned i)
+{
   Assert(seq);
   Assert(i < seq->length);
 
   return ((void **)seq->array.mem_array)[(seq->head + i) % seq->array.length];
 }
 
-void *Seq_put(Seq_T seq, unsigned i, void *x) {
-  void *prev;
+void* Seq_put(Seq_T seq, unsigned i, void* x)
+{
+  void* prev;
 
   Assert(seq);
   Assert(i < seq->length);
@@ -88,7 +91,8 @@ void *Seq_put(Seq_T seq, unsigned i, void *x) {
   return prev;
 }
 
-void *Seq_addhi(Seq_T seq, void *x) {
+void* Seq_addhi(Seq_T seq, void* x)
+{
   int i;
 
   Assert(seq);
@@ -98,10 +102,11 @@ void *Seq_addhi(Seq_T seq, void *x) {
 
   i = seq->length++;
 
-  return ((void **)seq->array.mem_array)[(seq->head + i)%seq->array.length] = x;
+  return ((void **)seq->array.mem_array)[(seq->head + i) % seq->array.length] = x;
 }
 
-void *Seq_addlo(Seq_T seq, void *x) {
+void* Seq_addlo(Seq_T seq, void* x)
+{
   int i = 0;
 
   Assert(seq);
@@ -117,7 +122,8 @@ void *Seq_addlo(Seq_T seq, void *x) {
   return ((void **)seq->array.mem_array)[(seq->head + i) % seq->array.length] = x;
 }
 
-void *Seq_remhi(Seq_T seq) {
+void* Seq_remhi(Seq_T seq)
+{
   int i;
 
   Assert(seq);
@@ -127,14 +133,15 @@ void *Seq_remhi(Seq_T seq) {
   return ((void **)seq->array.mem_array)[(seq->head + i) % seq->array.length];
 }
 
-void *Seq_remlo(Seq_T seq) {
+void* Seq_remlo(Seq_T seq)
+{
   int i = 0;
   void *x;
 
   Assert(seq);
   Assert(seq->length > 0);
 
-  x = ((void **)seq->array.mem_array)[(seq->head + i)%seq->array.length];
+  x = ((void **)seq->array.mem_array)[(seq->head + i) % seq->array.length];
   seq->head = (seq->head + 1)%seq->array.length;
 
   --seq->length;

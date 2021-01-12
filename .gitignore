@@ -59,6 +59,7 @@
 .tmp_versions/
 
 # Others
+bin/
 build/
 modules.order
 Module.symvers

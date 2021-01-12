@@ -4,32 +4,35 @@
 #include <setjmp.h>
 
 typedef struct Except_T {
-  const char *reason;
+  const char* message;
 } Except_T;
 
 typedef struct Except_Frame Except_Frame;
 
 struct Except_Frame {
   Except_Frame *prev;
-
   jmp_buf env;
-  const char *file;
-  int line;
-  const Except_T *exception;
+  const char* file;
+  unsigned line;
+  const Except_T* exception;
 };
 
 enum { Except_entered=0, Except_raised,
        Except_handled,   Except_finalized };
 
-extern Except_Frame *Except_stack;
+extern Except_Frame* Except_stack;
 
 extern const Except_T Assert_Failed;
 
-void Except_raise(const Except_T *e, const char *file,int line);
+extern const Except_T Precondition_Failed;
+extern const Except_T Postcondition_Failed;
+extern const Except_T Invariant_Error;
 
-#define RAISE(e) Except_raise(&(e), __FILE__, __LINE__)
+void Except_raise(const Except_T* e, const char* file, unsigned line);
 
-#define RERAISE Except_raise(Except_frame.exception,  \
+#define THROW(e) Except_raise(&(e), __FILE__, __LINE__)
+
+#define RETHROW Except_raise(Except_frame.exception,  \
     Except_frame.file, Except_frame.line)
 
 #define RETURN switch (Except_stack = Except_stack->prev, 0) default: return
@@ -42,7 +45,7 @@ void Except_raise(const Except_T *e, const char *file,int line);
   Except_flag = setjmp(Except_frame.env); \
   if (Except_flag == Except_entered) {
 
-#define EXCEPT(e)                                                         \
+#define CATCH(e)                                                          \
     if (Except_flag == Except_entered) Except_stack = Except_stack->prev; \
   } else if (Except_frame.exception == &(e)) {                            \
     Except_flag = Except_handled;
@@ -60,7 +63,7 @@ void Except_raise(const Except_T *e, const char *file,int line);
 
 #define END_TRY                                                           \
     if (Except_flag == Except_entered) Except_stack = Except_stack->prev; \
-    } if (Except_flag == Except_raised) RERAISE;                          \
+    } if (Except_flag == Except_raised) RETHROW;                          \
 } while (0)
 
-#endif /* COMMON_LANG_EXCEPT_H */
+#endif  /* COMMON_LANG_EXCEPT_H */

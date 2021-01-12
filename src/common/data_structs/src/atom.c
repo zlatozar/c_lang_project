@@ -1,5 +1,5 @@
-#include <string.h>
-#include <limits.h>
+#include <limits.h>  /* LONG_MIN, LONG_MAX */
+#include <string.h>  /* strlen             */
 
 #include "macros/lang.h"
 #include "common/lang/assert.h"
@@ -10,7 +10,7 @@
 static struct atom {
   struct atom *link;
   size_t len;
-  char *str;
+  char* str;
 } *buckets[2048];
 
 static unsigned long scatter[] = {
@@ -59,7 +59,8 @@ static unsigned long scatter[] = {
   1884137923, 53392249, 1735424165, 1602280572
 };
 
-const char *Atom_new(const char *str, size_t len) {
+const char* Atom_new(const char* str, size_t len)
+{
   struct atom *p;
 
   Assert(str);
@@ -95,7 +96,8 @@ const char *Atom_new(const char *str, size_t len) {
   return p->str;
 }
 
-size_t Atom_length(const char *str) {
+size_t Atom_length(const char* str)
+{
   struct atom *p;
 
   Assert(str);
@@ -109,9 +111,10 @@ size_t Atom_length(const char *str) {
   return 0;
 }
 
-const char *Atom_int(long n) {
+const char* Atom_int(long n)
+{
   char str[43];
-  char *s = str + sizeof str;
+  char* s = str + sizeof str;
   unsigned long m;
 
   if (n == LONG_MIN)
@@ -131,7 +134,8 @@ const char *Atom_int(long n) {
   return Atom_new(s, (str + sizeof str) - s);
 }
 
-const char *Atom_string(const char *str) {
+const char* Atom_string(const char* str)
+{
   Assert(str);
   return Atom_new(str, strlen(str));
 }

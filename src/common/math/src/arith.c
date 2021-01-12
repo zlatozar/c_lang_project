@@ -1,11 +1,20 @@
-#include "common/math/arith.h"
+#include <stddef.h>
 
+#include "common/math/arith.h"
 
 int Arith_max(int x, int y) {
   return x > y ? x : y;
 }
 
+size_t Arith_smax(size_t x, size_t y) {
+  return x > y ? x : y;
+}
+
 int Arith_min(int x, int y) {
+  return x > y ? y : x;
+}
+
+size_t Arith_smin(size_t x, size_t y) {
   return x > y ? y : x;
 }
 

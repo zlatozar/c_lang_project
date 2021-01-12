@@ -1,4 +1,4 @@
-#include <stddef.h>
+#include <stddef.h>  /* NULL */
 
 #include "common/lang/assert.h"
 #include "common/lang/mem.h"
@@ -9,12 +9,13 @@ struct Stack_T {
   int count;
 
   struct elem {
-    void *x;
+    void* x;
     struct elem *link;
   } *head;
 };
 
-Stack_T Stack_new(void) {
+Stack_T Stack_new(void)
+{
   Stack_T stk;
   NEW(stk);
 
@@ -24,7 +25,8 @@ Stack_T Stack_new(void) {
   return stk;
 }
 
-void Stack_free(Stack_T *stk) {
+void Stack_free(Stack_T* stk)
+{
   struct elem *t, *u;
 
   Assert(stk && *stk);
@@ -37,13 +39,15 @@ void Stack_free(Stack_T *stk) {
   FREE(*stk);
 }
 
-int Stack_empty(Stack_T stk) {
+int Stack_empty(Stack_T stk)
+{
   Assert(stk);
   return stk->count == 0;
 }
 
-void Stack_push(Stack_T stk, void *x) {
+void Stack_push(Stack_T stk, void* x) {
   struct elem *t;
+
   Assert(stk);
   NEW(t);
 
@@ -54,8 +58,9 @@ void Stack_push(Stack_T stk, void *x) {
   stk->count++;
 }
 
-void *Stack_pop(Stack_T stk) {
-  void *x;
+void* Stack_pop(Stack_T stk)
+{
+  void* x;
   struct elem *t;
 
   Assert(stk);
@@ -68,5 +73,6 @@ void *Stack_pop(Stack_T stk) {
   x = t->x;
 
   FREE(t);
+
   return x;
 }

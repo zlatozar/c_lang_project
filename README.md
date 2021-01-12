@@ -85,10 +85,12 @@ examples/    usage examples
 
 - git
 - gcc
+- make
 - cmake
 - autotools
 - lex/yacc
 - valgrind
+- astyle
 
 ## Dependencies
 

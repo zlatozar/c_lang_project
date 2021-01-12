@@ -3,7 +3,9 @@ BUILD_DIR = build
 vpath %.c src
 vpath %.o $(BUILD_DIR)/obj
 
-CFLAGS  := -I include -std=c99 -pedantic-errors -Wall -Wextra -Werror
+# -Wconversion eventually
+CFLAGS  := -I include -std=c99 -pedantic-errors -Wall -Wextra \
+					 -Werror -Wshadow -Wundef -fno-common
 LDFLAGS := -L $(BUILD_DIR)/lib
 ARFLAGS := r
 
@@ -18,14 +20,16 @@ lib_src  := $(notdir $(wildcard src/*.c))
 lib_objs := $(foreach obj, $(lib_src:.c=.o), $(BUILD_DIR)/obj/$(obj))
 lib_deps := $(foreach dep, $(lib_src:.c=.d), $(BUILD_DIR)/obj/$(dep))
 
-LDLIBS_H = -I../lang/include -I../math/include -I../../macros/include
+MACROS_H = -I../../macros/include
+
+LDLIBS_H = -I../lang/include -I../math/include
 LDLIBS   = ../lang/build/lib ../math/build/lib
 
 # ______________________________________________________________________________
 #                                                                       Targets
 
 .PHONY: dev
-dev: CFLAGS += -DDEBUG -g $(LDLIBS_H)
+dev: CFLAGS += -fmax-errors=5 -DDEBUG -g $(MACROS_H) $(LDLIBS_H)
 dev: all
 
 all: $(BUILD_DIR)/lib/$(LIB_NAME)
@@ -47,7 +51,7 @@ $(BUILD_DIR)/obj/%.o: %.c
 
 debug: clean dev
 
-release: CFLAGS += -O2 $(LDLIBS_H)
+release: CFLAGS += -O2 $(MACROS_H) $(LDLIBS_H)
 release: clean all
 
 .PHONY: clean
@@ -82,3 +86,4 @@ help:
 	@echo
 	@echo "    Development:            make                 "
 	@echo "    Releases:               make release         "
+	@echo
