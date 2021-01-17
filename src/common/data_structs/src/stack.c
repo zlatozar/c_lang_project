@@ -5,9 +5,8 @@
 
 #include "common/data_structs/stack.h"
 
-struct Stack_T {
+struct _Stack_T {
   int count;
-
   struct elem {
     void* x;
     struct elem *link;

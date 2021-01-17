@@ -32,8 +32,8 @@ void Except_raise(const Except_T* e, const char* file, unsigned line);
 
 #define THROW(e) Except_raise(&(e), __FILE__, __LINE__)
 
-#define RETHROW Except_raise(Except_frame.exception,  \
-    Except_frame.file, Except_frame.line)
+#define RETHROW Except_raise(Except_frame.exception,             \
+                             Except_frame.file, Except_frame.line)
 
 #define RETURN switch (Except_stack = Except_stack->prev, 0) default: return
 

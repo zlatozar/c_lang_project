@@ -2,12 +2,13 @@
 #define COMMON_DATA_STRUCTS_ARRAYREP_H
 
 
-struct Array_T {
+struct _Array_T {
   size_t length;
   size_t size;
-  char* mem_array;
+  /* void* but we need pointer arithmetic */
+  char* mem_alloc;
 };
 
-extern void ArrayRep_init(Array_T array, size_t length, size_t size, void *mem_loc);
+extern void ArrayRep_init(Array_T array, size_t length, size_t size, void* mem_alloc);
 
 #endif  /* COMMON_DATA_STRUCTS_ARRAYREP_H */

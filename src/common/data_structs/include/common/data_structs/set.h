@@ -2,7 +2,7 @@
 #define COMMON_DATA_STRUCTS_SET_H
 
 
-typedef struct Set_T* Set_T;
+typedef struct _Set_T* Set_T;
 
 extern Set_T  Set_new(size_t hint, int cmp( const void* x, const void* y ),
                       size_t hash( const void* x ));

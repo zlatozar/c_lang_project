@@ -11,7 +11,7 @@ static struct atom {
   struct atom *link;
   size_t len;
   char* str;
-} *buckets[2048];
+} *atom_buckets[2048];
 
 static unsigned long scatter[] = {
   2078917053, 143302914, 1027100827, 1953210302, 755253631, 2002600785,
@@ -70,9 +70,9 @@ const char* Atom_new(const char* str, size_t len)
   for (h = 0, i = 0; i < len; i++)
     h = (h << 1) + scatter[(unsigned char)str[i]];
 
-  h &= ARRAY_SIZE(buckets) - 1;
+  h &= ARRAY_SIZE(atom_buckets) - 1;
 
-  for (p = buckets[h]; p; p = p->link) {
+  for (p = atom_buckets[h]; p; p = p->link) {
     if (len == p->len) {
       for (i = 0; i < len && p->str[i] == str[i]; )
         i++;
@@ -90,8 +90,8 @@ const char* Atom_new(const char* str, size_t len)
     memcpy(p->str, str, len);
 
   p->str[len] = '\0';
-  p->link = buckets[h];
-  buckets[h] = p;
+  p->link = atom_buckets[h];
+  atom_buckets[h] = p;
 
   return p->str;
 }
@@ -102,8 +102,8 @@ size_t Atom_length(const char* str)
 
   Assert(str);
 
-  for (size_t i = 0; i < ARRAY_SIZE(buckets); i++)
-    for (p = buckets[i]; p; p = p->link)
+  for (size_t i = 0; i < ARRAY_SIZE(atom_buckets); i++)
+    for (p = atom_buckets[i]; p; p = p->link)
       if (p->str == str)
         return p->len;
 

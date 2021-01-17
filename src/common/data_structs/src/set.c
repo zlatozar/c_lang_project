@@ -8,7 +8,7 @@
 
 #include "common/data_structs/set.h"
 
-struct Set_T {
+struct _Set_T {
   size_t length;
   unsigned time_stamp;
   int (*cmp)( const void* x, const void* y );

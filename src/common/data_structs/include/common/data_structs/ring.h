@@ -2,7 +2,7 @@
 #define COMMON_DATA_STRUCTS_RING_H
 
 
-typedef struct Ring_T* Ring_T;
+typedef struct _Ring_T* Ring_T;
 
 extern Ring_T Ring_new(void);
 extern Ring_T Ring_ring(void* x, ...);

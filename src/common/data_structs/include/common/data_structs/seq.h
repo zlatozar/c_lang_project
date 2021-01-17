@@ -2,7 +2,7 @@
 #define COMMON_DATA_STRUCTS_SEQ_H
 
 
-typedef struct Seq_T* Seq_T;
+typedef struct _Seq_T* Seq_T;
 
 extern Seq_T  Seq_new(size_t hint);
 extern Seq_T  Seq_seq(void* x, ...);

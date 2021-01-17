@@ -2,7 +2,7 @@
 #define COMMON_DATA_STRUCTS_STACK_H
 
 
-typedef struct Stack_T* Stack_T;
+typedef struct _Stack_T* Stack_T;
 
 extern Stack_T Stack_new(void);
 extern void    Stack_free(Stack_T* stk);

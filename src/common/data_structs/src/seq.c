@@ -9,8 +9,8 @@
 
 #include "common/data_structs/seq.h"
 
-struct Seq_T {
-  struct Array_T array;
+struct _Seq_T {
+  struct _Array_T array;
   size_t length;
   int head;
 };
@@ -21,7 +21,7 @@ LOCAL void expand(Seq_T seq)
   Array_resize(&seq->array, 2*n);
 
   if (seq->head > 0) {
-    void** old = &((void **)seq->array.mem_array)[seq->head];
+    void** old = &((void **)seq->array.mem_alloc)[seq->head];
     memcpy(old + n, old, (n - seq->head) * sizeof (void *));
     seq->head += n;
   }
@@ -75,7 +75,7 @@ void* Seq_get(Seq_T seq, unsigned i)
   Assert(seq);
   Assert(i < seq->length);
 
-  return ((void **)seq->array.mem_array)[(seq->head + i) % seq->array.length];
+  return ((void **)seq->array.mem_alloc)[(seq->head + i) % seq->array.length];
 }
 
 void* Seq_put(Seq_T seq, unsigned i, void* x)
@@ -85,8 +85,8 @@ void* Seq_put(Seq_T seq, unsigned i, void* x)
   Assert(seq);
   Assert(i < seq->length);
 
-  prev = ((void **)seq->array.mem_array)[(seq->head + i) % seq->array.length];
-  ((void **)seq->array.mem_array)[(seq->head + i) % seq->array.length] = x;
+  prev = ((void **)seq->array.mem_alloc)[(seq->head + i) % seq->array.length];
+  ((void **)seq->array.mem_alloc)[(seq->head + i) % seq->array.length] = x;
 
   return prev;
 }
@@ -102,7 +102,7 @@ void* Seq_addhi(Seq_T seq, void* x)
 
   i = seq->length++;
 
-  return ((void **)seq->array.mem_array)[(seq->head + i) % seq->array.length] = x;
+  return ((void **)seq->array.mem_alloc)[(seq->head + i) % seq->array.length] = x;
 }
 
 void* Seq_addlo(Seq_T seq, void* x)
@@ -119,7 +119,7 @@ void* Seq_addlo(Seq_T seq, void* x)
 
   seq->length++;
 
-  return ((void **)seq->array.mem_array)[(seq->head + i) % seq->array.length] = x;
+  return ((void **)seq->array.mem_alloc)[(seq->head + i) % seq->array.length] = x;
 }
 
 void* Seq_remhi(Seq_T seq)
@@ -130,7 +130,7 @@ void* Seq_remhi(Seq_T seq)
   Assert(seq->length > 0);
 
   i = --seq->length;
-  return ((void **)seq->array.mem_array)[(seq->head + i) % seq->array.length];
+  return ((void **)seq->array.mem_alloc)[(seq->head + i) % seq->array.length];
 }
 
 void* Seq_remlo(Seq_T seq)
@@ -141,8 +141,8 @@ void* Seq_remlo(Seq_T seq)
   Assert(seq);
   Assert(seq->length > 0);
 
-  x = ((void **)seq->array.mem_array)[(seq->head + i) % seq->array.length];
-  seq->head = (seq->head + 1)%seq->array.length;
+  x = ((void **)seq->array.mem_alloc)[(seq->head + i) % seq->array.length];
+  seq->head = (seq->head + 1) % seq->array.length;
 
   --seq->length;
 

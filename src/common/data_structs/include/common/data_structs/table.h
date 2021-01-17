@@ -2,7 +2,7 @@
 #define COMMON_DATA_STRUCTS_TABLE_H
 
 
-typedef struct Table_T* Table_T;
+typedef struct _Table_T* Table_T;
 
 extern Table_T Table_new(unsigned hint, int cmp( const void* x, const void* y ),
                          unsigned hash( const void* key ));

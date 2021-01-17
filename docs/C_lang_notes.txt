@@ -824,3 +824,24 @@
 
 [GCC] In gcc, you can enable specific warnings in gcc with -Wxxxx and
       disable them with -Wno-xxxx.
+
+[TIP] The card is a pointer to your account. You don’t have to carry your
+      account papers and a representative from the company around with you
+      because you have a pointer to the company and to your account right there.
+
+[TIP] "Finding the smallest program that demonstrates the error" is a powerful
+      debugging tool.
+
+[TIP] There is a common pattern known as RAII - Resource Allocation Is
+      Initialization which means that when that whenever you create anything at
+      all (usually a variable, but other things as well) you ensure that it is
+      initialized, even if you don’t think it needs it. And that means not
+      creating resources until you have something to initialize them with.
+
+[LANG] Although (void *) and (char *) can be both equivalently cast to any other
+       pointer type, it is only legal to perform pointer arithmetic on a (char *) and
+       not with (void *) if you want to comply with Standard C.
+
+[LANG]  If you want to perform pointer arithmetic: use (char *).
+        If you want to get the pointer address in order to cast it into another
+        type later on use (void *).

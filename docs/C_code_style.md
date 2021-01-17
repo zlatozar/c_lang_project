@@ -460,7 +460,7 @@ char *p, *n;
 
 ## TODO: Structures, enumerations, typedefs
 
-- Structure or enumeration name must be lowercase with optional underscore `_` character between words
+- Structure or enumeration name must be CamleCase with optional underscore `_` character between words
 - Structure or enumeration may contain `typedef` keyword
 - All structure members must be lowercase
 - All enumeration members must be uppercase
@@ -468,45 +468,45 @@ char *p, *n;
 
 When structure is declared, it may use one of `3` different options:
 
-1. When structure is declared with *name only*, it *must not* contain `_t` suffix after its name.
+1. When structure is declared with *name only*, it *must not* contain `_T` suffix after its name.
 ```c
-struct struct_name {
+struct _Struct {
     char* a;
     char b;
 };
 ```
-2. When structure is declared with *typedef only*, it *has to* contain `_t` suffix after its name.
+2. When structure is declared with *typedef only*, it *has to* contain `_T` suffix after its name.
 ```c
-typedef struct {
+typedef _Struct {
     char* a;
     char b;
-} struct_name_t;
+} Struct_T;
 ```
-3. When structure is declared with *name and typedef*, it *must not* contain `_t` for basic name and it *has to* contain `_t` suffix after its name for typedef part.
+3. When structure is declared with *name and typedef*, it *must not* contain `_T` for basic name and it *has to* contain `_T` suffix after its name for typedef part.
 ```c
-typedef struct struct_name {
+typedef struct _Struct {
     char* a;
     char b;
     char c;
-} struct_name_t;
+} Struct_T;
 ```
 
 Examples of bad declarations and their suggested corrections
 ```c
 /* a and b must be separated to 2 lines */
-/* Name of structure with typedef must include _t suffix */
+/* Name of structure with typedef must include _T suffix */
 typedef struct {
     int32_t a, b;
-} a;
+} A;
 
 /* Corrected version */
 typedef struct {
     int32_t a;
     int32_t b;
-} a_t;
+} A_T;
 
-/* Wrong name, it must not include _t suffix */
-struct name_t {
+/* Wrong name, it must not include _T suffix */
+struct Name_T {
     int32_t a;
     int32_t b;
 };
@@ -515,7 +515,7 @@ struct name_t {
 typedef enum {
     MY_ENUM_TESTA,
     my_enum_testb,
-} my_enum_t;
+} My_enum_T;
 ```
 
 - When initializing structure on declaration, use `C99` initialization style
@@ -530,8 +530,8 @@ a_t a = {
 typedef struct {
    int id;
    char* name;
-} employee_t;
-#define INIT_EMPLOYEE(X) employee_t X = {.id = 0, .name ="none"}
+} Employee_T;
+#define INIT_EMPLOYEE(X) Employee_T X = {.id = 0, .name ="none"}
 
 /* Wrong */
 a_t a = {1, 2};

@@ -7,12 +7,12 @@
 
 #include "common/data_structs/table.h"
 
-struct Table_T {
+struct _Table_T {
   size_t size;
   int (*cmp)( const void* x, const void* y);
   unsigned (*hash)( const void* key );
   size_t length;
-  unsigned timestamp;
+  unsigned time_stamp;
 
   struct binding {
     struct binding *link;
@@ -54,7 +54,7 @@ Table_T Table_new(unsigned hint, int cmp( const void* x, const void* y),
     table->buckets[i] = NULL;
 
   table->length = 0;
-  table->timestamp = 0;
+  table->time_stamp = 0;
 
   return table;
 }
@@ -116,7 +116,7 @@ void* Table_put(Table_T table, const void* key, void* value)
   }
 
   p->value = value;
-  table->timestamp++;
+  table->time_stamp++;
 
   return prev;
 }
@@ -146,7 +146,7 @@ void* Table_remove(Table_T table, const void* key)
   Assert(table);
   Assert(key);
 
-  table->timestamp++;
+  table->time_stamp++;
   i = (*table->hash)(key) % table->size;
 
   for (pp = &table->buckets[i]; *pp; pp = &(*pp)->link)
@@ -176,13 +176,13 @@ void Table_map(Table_T table, void apply( const void* key, void** value, void* c
   Assert(table);
   Assert(apply);
 
-  stamp = table->timestamp;
+  stamp = table->time_stamp;
 
   for (i = 0; i < table->size; i++)
 
     for (p = table->buckets[i]; p; p = p->link) {
       apply(p->key, &p->value, cl);
-      Assert(table->timestamp == stamp);
+      Assert(table->time_stamp == stamp);
     }
 }
 

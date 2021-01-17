@@ -6,12 +6,11 @@
 
 #include "common/data_structs/ring.h"
 
-struct Ring_T {
+struct _Ring_T {
   struct node {
     struct node *llink, *rlink;
-    void *value;
+    void* value;
   } *head;
-
   int length;
 };
 

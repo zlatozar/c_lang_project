@@ -2,7 +2,7 @@
 #define COMMON_DATA_STRUCTS_ARRAY_H
 
 
-typedef struct Array_T *Array_T;
+typedef struct _Array_T* Array_T;
 
 extern Array_T Array_new(size_t length, size_t size);
 extern void    Array_free(Array_T* array);

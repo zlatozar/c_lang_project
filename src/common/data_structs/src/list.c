@@ -5,199 +5,192 @@
 
 #include "common/data_structs/list.h"
 
-struct List_T {
+struct _List_T {
   void* head;
-  struct List_T* tail;
+  struct _List_T* tail;
 };
 
-List_T List_cons(void* head, List_T tail)
+List_T List_cons(void* head, List_T listT)
 {
-  List_T list;
-  NEW(list);
+  List_T newT;
+  NEW(newT);
 
-  list->head = head;
-  list->tail = tail;
+  newT->head = head;
+  newT->tail = listT;
 
-  return list;
+  return newT;
 }
 
-void List_free(List_T* list)
+void List_free(List_T* p_listT)
 {
-  List_T rest;
+  List_T restT;
 
-  Assert(list);
+  Assert(p_listT && *p_listT);
 
-  for( ; *list; *list = rest) {
-    rest = (*list)->tail;
-    FREE(*list);
+  for( ; *p_listT; *p_listT = restT) {
+    restT = (*p_listT)->tail;
+    FREE(*p_listT);
   }
 }
 
-void* List_head(List_T list)
+void* List_head(List_T listT)
 {
   /* Fails if out of bound */
-  Assert(list);
-  return list->head;
+  Assert(listT);
+  return listT->head;
 }
 
-List_T List_tail(List_T list)
+/*
+ * NOTE: Commonly used in iterations to take next:
+ *       listT = List_tail(listT);
+ */
+List_T List_tail(List_T listT)
 {
-  Assert(list);
-  return list->tail;
+  Assert(listT);
+  return listT->tail;
 }
 
-size_t List_length(List_T list)
+size_t List_length(List_T listT)
 {
   size_t accu = 0;
 
-  while(list != NULL) {
+  while(listT != NULL) {
     ++accu;
-    list = List_tail(list);
+    listT = List_tail(listT);
   }
-
   return accu;
 }
 
-// FIXME
-void List_drop(List_T list, unsigned n)
+void List_drop(List_T* p_listT, unsigned n)
 {
-  Assert(list);
+  List_T restT;
 
-  while (n != 0) {
-    List_T current = list;
+  Assert(p_listT && *p_listT);
 
-    list = List_tail(list);
-    FREE(current);
-    n--;
+  for( ; *p_listT && n != 0; *p_listT = restT) {
+    restT = (*p_listT)->tail;
+    FREE(*p_listT);
+    --n;
   }
 }
 
-void* List_nth(List_T list, unsigned n)
+void* List_nth(List_T listT, unsigned n)
 {
   while (n != 0) {
-    list = List_tail(list);
+    listT = List_tail(listT);
     n--;
   }
-
-  return List_head(list);
+  return List_head(listT);
 }
 
-List_T List_append(List_T xs, List_T ys)
+List_T List_append(List_T x_listT, List_T y_listT)
 {
-  List_T accu = ys;
-  List_T* last = &accu;
+  List_T resultT = y_listT;
+  List_T* p_y_listT = &resultT;
 
-  while(xs != NULL) {
-    List_T new = List_cons( List_head(xs), ys);
-    *last = new;
+  while(x_listT != NULL) {
+    List_T new_ref = List_cons(List_head(x_listT), y_listT);
 
-    last = &new->tail;
-    xs = List_tail(xs);
+    *p_y_listT = new_ref;
+    p_y_listT = &new_ref->tail;
+
+    x_listT = List_tail(x_listT);
   }
-
-  return accu;
+  return resultT;
 }
 
-List_T List_filter(bool (*pred)( const void* ), List_T xs)
+List_T List_filter(bool (*pred_fn)( const void* ), List_T listT)
 {
-  Assert(xs);
+  List_T resultT = NULL;
+  List_T* p_restT = &resultT;
 
-  List_T accu = NULL;
-  List_T *last = &accu;
+  while(listT != NULL) {
+    void* curr = List_head(listT);
 
-  while(xs != NULL) {
-    void* x = List_head(xs);
+    if(pred_fn(curr)) {
+      List_T new_ref = List_cons(curr, NULL);
 
-    if(pred( x )) {
-      List_T new = List_cons(x, NULL);
-      *last = new;
-      last = &new->tail;
+      *p_restT = new_ref;
+      p_restT = &new_ref->tail;
     }
-    xs = List_tail(xs);
-  }
 
-  return accu;
+    listT = List_tail(listT);
+  }
+  return resultT;
 }
 
-// for two argument predicate: e.g. arg > current element
-List_T List_filter2(bool (*pred)( void*, const void* ), void* arg, List_T xs)
+// for two argument predicate: e.g. if (arg > curr) {..
+List_T List_filter2(bool (*pred_fn)( void*, const void* ), void* arg, List_T listT)
 {
-  Assert(xs);
+  List_T resultT = NULL;
+  List_T* p_restT = &resultT;
 
-  List_T accu = NULL ;
-  List_T *last = &accu;
+  while(listT != NULL) {
+    void* curr = List_head(listT);
 
-  while(xs != NULL) {
-    void* x = List_head(xs);
+    if(pred_fn(arg, curr)) {
+      List_T new_ref = List_cons(curr, NULL);
 
-    if(pred( arg, x )) {
-      List_T new = List_cons(x, NULL);
-      *last = new;
-      last = &new->tail;
+      *p_restT = new_ref;
+      p_restT = &new_ref->tail;
     }
-    xs = List_tail(xs);
-  }
 
-  return accu;
+    listT = List_tail(listT);
+  }
+  return resultT;
 }
 
-List_T List_map(void* (*f)( void* ), List_T xs)
+List_T List_map(void* (*map_fn)( void* ), List_T listT)
 {
-  Assert(xs);
+  List_T resultT = NULL;
+  List_T* p_restT = &resultT;
 
-  List_T accu = NULL;
-  List_T *last = &accu;
+  while(listT != NULL) {
+    List_T new_ref = List_cons( map_fn(List_head(listT) ), NULL);
 
-  while(xs != NULL) {
-    List_T new = List_cons( f( List_head(xs) ), NULL);
-    *last = new;
+    *p_restT = new_ref;
+    p_restT = &new_ref->tail;
 
-    last = &new->tail;
-    xs = List_tail(xs);
+    listT = List_tail(listT);
   }
-  return accu;
+  return resultT;
 }
 
-List_T List_map2(void* (*f)( void*, void* ), void* arg, List_T xs)
+List_T List_map2(void* (*map_fn)( void*, void* ), void* arg, List_T listT)
 {
-  Assert(xs);
+  List_T resultT = NULL;
+  List_T* p_restT = &resultT;
 
-  List_T accu = NULL;
-  List_T *last = &accu;
+  while(listT != NULL) {
+    List_T new_ref = List_cons( map_fn(arg, List_head(listT) ), NULL);
 
-  while(xs != NULL) {
-    List_T new = List_cons( f( arg, List_head(xs) ), NULL);
-    *last = new;
+    *p_restT = new_ref;
+    p_restT = &new_ref->tail;
 
-    last = &new->tail;
-    xs = List_tail(xs);
+    listT = List_tail(listT);
   }
-
-  return accu;
+  return resultT;
 }
 
-List_T List_copy(List_T xs)
-{
-  List_T accu = NULL;
-  List_T *last = &accu;
+List_T List_copy(List_T listT) {
+  List_T newT, *p_newT = &newT;
 
-  Assert(xs);
+  for ( ; listT; listT = listT->tail) {
+    NEW(*p_newT);
+    (*p_newT)->head = listT->head;
 
-  while(xs != NULL) {
-    List_T new = List_cons( List_head(xs), NULL);
-    *last = new;
-
-    last = &new->tail;
-    xs = List_tail(xs);
+    p_newT = &(*p_newT)->tail;
   }
 
-  return accu;
+  *p_newT = NULL;
+  return newT;
 }
 
-void List_print(void (*print)( const void* ), List_T xs)
+void List_print(void (*print_fn)( const void* ), List_T listT)
 {
-  while (xs != NULL) {
-    print( List_head(xs));
-    xs = List_tail(xs);
+  while (listT != NULL) {
+    print_fn(List_head(listT));
+
+    listT = List_tail(listT);
   }
 }
