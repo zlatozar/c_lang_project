@@ -27,7 +27,7 @@ lib_deps := $(foreach dep, $(lib_src:.c=.d), $(BUILD_DIR)/obj/$(dep))
 #                                                                       Targets
 
 .PHONY: dev
-dev: CFLAGS += -DDEBUG -g $(MACROS_H) $(LDLIBS_H)
+dev: CFLAGS += -g -Og -fno-inline -DDEBUG -fmax-errors=5 $(MACROS_H) $(LDLIBS_H)
 dev: all
 
 all: $(BUILD_DIR)/lib/$(LIB_NAME)

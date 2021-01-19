@@ -5,69 +5,69 @@
 
 #include "common/data_structs/stack.h"
 
-struct _Stack_T {
+struct stack {
   int count;
   struct elem {
     void* x;
     struct elem *link;
-  } *head;
+  } *sp;
 };
 
 Stack_T Stack_new(void)
 {
-  Stack_T stk;
-  NEW(stk);
+  Stack_T self;
+  NEW(self);
 
-  stk->count = 0;
-  stk->head = NULL;
+  self->count = 0;
+  self->sp = NULL;
 
-  return stk;
+  return self;
 }
 
-void Stack_free(Stack_T* stk)
+void Stack_free(Stack_T* self)
 {
   struct elem *t, *u;
 
-  Assert(stk && *stk);
+  Assert(self && *self);
 
-  for (t = (*stk)->head; t; t = u) {
+  for (t = (*self)->sp; t; t = u) {
     u = t->link;
     FREE(t);
   }
 
-  FREE(*stk);
+  FREE(*self);
 }
 
-int Stack_empty(Stack_T stk)
+bool Stack_isEmpty(Stack_T self)
 {
-  Assert(stk);
-  return stk->count == 0;
+  Assert(self);
+  return self->count == 0;
 }
 
-void Stack_push(Stack_T stk, void* x) {
+void Stack_push(Stack_T self, void* x) {
   struct elem *t;
 
-  Assert(stk);
+  Assert(self);
   NEW(t);
 
   t->x = x;
-  t->link = stk->head;
+  t->link = self->sp;
 
-  stk->head = t;
-  stk->count++;
+  self->sp = t;
+  self->count++;
 }
 
-void* Stack_pop(Stack_T stk)
+void* Stack_pop(Stack_T self)
 {
   void* x;
   struct elem *t;
 
-  Assert(stk);
-  Assert(stk->count > 0);
+  Assert(self);
+  Assert(self->count > 0);
 
-  t = stk->head;
-  stk->head = t->link;
-  stk->count--;
+  t = self->sp;
+  self->sp = t->link;
+  self->count--;
 
   x = t->x;
 

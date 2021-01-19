@@ -109,6 +109,23 @@ int my_func(void)
 
 - Always declare local variables at the beginning of the block, before first executable statement
 
+- Prefix constant names with `k`
+
+- Prefix pointers with `p_` but not for struct references
+
+- Pointer to struct reference (double pointer in practice) prefix with `pT`
+
+- Double pointers with `pp_`
+
+```c
+/* OK */
+int* p_counter;
+List_T list;
+
+List_T result = ylist;
+List_T* pT_result = &result;
+```
+
 - Declare counter variables in `for` loop
 ```c
 /* OK */
@@ -148,13 +165,12 @@ void a(void)
 ```
 
 - Except `char`, `float` or `double`, always use types declared in `stdint.h` library, eg. `uint8_t` for `unsigned 8-bit`, etc.
-- Do not use `stdbool.h` library. Use `1` or `0` for `true` or `false` respectively
 ```c
 /* OK */
 uint8_t status;
 status = 0;
 
-/* Wrong */
+/* OK */
 #include <stdbool.h>
 bool status = true;
 ```
@@ -214,7 +230,7 @@ void my_func(void* const d)
 }
 ```
 
-- When function may accept pointer of any type, always use `void *`, do not use `uint8_t *`
+- When function may accept pointer of any type, always use `void *`(do not use `uint8_t *`)
     - Function must take care of proper casting in implementation
 ```c
 /*
@@ -263,9 +279,13 @@ void my_func(size_t size)
 }
 ```
 
+- Non-Boolean values shall be converted to Boolean via use of relational
+  operators (e.g., < or !=), not via casts.
 - Always compare variable against zero, except if it is treated as `boolean` type
 - Never compare `boolean-treated` variables against zero or one. Use NOT (`!`) instead
 ```c
+bool b_in_motion = (0 != speed_in_mph);  /* convert to boolean */
+
 size_t length = 5;  /* Counter variable */
 uint8_t is_ok = 0;  /* Boolean-treated variable */
 if (length)         /* Wrong, length is not treated as boolean */
@@ -323,6 +343,7 @@ if (is_ok == 0)     /* Wrong, use ! for negative check */
 
 ## Functions
 
+- It is important to know that functions are not always inlined even if declared as such.
 - Every function which may have access from outside its module, must include function *prototype* (or *declaration*)
 - Function name must be lowercase, optionally separated with underscore `_` character
 ```c
@@ -394,6 +415,8 @@ const char* foo(void)
 ```
 
 - Extensively use `assert` to outline the function contract.
+- When defining function's parameters order is this: structure(changed by side-effects),
+  then additional params.
 
 ## Variables
 
@@ -468,45 +491,55 @@ char *p, *n;
 
 When structure is declared, it may use one of `3` different options:
 
-1. When structure is declared with *name only*, it *must not* contain `_T` suffix after its name.
+1. When structure is declared with *name only*, it *must not* contain `_t` suffix after its name.
 ```c
-struct _Struct {
+struct name {
     char* a;
     char b;
 };
 ```
-2. When structure is declared with *typedef only*, it *has to* contain `_T` suffix after its name.
+2. When structure is declared with *typedef only*, it *has to* contain `_t` suffix after its name.
 ```c
-typedef _Struct {
+typedef struct {
     char* a;
     char b;
-} Struct_T;
+} name_t;
 ```
-3. When structure is declared with *name and typedef*, it *must not* contain `_T` for basic name and it *has to* contain `_T` suffix after its name for typedef part.
+3. When structure is declared with *name and typedef*, it *must not* contain `_t` for basic name and it *has to* contain `_t` suffix after its name for typedef part.
 ```c
-typedef struct _Struct {
+typedef struct name {
     char* a;
     char b;
     char c;
-} Struct_T;
+} name_t;
+```
+4. For opaque pointers use struct but staring with upper case and suffix `_T`.
+```c
+ struct name {
+    char* a;
+    char b;
+    char c;
+};
+
+typedef name* Name_T;
 ```
 
 Examples of bad declarations and their suggested corrections
 ```c
 /* a and b must be separated to 2 lines */
-/* Name of structure with typedef must include _T suffix */
+/* Name of structure with typedef must include _t suffix */
 typedef struct {
     int32_t a, b;
-} A;
+} name;
 
 /* Corrected version */
 typedef struct {
     int32_t a;
     int32_t b;
-} A_T;
+} name_t;
 
 /* Wrong name, it must not include _T suffix */
-struct Name_T {
+struct name_t {
     int32_t a;
     int32_t b;
 };
@@ -515,13 +548,16 @@ struct Name_T {
 typedef enum {
     MY_ENUM_TESTA,
     my_enum_testb,
-} My_enum_T;
+} my_tests_e;
 ```
+
+- Enums name should have suffix `_e` and `typedef` declarations ends `_et`.
+- Unions name should have suffix `_u` and `typedef` declarations ends `_ut`.
 
 - When initializing structure on declaration, use `C99` initialization style
 ```c
 /* OK */
-a_t a = {
+name_t a = {
     .a = 4,
     .b = 5,
 };
@@ -530,7 +566,7 @@ a_t a = {
 typedef struct {
    int id;
    char* name;
-} Employee_T;
+} employee_t;
 #define INIT_EMPLOYEE(X) Employee_T X = {.id = 0, .name ="none"}
 
 /* Wrong */

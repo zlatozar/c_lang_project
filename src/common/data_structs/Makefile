@@ -5,7 +5,8 @@ vpath %.o $(BUILD_DIR)/obj
 
 # -Wconversion eventually
 CFLAGS  := -I include -std=c99 -pedantic-errors -Wall -Wextra \
-					 -Werror -Wshadow -Wundef -fno-common
+           -Werror -Wshadow -Wundef -fno-common
+
 LDFLAGS := -L $(BUILD_DIR)/lib
 ARFLAGS := r
 
@@ -29,7 +30,7 @@ LDLIBS   = ../lang/build/lib ../math/build/lib
 #                                                                       Targets
 
 .PHONY: dev
-dev: CFLAGS += -fmax-errors=5 -DDEBUG -g $(MACROS_H) $(LDLIBS_H)
+dev: CFLAGS += -g -Og -fno-inline -DDEBUG -fmax-errors=5 $(MACROS_H) $(LDLIBS_H)
 dev: all
 
 all: $(BUILD_DIR)/lib/$(LIB_NAME)

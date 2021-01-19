@@ -1,5 +1,6 @@
 ## Project Root
-DEPS_ROOT = ../../../../deps
+PROJ_ROOT = ../../../..
+DEPS_ROOT = $(PROJ_ROOT)/deps
 
 # Should contains 'unity.h' and 'unity_internals.h'
 UNITY_NAME = libunity.a
@@ -8,13 +9,11 @@ UNITY_LIB  = $(DEPS_ROOT)/builds/unity/lib
 
 LIB_DIR = ../build/lib
 
-CFLAGS  = -std=c99 -pedantic-errors -Wall -Wextra -Werror -DDEBUG
+CFLAGS   = -g -Og -std=c99 -pedantic-errors -Wall -Wextra -Werror -DDEBUG
+VALGRIND = valgrind --leak-check=full --suppressions=$(PROJ_ROOT)/valgrind-test.supp --quiet --error-exitcode=1
 
 # Form names of the executable
 BUILD_DIR = bin
-
-test_src  := $(wildcard test_*.c)
-test_runs := $(notdir $(patsubst test_%.c,$(BUILD_DIR)/test_%.run,$(test_src)))
 
 # ______________________________________________________________________________
 #                                                                       Specify
@@ -30,22 +29,29 @@ DEPS       = -L ../../lang/build/lib -l:lang.a
 
 UNITY    = -L $(UNITY_LIB) -l:$(UNITY_NAME)
 
+BUILD_NEEDED = $(LIB_H) $(MACROS_H) $(DEP_LIBS_H) -I$(UNITY_H) $(LIB) $(DEPS) $(UNITY)
+
 # ______________________________________________________________________________
 #                                                                       Targets
 
 .PHONY: test
-test: build_src run
-
-run: $(BUILD_DIR)/$(test_runs)
-	@-./$<
+test: build_src test_runners
 
 build_src:
-	@echo "Build project first"
+	@echo "Build library first"
 	@cd .. && $(MAKE)
 
-$(BUILD_DIR)/%.run: %.c
-	@mkdir -p $(@D)
-	$(LINK.c) $< $(LIB_H) $(MACROS_H) $(DEP_LIBS_H) -I$(UNITY_H) $(LIB) $(DEPS) $(UNITY) -o $@
+test_runners: test_list.run test_stack.run
+
+test_list.run:
+	@mkdir -p $(BUILD_DIR)/$(@D)
+	$(LINK.c) test_list.c $(BUILD_NEEDED) -o $(BUILD_DIR)/$@
+	$(VALGRIND) ./$(BUILD_DIR)/$@
+
+test_stack.run:
+	@mkdir -p $(BUILD_DIR)/$(@D)
+	$(LINK.c) test_stack.c $(BUILD_NEEDED) -o $(BUILD_DIR)/$@
+	$(VALGRIND) ./$(BUILD_DIR)/$@
 
 .PHONY: clean
 clean:

@@ -7,7 +7,7 @@
 
 #include "common/data_structs/table.h"
 
-struct _Table_T {
+struct table {
   size_t size;
   int (*cmp)( const void* x, const void* y);
   unsigned (*hash)( const void* key );
@@ -43,7 +43,7 @@ Table_T Table_new(unsigned hint, int cmp( const void* x, const void* y),
   for (i = 1; primes[i] < hint; i++)
     ;
 
-  table = ALLOC(sizeof (*table) + primes[i - 1] * sizeof (table->buckets[0]));
+  table = ALLOC(sizeof(*table) + primes[i - 1] * sizeof(table->buckets[0]));
 
   table->size = primes[i - 1];
   table->cmp  = cmp  ?  cmp : cmpatom;
@@ -194,7 +194,7 @@ void** Table_toArray(Table_T table, void* end)
 
   Assert(table);
 
-  array = ALLOC((2*table->length + 1) * sizeof (*array));
+  array = ALLOC((2 * table->length + 1) * sizeof(*array));
 
   for (i = 0; i < table->size; i++)
 

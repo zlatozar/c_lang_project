@@ -5,11 +5,11 @@
 
 extern const Except_T Mem_Failed;
 
-extern void* Mem_alloc(size_t nbytes, const char* file, unsigned line);
-extern void* Mem_calloc(size_t count, size_t nbytes, const char* file, unsigned line);
+extern void* Mem_alloc(long nbytes, const char* file, int line);
+extern void* Mem_calloc(long count, long nbytes, const char* file, int line);
 
-extern void  Mem_free(void* ptr, const char* file, unsigned line);
-extern void* Mem_resize(void* ptr, size_t nbytes,	const char* file, unsigned line);
+extern void  Mem_free(void* ptr, const char* file, int line);
+extern void* Mem_resize(void* ptr, long nbytes,	const char* file, int line);
 
 #define ALLOC(nbytes)          Mem_alloc((nbytes), __FILE__, __LINE__)
 #define CALLOC(count, nbytes)  Mem_calloc((count), (nbytes), __FILE__, __LINE__)

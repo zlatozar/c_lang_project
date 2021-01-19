@@ -8,7 +8,7 @@
 
 #include "common/data_structs/set.h"
 
-struct _Set_T {
+struct set {
   size_t length;
   unsigned time_stamp;
   int (*cmp)( const void* x, const void* y );
@@ -74,7 +74,7 @@ Set_T Set_new(size_t hint, int cmp( const void* x, const void* y ),
   for (i = 1; primes[i] < hint; i++)
     ;
 
-  set = ALLOC(sizeof (*set) + primes[i-1] * sizeof (set->buckets[0]));
+  set = ALLOC(sizeof(*set) + primes[i-1] * sizeof(set->buckets[0]));
 
   set->size = primes[i-1];
   set->cmp  = cmp  ?  cmp : cmpatom;
@@ -219,7 +219,7 @@ void** Set_toArray(Set_T set, void* end)
 
   Assert(set);
 
-  array = ALLOC((set->length + 1) * sizeof (*array));
+  array = ALLOC((set->length + 1) * sizeof(*array));
 
   for (i = 0; i < set->size; i++) {
     for (p = set->buckets[i]; p; p = p->link)

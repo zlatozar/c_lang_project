@@ -61,7 +61,7 @@ static unsigned long scatter[] = {
 
 const char* Atom_new(const char* str, size_t len)
 {
-  struct atom *p;
+  struct atom* p_atom;
 
   Assert(str);
 
@@ -72,40 +72,40 @@ const char* Atom_new(const char* str, size_t len)
 
   h &= ARRAY_SIZE(atom_buckets) - 1;
 
-  for (p = atom_buckets[h]; p; p = p->link) {
-    if (len == p->len) {
-      for (i = 0; i < len && p->str[i] == str[i]; )
+  for (p_atom = atom_buckets[h]; p_atom; p_atom = p_atom->link) {
+    if (len == p_atom->len) {
+      for (i = 0; i < len && p_atom->str[i] == str[i]; )
         i++;
 
       if (i == len)
-        return p->str;
+        return p_atom->str;
     }
   }
 
-  p = ALLOC(sizeof (*p) + len + 1);
-  p->len = len;
-  p->str = (char *)(p + 1);
+  p_atom = ALLOC(sizeof(*p_atom) + len + 1);
+  p_atom->len = len;
+  p_atom->str = (char *)(p_atom + 1);
 
   if (len > 0)
-    memcpy(p->str, str, len);
+    memcpy(p_atom->str, str, len);
 
-  p->str[len] = '\0';
-  p->link = atom_buckets[h];
-  atom_buckets[h] = p;
+  p_atom->str[len] = '\0';
+  p_atom->link = atom_buckets[h];
+  atom_buckets[h] = p_atom;
 
-  return p->str;
+  return p_atom->str;
 }
 
 size_t Atom_length(const char* str)
 {
-  struct atom *p;
+  struct atom* p_atom;
 
   Assert(str);
 
   for (size_t i = 0; i < ARRAY_SIZE(atom_buckets); i++)
-    for (p = atom_buckets[i]; p; p = p->link)
-      if (p->str == str)
-        return p->len;
+    for (p_atom = atom_buckets[i]; p_atom; p_atom = p_atom->link)
+      if (p_atom->str == str)
+        return p_atom->len;
 
   Fail();
   return 0;
@@ -114,7 +114,7 @@ size_t Atom_length(const char* str)
 const char* Atom_int(long n)
 {
   char str[43];
-  char* s = str + sizeof str;
+  char* s = str + sizeof(str);
   unsigned long m;
 
   if (n == LONG_MIN)
@@ -131,7 +131,7 @@ const char* Atom_int(long n)
   if (n < 0)
     *--s = '-';
 
-  return Atom_new(s, (str + sizeof str) - s);
+  return Atom_new(s, (str + sizeof(str)) - s);
 }
 
 const char* Atom_string(const char* str)

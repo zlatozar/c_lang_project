@@ -1,19 +1,26 @@
-#include <string.h>
+#ifndef NDEBUG   /*  Development version */
 
+#include <stdlib.h>  /* malloc, calloc, realloc, free */
+#include <string.h>  /* memset */
 #include "macros/lang.h"
 #include "common/lang/assert.h"
 
 #include "common/lang/mem.h"
 
+// -----------------------------------------------------------------------------
+// Definitions
+// -----------------------------------------------------------------------------
+
+#define TOTAL_BUCKETS 2048
+
 union align {
 #ifdef MAXALIGN
   char pad[MAXALIGN];
-
 #else
   int i;
   long l;
-  long* lp;
-  void* p;
+  long *lp;
+  void *p;
   void (*fp)(void);
   float f;
   double d;
@@ -21,86 +28,89 @@ union align {
 #endif
 };
 
+#define hash(p, t) (((unsigned long)(p) >> 3) & (sizeof (t)/sizeof ((t)[0]) - 1))
+
 #define NDESCRIPTORS 512
-#define hash(p, t)   (((unsigned long)(p) >> 3) & (sizeof (t)/sizeof ((t)[0]) - 1))
-#define NALLOC       ((4096 + sizeof (union align) - 1)/             \
-                      (sizeof (union align))) * (sizeof (union align))
 
-const Except_T Mem_Failed = { "[dev] Memory allocation failed" };
+#define NALLOC ((4096 + sizeof (union align) - 1) / (sizeof (union align)))*(sizeof (union align))
 
-LOCAL struct descriptor {
+// -----------------------------------------------------------------------------
+// Data
+// -----------------------------------------------------------------------------
+
+const Except_T Mem_Failed = { "Allocation failed" };
+
+static struct descriptor {
   struct descriptor *free;
   struct descriptor *link;
-  const void* ptr;
+  const void *ptr;
   long size;
-  const char* file;
-  unsigned line;
-} *htab[2048];
+  const char *file;
+  int line;
+} *htab[TOTAL_BUCKETS];
 
-/*
- * The head of the free list point to itself because
- * we have to create circle.
- */
-LOCAL struct descriptor freelist = { .free = &freelist };
+static struct descriptor freelist = { .free = &freelist };
 
-LOCAL struct descriptor *find(const void* ptr) {
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Functions
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+static struct descriptor *find(const void *ptr)
+{
   struct descriptor *bp = htab[hash(ptr, htab)];
+
   while (bp && bp->ptr != ptr)
     bp = bp->link;
 
   return bp;
 }
 
-void Mem_free(void* ptr, const char* file, unsigned line) {
+void Mem_free(void *ptr, const char *file, int line)
+{
   if (ptr) {
     struct descriptor *bp;
 
-    if (((unsigned long)ptr) % (sizeof (union align)) != 0
-        || (bp = find(ptr)) == NULL
-        || bp->free) {
-
+    if (((unsigned long)ptr) % (sizeof (union align)) != 0 || (bp = find(ptr)) == NULL || bp->free)
       Except_raise(&Assert_Failed, file, line);
-    }
 
     bp->free = freelist.free;
     freelist.free = bp;
   }
 }
 
-void* Mem_resize(void* ptr, long nbytes, const char* file, unsigned line) {
+void *Mem_resize(void *ptr, long nbytes, const char *file, int line)
+{
   struct descriptor *bp;
-  void* newptr;
+  void *newptr;
 
   Assert(ptr);
   Assert(nbytes > 0);
 
-  if ( ((unsigned long)ptr) % (sizeof (union align)) != 0
-      || (bp = find(ptr)) == NULL || bp->free ) {
-
+  if (((unsigned long)ptr) % (sizeof (union align)) != 0 || (bp = find(ptr)) == NULL || bp->free)
     Except_raise(&Assert_Failed, file, line);
-  }
 
   newptr = Mem_alloc(nbytes, file, line);
   memcpy(newptr, ptr, nbytes < bp->size ? nbytes : bp->size);
-
   Mem_free(ptr, file, line);
+
   return newptr;
 }
 
-void* Mem_calloc(long count, long nbytes,	const char* file, unsigned line) {
-  void* ptr;
+void *Mem_calloc(long count, long nbytes, const char *file, int line)
+{
+  void *ptr;
 
   Assert(count > 0);
   Assert(nbytes > 0);
 
   ptr = Mem_alloc(count*nbytes, file, line);
-  memset(ptr, '\0', count * nbytes);
+  memset(ptr, '\0', count*nbytes);
 
   return ptr;
 }
 
-static struct descriptor *dalloc(void* ptr, long size,
-                                 const char* file, unsigned line) {
+static struct descriptor *dalloc(void *ptr, long size, const char *file, int line)
+{
   static struct descriptor *avail;
   static int nleft;
 
@@ -117,61 +127,90 @@ static struct descriptor *dalloc(void* ptr, long size,
   avail->file = file;
   avail->line = line;
   avail->free = avail->link = NULL;
-
   nleft--;
 
   return avail++;
 }
 
-void* Mem_alloc(long nbytes, const char* file, unsigned line) {
+void *Mem_alloc(long nbytes, const char *file, int line)
+{
   struct descriptor *bp;
-  void* ptr;
+  void *ptr;
 
   Assert(nbytes > 0);
 
-  nbytes = ((nbytes + sizeof (union align) - 1)/
-            (sizeof (union align)))*(sizeof (union align));
-
+  nbytes = ((nbytes + sizeof (union align) - 1) / (sizeof (union align))) * (sizeof (union align));
   for (bp = freelist.free; bp; bp = bp->free) {
-
     if (bp->size > nbytes) {
       bp->size -= nbytes;
       ptr = (char *)bp->ptr + bp->size;
-
       if ((bp = dalloc(ptr, nbytes, file, line)) != NULL) {
         unsigned h = hash(ptr, htab);
         bp->link = htab[h];
         htab[h] = bp;
-
         return ptr;
-
-      } else {
-
+      }
+      else {
         if (file == NULL)
           THROW(Mem_Failed);
         else
           Except_raise(&Mem_Failed, file, line);
       }
     }
-
     if (bp == &freelist) {
       struct descriptor *newptr;
 
+      // TODO: ptr  should be freed
+
       if ((ptr = malloc(nbytes + NALLOC)) == NULL
-          || (newptr = dalloc(ptr, nbytes + NALLOC,	__FILE__, __LINE__)) == NULL)	{
+          || (newptr = dalloc(ptr, nbytes + NALLOC, __FILE__, __LINE__)) == NULL) {
 
         if (file == NULL)
           THROW(Mem_Failed);
         else
           Except_raise(&Mem_Failed, file, line);
       }
-
       newptr->free = freelist.free;
       freelist.free = newptr;
     }
   }
 
-  Fail();
-
+  Assert(0);
   return NULL;
 }
+
+#else
+typedef int ISO_C_forbids_an_empty_translation_unit;
+#endif  /* NDEBUG */
+
+// -----------------------------------------------------------------------------
+// Memory Leak
+// -----------------------------------------------------------------------------
+
+// In order to ensure a memory leak, need to allocate > TOTAL_BUCKETS times. To
+// make this easier to test, added the utility function Mem_num_leaks() to get
+// back the number of leaks. This content added as Exercise 5.5
+
+/* static int num_leaks = 0; */
+
+/* void Mem_leak(void (*apply)(void *ptr, long size, const char *file, int line, void *cl), void *cl) */
+/* { */
+/*   struct descriptor *p; */
+
+/*   // Reset this each time as it may change from run to run */
+/*   num_leaks = 0; */
+
+/*   int i; */
+/*   for (i = 0; i < TOTAL_BUCKETS; i++) */
+/*     if (htab[i] != NULL) */
+/*       for (p = htab[i]; p; p = p->link) */
+/*         if (p->free == NULL) { */
+/*           apply(p->ptr, p->size, p->file, p->line, cl); */
+/*           num_leaks++; */
+/*         } */
+/* } */
+
+/* int Mem_num_leaks() */
+/* { */
+/*   return num_leaks; */
+/* } */

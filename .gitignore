@@ -5,6 +5,10 @@
 \#*\#
 .\#*
 
+# Build dirs
+src/**/bin/
+build/
+
 # Command line
 *.bak
 *.tmp
@@ -59,8 +63,6 @@
 .tmp_versions/
 
 # Others
-bin/
-build/
 modules.order
 Module.symvers
 Makefile.old

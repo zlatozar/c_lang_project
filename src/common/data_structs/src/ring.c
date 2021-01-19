@@ -6,7 +6,7 @@
 
 #include "common/data_structs/ring.h"
 
-struct _Ring_T {
+struct ring {
   struct node {
     struct node *llink, *rlink;
     void* value;
@@ -14,7 +14,7 @@ struct _Ring_T {
   int length;
 };
 
-Ring_T Ring_new()
+Ring_T Ring_new(void)
 {
   Ring_T ring;
   NEW_0(ring);

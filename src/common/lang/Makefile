@@ -3,8 +3,8 @@ BUILD_DIR = build
 vpath %.c src
 vpath %.o $(BUILD_DIR)/obj
 
-CFLAGS  := -I include -std=c99 -pedantic-errors -Wall \
-           -Wextra -Werror -Wshadow -Wundef -Wconversion -fno-common
+CFLAGS  := -I include -std=c99 -pedantic-errors -Wall -Wextra \
+           -Wshadow -Wmaybe-uninitialized -fno-common
 
 LDFLAGS := -L $(BUILD_DIR)/lib
 ARFLAGS := r
@@ -12,20 +12,12 @@ ARFLAGS := r
 OUTPUT_OPTION = -MMD -MP -o $@
 
 # Sources
-SRC := $(notdir $(wildcard src/*.c))
+lib_src := $(notdir $(wildcard src/*.c))
 
 # ______________________________________________________________________________
 #                                                                       Specify
 
-ifeq ($(DEBUG),true)
-
-LIB_NAME  = lang-dev.a
-lib_src  := $(filter-out mem.c, $(SRC))
-
-else
 LIB_NAME  = lang.a
-lib_src  := $(filter-out mem-dev.c, $(SRC))
-endif
 
 lib_objs := $(foreach obj, $(lib_src:.c=.o), $(BUILD_DIR)/obj/$(obj))
 lib_deps := $(foreach dep, $(lib_src:.c=.d), $(BUILD_DIR)/obj/$(dep))
@@ -36,7 +28,7 @@ MACROS_H  = -I../../macros/include
 #                                                                       Targets
 
 .PHONY: dev
-dev: CFLAGS += -DDEBUG -g $(MACROS_H)
+dev: CFLAGS += -g -Og -fno-inline -DDEBUG -fmax-errors=5 $(MACROS_H)
 dev: all
 
 all: $(BUILD_DIR)/lib/$(LIB_NAME)

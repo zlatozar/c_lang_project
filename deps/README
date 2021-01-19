@@ -1,3 +1,5 @@
+May be better name is 'ext-deps'
+
 External third party dependancies that are build raraly, build is slow
 or are OS dependant, will be placed here as submoduls.
 

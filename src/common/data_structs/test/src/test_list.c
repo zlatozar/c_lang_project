@@ -11,6 +11,10 @@ LOCAL void print_str(const void* str) {
   printf("%s ", (char*) str);
 }
 
+LOCAL void print_int(const void* integer) {
+  printf("%i ", PTR_TO_INT(integer));
+}
+
 // _____________________________________________________________________________
 //                                                               setUp/tearDown
 
@@ -35,7 +39,8 @@ void test_List_cons() {
   List_print(print_str, list_str);
   printf("\n");
 
-  TEST_ASSERT_EQUAL(2, List_length(list_str));
+  List_print(print_int, list_int);
+  printf("\n");
 
   List_free(&list_str);
 }

@@ -762,7 +762,7 @@
        $^ The names of all the prerequisite (space separated)
           Same as previous but take all not one by one
        $* Refers to the current target name with its suffix deleted
-       %  Used in target names means match anything
+       %  Used in target names means match anything (dynamic targets)
 
 [MAKE] Make is a project building programming language.
 
@@ -842,6 +842,103 @@
        pointer type, it is only legal to perform pointer arithmetic on a (char *) and
        not with (void *) if you want to comply with Standard C.
 
-[LANG]  If you want to perform pointer arithmetic: use (char *).
-        If you want to get the pointer address in order to cast it into another
-        type later on use (void *).
+[LANG] If you want to perform pointer arithmetic: use (char *).
+       If you want to get the pointer address in order to cast it into another
+       type later on use (void *).
+
+[TIP]      char *copy = malloc(strlen(buffer));
+       Classic 'strlen + 1' bug - use STR_ALLOC macro from the project.
+
+[LANG] Segmentation faults can also occur when your program runs out of stack
+       space. This may not be a bug in your program, but may be due instead to
+       your shell setting the stack size limit too small. To check memory
+       limits, use the 'ulimit'. Temporary try: ulimit -c unlimited
+
+[LANG] Classical "Array out of bounds" error cause segmentation faults.
+
+[TIP] Here is what cause segmentation faults:
+          - Improper format control string in printf or scanf statements
+          - Forgetting to use "&" on the arguments to scanf
+          - Accessing beyond the bounds of an array
+          - Failure to initialize a pointer before accessing it
+          - Incorrect use of the "&" (address of) and "*" (dereferencing) operators
+
+[TIP] To test for leaks at least in one test you need to allocate then free and this
+      test should be run with valgrind.
+
+[TIP] (*p_struct).some_field is very common that's why syntax sugar is introduced:
+      p_struct->some_field
+
+[TIP]       p_atom = ALLOC(NUM * sizeof(*p_atom))
+      This is a broadly used pattern to allocate memory. The type is the type
+      that points p_atom. If you change p_atom to point to some other type there
+      is no need to fix allocation.
+
+[TIP] You can reference for C libraries functions using 'man 3 <function name>'
+
+[TIP] man docs have many levels. For C functions use level 3:
+           1 User Commands
+           2 System Calls
+           3 C Library Functions
+           4 Devices and Special Files
+           ....
+
+[TRICK] If you can't quite remember exactly function from C stdlib use 'man -k'.
+        E.g man -k '^printf'
+
+[LANG] C represents procedure paradigm, it is verb-oriented. This is because typical
+       first you see is a functions call which usually contains verb that gives you
+       a hint what you want to accomplish. In OOP you see first noun (data, object).
+
+[LANG] short s = -1; is represented all 1's 11111111 11111111
+       short us = 1; all 0;s 00000000 00000000
+       If you do int i = s; then sign extend will be applied so all 1's again.
+
+[TIP] C functions change data through side effects so it is very common to pass
+      pointer to the struct and return void but actually the data will be
+      changed. This paradigm is completely opposite to functional programming.
+
+[STYLE] Prefer sizeof(varname) to sizeof(type).
+
+[TIP] While comments are very important, the best code is self-documented.
+
+[TIP] Re-write function interface by grouping the arguments into a struct
+      if it has too much text to fit.
+
+[LANG] In C there is no instantiates - declaration do the job as fill struct
+       fields with default values or to have initialization function (pointer
+       fields are special case) followed by memory allocation. E.g.
+          List_T list;
+          NEW(list);   // heap allocation
+
+[LANG] If you have a structure with pointer fields you need(can) to after you
+       allocate it with malloc. If you try to this before malloc segmentation
+       error will be thrown.
+
+[STYLE] Try include/define precise pre-conditions and post-conditions with every
+        function that you write.
+
+[STYLE] Keep your input and output as separate functions, so they can be changed
+        easily and can be custom-tailored to your computing system. In this way
+        'Dependency rejection' could be applied.
+
+[TEST] The quality of test data is more important than its quantity.
+
+[STYLE] Try design with types. Let's assume that we have to defined a 24-bit data type
+        and you have to emphasize that. The corresponding type will be:
+            typedef struct type24 {
+              unsigned char x[3];
+            } type24;
+
+[LANG]  void* and char* are functionally equivalent: the key property of both is
+        that they are pointers that can be faithfully cast to any other pointer
+        type. The only difference is that legal to perform arithmetic on a
+        char*, but not on a void*.
+
+[TEST] For the programmer to be 99.95% sure of the 100,000-line program, the
+       development procedure would have to be made more rigorous (and presumably
+       more time-consuming) to the extent that each 50-line segment is
+       99.999975% certain of being correct.
+
+[TIP] Let the program "grow" from an initial skeleton of dummy functions.
+      Once the design is completed, the main() function can be written.
