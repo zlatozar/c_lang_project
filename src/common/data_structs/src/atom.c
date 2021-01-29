@@ -1,17 +1,16 @@
 #include <limits.h>  /* LONG_MIN, LONG_MAX */
 #include <string.h>  /* strlen             */
-
 #include "macros/lang.h"
-#include "common/lang/assert.h"
-#include "common/lang/mem.h"
+#include "lang/assert.h"
+#include "lang/mem.h"
 
-#include "common/data_structs/atom.h"
+#include "data_structs/atom.h"
 
 static struct atom {
-  struct atom *link;
+  struct atom* link;
   size_t len;
   char* str;
-} *atom_buckets[2048];
+}* atom_buckets[2048];
 
 static unsigned long scatter[] = {
   2078917053, 143302914, 1027100827, 1953210302, 755253631, 2002600785,
@@ -59,7 +58,8 @@ static unsigned long scatter[] = {
   1884137923, 53392249, 1735424165, 1602280572
 };
 
-const char* Atom_new(const char* str, size_t len)
+const char*
+Atom_new(const char* str, size_t len)
 {
   struct atom* p_atom;
 
@@ -68,26 +68,26 @@ const char* Atom_new(const char* str, size_t len)
   unsigned long h;
   size_t i;
   for (h = 0, i = 0; i < len; i++)
-    h = (h << 1) + scatter[(unsigned char)str[i]];
+  { h = (h << 1) + scatter[(unsigned char)str[i]]; }
 
   h &= ARRAY_SIZE(atom_buckets) - 1;
 
   for (p_atom = atom_buckets[h]; p_atom; p_atom = p_atom->link) {
     if (len == p_atom->len) {
       for (i = 0; i < len && p_atom->str[i] == str[i]; )
-        i++;
+      { i++; }
 
       if (i == len)
-        return p_atom->str;
+      { return p_atom->str; }
     }
   }
 
   p_atom = ALLOC(sizeof(*p_atom) + len + 1);
   p_atom->len = len;
-  p_atom->str = (char *)(p_atom + 1);
+  p_atom->str = (char*)(p_atom + 1);
 
   if (len > 0)
-    memcpy(p_atom->str, str, len);
+  { memcpy(p_atom->str, str, len); }
 
   p_atom->str[len] = '\0';
   p_atom->link = atom_buckets[h];
@@ -96,7 +96,8 @@ const char* Atom_new(const char* str, size_t len)
   return p_atom->str;
 }
 
-size_t Atom_length(const char* str)
+size_t
+Atom_length(const char* str)
 {
   struct atom* p_atom;
 
@@ -105,36 +106,38 @@ size_t Atom_length(const char* str)
   for (size_t i = 0; i < ARRAY_SIZE(atom_buckets); i++)
     for (p_atom = atom_buckets[i]; p_atom; p_atom = p_atom->link)
       if (p_atom->str == str)
-        return p_atom->len;
+      { return p_atom->len; }
 
   Fail();
   return 0;
 }
 
-const char* Atom_int(long n)
+const char*
+Atom_int(long n)
 {
   char str[43];
   char* s = str + sizeof(str);
   unsigned long m;
 
   if (n == LONG_MIN)
-    m = LONG_MAX + 1UL;
+  { m = LONG_MAX + 1UL; }
   else if (n < 0)
-    m = -n;
+  { m = -n; }
   else
-    m = n;
+  { m = n; }
 
   do
-    *--s = m % 10 + '0';
+  { *--s = m % 10 + '0'; }
   while ((m /= 10) > 0);
 
   if (n < 0)
-    *--s = '-';
+  { *--s = '-'; }
 
   return Atom_new(s, (str + sizeof(str)) - s);
 }
 
-const char* Atom_string(const char* str)
+const char*
+Atom_string(const char* str)
 {
   Assert(str);
   return Atom_new(str, strlen(str));

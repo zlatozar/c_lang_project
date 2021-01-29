@@ -9,6 +9,7 @@ struct array_rep {
   char* mem_alloc;
 };
 
-extern void ArrayRep_init(struct array_rep* p_arrayRep, size_t length, size_t size, void* mem_alloc);
+extern void ArrayRep_init(struct array_rep* p_arrayRep, size_t length,
+                          size_t size, void* mem_alloc);
 
 #endif  /* COMMON_DATA_STRUCTS_ARRAYREP_H */

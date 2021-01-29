@@ -5,3 +5,5 @@ or are OS dependant, will be placed here as submoduls.
 
 Should be builded and prepared for static linking.
 NOTE: If changes are needed fork dependand library in you own reporistory.
+
+TODO: Add one Makefile to build them all

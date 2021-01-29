@@ -10,7 +10,8 @@ UNITY_LIB  = $(DEPS_ROOT)/builds/unity/lib
 LIB_DIR = ../build/lib
 
 CFLAGS   = -g -Og -std=c99 -pedantic-errors -Wall -Wextra -Werror -DDEBUG
-VALGRIND = valgrind --leak-check=full --suppressions=$(PROJ_ROOT)/valgrind-test.supp --quiet --error-exitcode=1
+VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --quiet --error-exitcode=1 \
+					 --suppressions=$(PROJ_ROOT)/valgrind-test.supp
 
 # Form names of the executable
 BUILD_DIR = bin

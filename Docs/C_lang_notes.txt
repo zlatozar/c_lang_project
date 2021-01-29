@@ -942,3 +942,95 @@
 
 [TIP] Let the program "grow" from an initial skeleton of dummy functions.
       Once the design is completed, the main() function can be written.
+
+[LANG] Opaque pointers:
+          typedef struct node_t node_t, *List_T // in .h
+          struct node_t {                       // fallowing in .c
+            char* data;
+            List_T next;
+          };
+
+[LANG] static means two different things in C:
+       - A static variable inside a function keeps its value between invocations.
+       - A static global variable or a function is "seen" only in the file it's
+         declared in.
+
+[LANG] Dynamically allocated variables resides in heap.
+
+[LANG] void* doesn't mean that points to nothing - it points to something that
+       has no type.
+
+[TIP] Data dominates. If you've chosen the right data structures and organized
+      things well, the algorithms will almost always be self-evident. Data structures,
+      not algorithms, are central to programming.
+
+[STYLE] Simple rule: include files should never include include files.
+
+[TIP] When we write generic functions we use void* parameters. Sometimes inside
+      them we need to make pointer arithmetic but it is not possible to do that
+      with void*. How to proceed? Accept that (void*) points just to one byte so
+      cast it to (char*) - scale factor becomes one. To be pointer arithmetic
+      correct offset should be multiplied by size of the current type. E.g.
+           int lsearch(void* key, void* base, int size, int elmSize) {
+               for (int i = 0; i < n; ++i) {
+                   void* elmAddres = (char*)base + i*size;
+                   ...
+
+[LANG] memcmp works very well for what that could be in memory "rectangle"
+       (continues place) - simple types like int, float, double etc. and does not
+       work very well for char*, structs(aligning and pointers inside). For such
+       types pass comparison function.
+
+[TIP] With threads, the operating system switches running threads preemptively
+      according to its scheduler, which is an algorithm in the operating system
+      kernel. With coroutines (see pt.h), the programmer and programming
+      language determine when to switch coroutines; in other words, tasks are
+      cooperatively multitasked by pausing and resuming functions at set
+      points, typically (but not necessarily) within a single thread.
+
+[TIP] If you using protothreads(coroutines) all function-local variables that
+      should have their values saved between coroute returns should be static.
+
+[TIP] Co-routines are to state machines what recursion is to stacks. This is
+      because co-routines save the control state of a function between calls.
+
+[TIP] Design is the art to balance contradicting goals.
+
+[LANG] Pointers have the same size. It doesn't matter what they point.
+
+[LANG] *(char**)vp1 is not the same as (char*)vp1. We have to reach the value first
+       then dereferenc.
+
+[STYLE] Always check malloc (and all of that kind) return value with assert. If
+        malloc fails you have to change your design -  current available memory is
+        not enough.
+
+[LANG] In C you can't reference directly parent structure from the nested but could
+       have pointer to it so kind of mutually recursive types could be written
+           struct xx {
+             int i;
+             struct yy {
+               char s;
+               struct xx* p;
+             } *q;
+           };
+
+[TRICK] Header file must include only every other header file in order to compile
+        correctly, but not more (.c should include the rest if required). To check
+        this For every header file in a software package, automatically generate and
+        then compile the following:
+            #include "path/to/header_under_test"
+            int main () { return 0; }
+
+[TIP] In some cases you do not know array size until size is not passed/calculated.
+      But even that we can handle that case using malloc:
+          bool* visited;
+          int vertex_cnt;
+          ...              // calculate vertex_cnt
+          visited = (bool*)malloc(vertex_cnt * sizeof(bool));
+          for(int i = 0; ....) {
+            visited[i] = true;
+            ...
+
+[TIP] Make the problem easier to solve as introduce new helper functions.
+      Wishful thinking.

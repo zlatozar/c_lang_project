@@ -3,8 +3,17 @@ BUILD_DIR = build
 vpath %.c src
 vpath %.o $(BUILD_DIR)/obj
 
-CFLAGS  := -I include -std=c99 -pedantic-errors -Wall -Wextra \
-           -Wshadow -Wmaybe-uninitialized -fno-common
+# Base
+CFLAGS := -I include -std=c99 -Wall -Wextra -Wpedantic -Werror -fno-common
+
+# -Wconversion eventually
+CFLAGS += -Wformat=2 -Wno-unused-parameter -Wshadow -Wundef          \
+					-Wwrite-strings -Wstrict-prototypes -Wold-style-definition \
+					-Wredundant-decls -Wnested-externs -Wmissing-include-dirs  \
+					-Wjump-misses-init -Wlogical-op
+
+# TODO: Try to resolve this
+CFLAGS += -Wno-maybe-uninitialized
 
 LDFLAGS := -L $(BUILD_DIR)/lib
 ARFLAGS := r

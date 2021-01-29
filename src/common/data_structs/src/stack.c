@@ -1,19 +1,19 @@
 #include <stddef.h>  /* NULL */
+#include "lang/assert.h"
+#include "lang/mem.h"
 
-#include "common/lang/assert.h"
-#include "common/lang/mem.h"
-
-#include "common/data_structs/stack.h"
+#include "data_structs/stack.h"
 
 struct stack {
   int count;
   struct elem {
     void* x;
-    struct elem *link;
-  } *sp;
+    struct elem* link;
+  }* sp;
 };
 
-Stack_T Stack_new(void)
+Stack_T
+Stack_new(void)
 {
   Stack_T self;
   NEW(self);
@@ -24,9 +24,10 @@ Stack_T Stack_new(void)
   return self;
 }
 
-void Stack_free(Stack_T* self)
+void
+Stack_free(Stack_T* self)
 {
-  struct elem *t, *u;
+  struct elem* t, *u;
 
   Assert(self && *self);
 
@@ -38,14 +39,17 @@ void Stack_free(Stack_T* self)
   FREE(*self);
 }
 
-bool Stack_isEmpty(Stack_T self)
+bool
+Stack_isEmpty(Stack_T self)
 {
   Assert(self);
   return self->count == 0;
 }
 
-void Stack_push(Stack_T self, void* x) {
-  struct elem *t;
+void
+Stack_push(Stack_T self, void* x)
+{
+  struct elem* t;
 
   Assert(self);
   NEW(t);
@@ -57,10 +61,11 @@ void Stack_push(Stack_T self, void* x) {
   self->count++;
 }
 
-void* Stack_pop(Stack_T self)
+void*
+Stack_pop(Stack_T self)
 {
   void* x;
-  struct elem *t;
+  struct elem* t;
 
   Assert(self);
   Assert(self->count > 0);

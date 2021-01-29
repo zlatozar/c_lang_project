@@ -4,12 +4,20 @@
 #ifdef  NDEBUG
 #define Assert(exp) ((void)0)
 
+#define Require(exp) ((void)0)
+#define Ensure(exp) ((void)0)
+#define Invariant(exp) ((void)0)
+
 #else
 
-#include "common/lang/except.h"
+#include "except.h"
 
 extern void Assert(int exp);
-extern void Fail();
+extern void Fail(void);
+
+extern void Require(int exp);
+extern void Ensure(int exp);
+extern void Invariant(int exp);
 
 #define Assert(exp)     ( (void)((exp) || (THROW(Assert_Failed), 0)) )
 

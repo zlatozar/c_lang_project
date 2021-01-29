@@ -1,11 +1,11 @@
-#ifndef NDEBUG   /*  Development version */
+#ifndef NDEBUG       /*  Development version */
 
 #include <stdlib.h>  /* malloc, calloc, realloc, free */
-#include <string.h>  /* memset */
+#include <string.h>  /* memset                        */
 #include "macros/lang.h"
-#include "common/lang/assert.h"
+#include "lang/assert.h"
 
-#include "common/lang/mem.h"
+#include "lang/mem.h"
 
 // -----------------------------------------------------------------------------
 // Definitions
@@ -19,8 +19,8 @@ union align {
 #else
   int i;
   long l;
-  long *lp;
-  void *p;
+  long* lp;
+  void* p;
   void (*fp)(void);
   float f;
   double d;
@@ -41,13 +41,13 @@ union align {
 const Except_T Mem_Failed = { "Allocation failed" };
 
 static struct descriptor {
-  struct descriptor *free;
-  struct descriptor *link;
-  const void *ptr;
+  struct descriptor* free;
+  struct descriptor* link;
+  const void* ptr;
   long size;
-  const char *file;
+  const char* file;
   int line;
-} *htab[TOTAL_BUCKETS];
+}* htab[TOTAL_BUCKETS];
 
 static struct descriptor freelist = { .free = &freelist };
 
@@ -55,39 +55,44 @@ static struct descriptor freelist = { .free = &freelist };
 // Functions
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-static struct descriptor *find(const void *ptr)
+static struct descriptor*
+find(const void* ptr)
 {
-  struct descriptor *bp = htab[hash(ptr, htab)];
+  struct descriptor* bp = htab[hash(ptr, htab)];
 
   while (bp && bp->ptr != ptr)
-    bp = bp->link;
+  { bp = bp->link; }
 
   return bp;
 }
 
-void Mem_free(void *ptr, const char *file, int line)
+void
+Mem_free(void* ptr, const char* file, int line)
 {
   if (ptr) {
-    struct descriptor *bp;
+    struct descriptor* bp;
 
-    if (((unsigned long)ptr) % (sizeof (union align)) != 0 || (bp = find(ptr)) == NULL || bp->free)
-      Except_raise(&Assert_Failed, file, line);
+    if (((unsigned long)ptr) % (sizeof (union align)) != 0
+        || (bp = find(ptr)) == NULL || bp->free)
+    { Except_raise(&Assert_Failed, file, line); }
 
     bp->free = freelist.free;
     freelist.free = bp;
   }
 }
 
-void *Mem_resize(void *ptr, long nbytes, const char *file, int line)
+void*
+Mem_resize(void* ptr, long nbytes, const char* file, int line)
 {
-  struct descriptor *bp;
-  void *newptr;
+  struct descriptor* bp;
+  void* newptr;
 
   Assert(ptr);
   Assert(nbytes > 0);
 
-  if (((unsigned long)ptr) % (sizeof (union align)) != 0 || (bp = find(ptr)) == NULL || bp->free)
-    Except_raise(&Assert_Failed, file, line);
+  if (((unsigned long)ptr) % (sizeof (union align)) != 0
+      || (bp = find(ptr)) == NULL || bp->free)
+  { Except_raise(&Assert_Failed, file, line); }
 
   newptr = Mem_alloc(nbytes, file, line);
   memcpy(newptr, ptr, nbytes < bp->size ? nbytes : bp->size);
@@ -96,28 +101,30 @@ void *Mem_resize(void *ptr, long nbytes, const char *file, int line)
   return newptr;
 }
 
-void *Mem_calloc(long count, long nbytes, const char *file, int line)
+void*
+Mem_calloc(long count, long nbytes, const char* file, int line)
 {
-  void *ptr;
+  void* ptr;
 
   Assert(count > 0);
   Assert(nbytes > 0);
 
-  ptr = Mem_alloc(count*nbytes, file, line);
-  memset(ptr, '\0', count*nbytes);
+  ptr = Mem_alloc(count * nbytes, file, line);
+  memset(ptr, '\0', count * nbytes);
 
   return ptr;
 }
 
-static struct descriptor *dalloc(void *ptr, long size, const char *file, int line)
+static struct descriptor*
+dalloc(void* ptr, long size, const char* file, int line)
 {
-  static struct descriptor *avail;
+  static struct descriptor* avail;
   static int nleft;
 
   if (nleft <= 0) {
     avail = malloc(NDESCRIPTORS * sizeof (*avail));
     if (avail == NULL)
-      return NULL;
+    { return NULL; }
 
     nleft = NDESCRIPTORS;
   }
@@ -132,33 +139,34 @@ static struct descriptor *dalloc(void *ptr, long size, const char *file, int lin
   return avail++;
 }
 
-void *Mem_alloc(long nbytes, const char *file, int line)
+void*
+Mem_alloc(long nbytes, const char* file, int line)
 {
-  struct descriptor *bp;
-  void *ptr;
+  struct descriptor* bp;
+  void* ptr;
 
   Assert(nbytes > 0);
 
-  nbytes = ((nbytes + sizeof (union align) - 1) / (sizeof (union align))) * (sizeof (union align));
+  nbytes = ((nbytes + sizeof (union align) - 1) / (sizeof (union align))) *
+           (sizeof (union align));
   for (bp = freelist.free; bp; bp = bp->free) {
     if (bp->size > nbytes) {
       bp->size -= nbytes;
-      ptr = (char *)bp->ptr + bp->size;
+      ptr = (char*)bp->ptr + bp->size;
       if ((bp = dalloc(ptr, nbytes, file, line)) != NULL) {
         unsigned h = hash(ptr, htab);
         bp->link = htab[h];
         htab[h] = bp;
         return ptr;
-      }
-      else {
+      } else {
         if (file == NULL)
-          THROW(Mem_Failed);
+        { THROW(Mem_Failed); }
         else
-          Except_raise(&Mem_Failed, file, line);
+        { Except_raise(&Mem_Failed, file, line); }
       }
     }
     if (bp == &freelist) {
-      struct descriptor *newptr;
+      struct descriptor* newptr;
 
       // TODO: ptr  should be freed
 
@@ -166,9 +174,9 @@ void *Mem_alloc(long nbytes, const char *file, int line)
           || (newptr = dalloc(ptr, nbytes + NALLOC, __FILE__, __LINE__)) == NULL) {
 
         if (file == NULL)
-          THROW(Mem_Failed);
+        { THROW(Mem_Failed); }
         else
-          Except_raise(&Mem_Failed, file, line);
+        { Except_raise(&Mem_Failed, file, line); }
       }
       newptr->free = freelist.free;
       freelist.free = newptr;

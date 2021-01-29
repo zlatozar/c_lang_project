@@ -1,4 +1,4 @@
-#include "common/lang/assert.h"
+#include "lang/assert.h"
 
 const Except_T Assert_Failed = { "Assertion failed" };
 
@@ -13,7 +13,8 @@ void (Assert)(int exp)
   Assert(exp);
 }
 
-void Fail()
+void
+Fail(void)
 {
   Assert(0);
 }

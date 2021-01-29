@@ -1,12 +1,10 @@
-#include <limits.h>  /* INT_MAX      */
-#include <stddef.h>  /* NULL, size_t */
+#include "data_structs/set.h"
 
+#include <limits.h>       /* INT_MAX */
 #include "macros/lang.h"
-#include "common/lang/assert.h"
-#include "common/lang/mem.h"
-#include "common/math/arith.h"
-
-#include "common/data_structs/set.h"
+#include "lang/assert.h"
+#include "lang/mem.h"
+#include "math/arith.h"
 
 struct set {
   size_t length;
@@ -16,22 +14,28 @@ struct set {
   size_t size;
 
   struct member {
-    struct member *link;
+    struct member* link;
     const void* member;
-  } **buckets;
+  }** buckets;
 };
 
-LOCAL int cmpatom(const void* x, const void* y)
+//______________________________________________________________________________
+//                                                              Local functions
+
+LOCAL int
+cmpatom(const void* x, const void* y)
 {
   return x != y;
 }
 
-LOCAL size_t hashatom(const void* x)
+LOCAL size_t
+hashatom(const void* x)
 {
   return (unsigned long)x >> 2;
 }
 
-LOCAL Set_T copy(Set_T t, size_t hint)
+LOCAL Set_T
+copy(Set_T t, size_t hint)
 {
   Set_T set;
   Assert(t);
@@ -40,10 +44,10 @@ LOCAL Set_T copy(Set_T t, size_t hint)
   {
     size_t i;
 
-    struct member *q;
+    struct member* q;
     for (i = 0; i < t->size; i++) {
       for (q = t->buckets[i]; q; q = q->link) {
-        struct member *p;
+        struct member* p;
         const void* member = q->member;
 
         size_t ii = (*set->hash)(member) % set->size;
@@ -62,27 +66,32 @@ LOCAL Set_T copy(Set_T t, size_t hint)
   return set;
 }
 
-Set_T Set_new(size_t hint, int cmp( const void* x, const void* y ),
-              size_t hash( const void* x ))
+//______________________________________________________________________________
+//                                                             Public functions
+
+Set_T
+Set_new(size_t hint, int cmp( const void* x, const void* y ),
+        size_t hash( const void* x ))
 {
   Set_T set;
   size_t i;
 
   static unsigned primes[] = { 509, 509, 1021, 2053, 4093,
-                               8191, 16381, 32771, 65521, INT_MAX };
+                               8191, 16381, 32771, 65521, INT_MAX
+                             };
 
   for (i = 1; primes[i] < hint; i++)
     ;
 
-  set = ALLOC(sizeof(*set) + primes[i-1] * sizeof(set->buckets[0]));
+  set = ALLOC(sizeof(*set) + primes[i - 1] * sizeof(set->buckets[0]));
 
-  set->size = primes[i-1];
+  set->size = primes[i - 1];
   set->cmp  = cmp  ?  cmp : cmpatom;
   set->hash = hash ? hash : hashatom;
-  set->buckets = (struct member **)(set + 1);
+  set->buckets = (struct member**)(set + 1);
 
   for (i = 0; i < set->size; i++)
-    set->buckets[i] = NULL;
+  { set->buckets[i] = NULL; }
 
   set->length = 0;
   set->time_stamp = 0;
@@ -90,13 +99,14 @@ Set_T Set_new(size_t hint, int cmp( const void* x, const void* y ),
   return set;
 }
 
-void Set_free(Set_T* set)
+void
+Set_free(Set_T* set)
 {
   Assert(set && *set);
 
   if ((*set)->length > 0) {
     size_t i;
-    struct member *p, *q;
+    struct member* p, *q;
 
     for (i = 0; i < (*set)->size; i++) {
       for (p = (*set)->buckets[i]; p; p = q) {
@@ -110,16 +120,18 @@ void Set_free(Set_T* set)
   FREE(*set);
 }
 
-size_t Set_length(Set_T set)
+size_t
+Set_length(Set_T set)
 {
   Assert(set);
   return set->length;
 }
 
-int Set_member(Set_T set, const void* member)
+int
+Set_member(Set_T set, const void* member)
 {
   size_t i;
-  struct member *p;
+  struct member* p;
 
   Assert(set);
   Assert(member);
@@ -128,24 +140,25 @@ int Set_member(Set_T set, const void* member)
 
   for (p = set->buckets[i]; p; p = p->link) {
     if ((*set->cmp)(member, p->member) == 0)
-      break;
+    { break; }
   }
 
   return p != NULL;
 }
 
-void Set_put(Set_T set, const void* member)
+void
+Set_put(Set_T set, const void* member)
 {
   size_t i;
-  struct member *p;
+  struct member* p;
 
   Assert(set);
   Assert(member);
 
-  i = (*set->hash)(member)%set->size;
+  i = (*set->hash)(member) % set->size;
   for (p = set->buckets[i]; p; p = p->link) {
     if ((*set->cmp)(member, p->member) == 0)
-      break;
+    { break; }
   }
 
   if (p == NULL) {
@@ -164,10 +177,11 @@ void Set_put(Set_T set, const void* member)
   set->time_stamp++;
 }
 
-void* Set_remove(Set_T set, const void* member)
+void*
+Set_remove(Set_T set, const void* member)
 {
   size_t i;
-  struct member **pp;
+  struct member** pp;
 
   Assert(set);
   Assert(member);
@@ -177,7 +191,7 @@ void* Set_remove(Set_T set, const void* member)
 
   for (pp = &set->buckets[i]; *pp; pp = &(*pp)->link) {
     if ((*set->cmp)(member, (*pp)->member) == 0) {
-      struct member *p = *pp;
+      struct member* p = *pp;
       *pp = p->link;
       member = p->member;
 
@@ -185,18 +199,19 @@ void* Set_remove(Set_T set, const void* member)
 
       set->length--;
 
-      return (void *)member;
+      return (void*)member;
     }
   }
 
   return NULL;
 }
 
-void Set_map(Set_T set, void apply( const void* member, void* cl ), void* cl)
+void
+Set_map(Set_T set, void apply( const void* member, void* cl ), void* cl)
 {
   size_t i;
   unsigned stamp;
-  struct member *p;
+  struct member* p;
 
   Assert(set);
   Assert(apply);
@@ -211,11 +226,12 @@ void Set_map(Set_T set, void apply( const void* member, void* cl ), void* cl)
   }
 }
 
-void** Set_toArray(Set_T set, void* end)
+void**
+Set_toArray(Set_T set, void* end)
 {
   size_t i, j = 0;
   void** array;
-  struct member *p;
+  struct member* p;
 
   Assert(set);
 
@@ -223,14 +239,15 @@ void** Set_toArray(Set_T set, void* end)
 
   for (i = 0; i < set->size; i++) {
     for (p = set->buckets[i]; p; p = p->link)
-      array[j++] = (void *)p->member;
+    { array[j++] = (void*)p->member; }
   }
 
   array[j] = end;
   return array;
 }
 
-Set_T Set_union(Set_T s, Set_T t)
+Set_T
+Set_union(Set_T s, Set_T t)
 {
   if (s == NULL) {
     Assert(t);
@@ -246,10 +263,10 @@ Set_T Set_union(Set_T s, Set_T t)
 
     {
       size_t i;
-      struct member *q;
+      struct member* q;
       for (i = 0; i < t->size; i++) {
         for (q = t->buckets[i]; q; q = q->link)
-          Set_put(set, q->member);
+        { Set_put(set, q->member); }
       }
     }
 
@@ -257,7 +274,8 @@ Set_T Set_union(Set_T s, Set_T t)
   }
 }
 
-Set_T Set_inter(Set_T s, Set_T t)
+Set_T
+Set_inter(Set_T s, Set_T t)
 {
   if (s == NULL) {
     Assert(t);
@@ -277,12 +295,12 @@ Set_T Set_inter(Set_T s, Set_T t)
     {
       size_t i;
 
-      struct member *q;
+      struct member* q;
       for (i = 0; i < t->size; i++) {
 
         for (q = t->buckets[i]; q; q = q->link)
           if (Set_member(s, q->member)) {
-            struct member *p;
+            struct member* p;
             const void* member = q->member;
 
             size_t ii = (*set->hash)(member) % set->size;
@@ -302,7 +320,8 @@ Set_T Set_inter(Set_T s, Set_T t)
   }
 }
 
-Set_T Set_minus(Set_T t, Set_T s)
+Set_T
+Set_minus(Set_T t, Set_T s)
 {
   if (t == NULL) {
     Assert(s);
@@ -319,12 +338,12 @@ Set_T Set_minus(Set_T t, Set_T s)
     {
       size_t i;
 
-      struct member *q;
+      struct member* q;
       for (i = 0; i < t->size; i++)
         for (q = t->buckets[i]; q; q = q->link)
 
           if (!Set_member(s, q->member)) {
-            struct member *p;
+            struct member* p;
             const void* member = q->member;
 
             size_t ii = (*set->hash)(member) % set->size;
@@ -343,7 +362,8 @@ Set_T Set_minus(Set_T t, Set_T s)
   }
 }
 
-Set_T Set_diff(Set_T s, Set_T t)
+Set_T
+Set_diff(Set_T s, Set_T t)
 {
   if (s == NULL) {
     Assert(t);
@@ -359,12 +379,12 @@ Set_T Set_diff(Set_T s, Set_T t)
     {
       size_t i;
 
-      struct member *q;
+      struct member* q;
       for (i = 0; i < t->size; i++)
         for (q = t->buckets[i]; q; q = q->link)
 
           if (!Set_member(s, q->member)) {
-            struct member *p;
+            struct member* p;
             const void* member = q->member;
 
             size_t ii = (*set->hash)(member) % set->size;
@@ -384,12 +404,12 @@ Set_T Set_diff(Set_T s, Set_T t)
     {
       size_t i;
 
-      struct member *q;
+      struct member* q;
       for (i = 0; i < t->size; i++)
         for (q = t->buckets[i]; q; q = q->link)
 
           if (!Set_member(s, q->member)) {
-            struct member *p;
+            struct member* p;
             const void* member = q->member;
 
             size_t ii = (*set->hash)(member) % set->size;
@@ -401,7 +421,7 @@ Set_T Set_diff(Set_T s, Set_T t)
 
             set->buckets[ii] = p;
             set->length++;
-        }
+          }
     }
 
     return set;

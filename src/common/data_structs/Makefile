@@ -1,16 +1,4 @@
-BUILD_DIR = build
-
-vpath %.c src
-vpath %.o $(BUILD_DIR)/obj
-
-# -Wconversion eventually
-CFLAGS  := -I include -std=c99 -pedantic-errors -Wall -Wextra \
-           -Werror -Wshadow -Wundef -fno-common
-
-LDFLAGS := -L $(BUILD_DIR)/lib
-ARFLAGS := r
-
-OUTPUT_OPTION = -MMD -MP -o $@
+include ../Makefile.defs
 
 # ______________________________________________________________________________
 #                                                                       Specify
@@ -54,6 +42,10 @@ debug: clean dev
 
 release: CFLAGS += -O2 $(MACROS_H) $(LDLIBS_H)
 release: clean all
+
+cppcheck:
+		@cppcheck --enable=all --includes-file=include --suppressions-list="../../../cppcheck.supp" \
+							--template=[{severity}]{file}:{line}_{message} --quiet src
 
 .PHONY: clean
 clean:
