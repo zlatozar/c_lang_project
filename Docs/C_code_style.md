@@ -383,6 +383,7 @@ trie_add( *child, word + 1 );   // Good
 
 /* Single line comment (ok) */
 ```
+- Comment sentences should end with dot.
 
 ## Functions
 
@@ -390,7 +391,8 @@ trie_add( *child, word + 1 );   // Good
   Using different names for the same values in functions is suspicious, and
   forces your readers to reason about unimportant things.
 - It is important to know that functions are not always inlined even if declared as such
-- Every function which may have access from outside its module, must include function *prototype* (or *declaration*)
+- Every function which may have access from outside its module, must include
+  function *prototype* (or *declaration*)
 - Function name must start with module name in upper case followed by `_` and lowercase name
 ```c
 /* OK */
@@ -1093,7 +1095,7 @@ the header file in question, but must not include anything else.
 
 - Header file must only expose module **public** variables/types/functions
 - Use `extern` for global module variables in header file, define them in source file later
-```
+```c
 /* file.h ... */
 #ifndef ...
 
@@ -1155,8 +1157,5 @@ extern "C" {
 [AStyle](http://astyle.sourceforge.net/) is a great piece of software that can
 help with formatting the code based on input configuration.
 
-This repository contains `config/astylerc` file which can be used with `AStyle` software.
-
-```
-# Usage: astyle --options="<path to>/astylerc" src/*.c include/*.h
-```
+This repository contains `tools-setup/astylerc` file which can be used to
+setup `AStyle` software.

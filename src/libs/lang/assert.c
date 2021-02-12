@@ -1,7 +1,7 @@
 #include "lang/assert.h"
 
-const Except_T Assert_Failed = { "Assertion failed" };
-
+/* Initialize GLOBAL. Could be thrown from anywhere. */
+const Except_T Assert_Faile = { "Assertion failed" };
 const Except_T Precondition_Failed = { "Pre-condition failed" };
 const Except_T Postcondition_Failed = { "Post-condition failed" };
 const Except_T Invariant_Error = { "Invariant error" };
@@ -11,12 +11,6 @@ const Except_T Invariant_Error = { "Invariant error" };
 void (Assert)(int exp)
 {
   Assert(exp);
-}
-
-void
-Fail(void)
-{
-  Assert(0);
 }
 
 void (Require)(int exp)

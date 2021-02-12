@@ -7,9 +7,9 @@
 ### C Language
 
 #### Basics
-- [Introduction to C](http://ix.cs.uoregon.edu/~norris/cis330books/ThinkingInC/Index.html)
+- (video) [Introduction to C](http://ix.cs.uoregon.edu/~norris/cis330books/ThinkingInC/Index.html)
 - _"The C Programming Language"_ by Kernighan, Ritchie
-- [Programming Paradigms lectures from Stanford](https://www.youtube.com/watch?v=Ps8jOj7diA0&list=PL5BD86273FEF4DB0B)
+- (video) [Programming Paradigms lectures from Stanford](https://www.youtube.com/watch?v=Ps8jOj7diA0&list=PL5BD86273FEF4DB0B)
 
 ### Standard Library Reference
 
@@ -22,6 +22,9 @@
   [source code](https://github.com/zlatozar/cii)
 - _"Functional C"_ by Hartel  <br/>
   [book and source](https://research.utwente.nl/en/publications/functional-c)
+
+### Multi-threading
+- [PThreads tutorial](https://computing.llnl.gov/tutorials/pthreads/)
 
 ### Building Tools
 - _"AUTOTOOLS. A Practitioner’s Guide to GNU Autoconf, Automake, and Libtool"_ by John Calcote

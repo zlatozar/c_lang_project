@@ -8,7 +8,8 @@
 #include <errno.h>
 #include "lang/assert.h"
 
-int main(void)
+int
+main(void)
 {
   Assert(1);
   printf("%s\n", "Just testing project template...");

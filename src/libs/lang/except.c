@@ -10,9 +10,9 @@ Except_Frame* Except_stack = NULL;
 void
 Except_raise(const Except_T* e, const char* file, unsigned line)
 {
-  Except_Frame* p = Except_stack;
+  Require(e);
 
-  Assert(e);
+  Except_Frame* p = Except_stack;
 
   if (p == NULL) {
     fprintf(stderr, "Uncaught exception!");

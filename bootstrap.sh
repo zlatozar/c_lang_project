@@ -1,3 +1,4 @@
 #!/bin/sh
 
-autoreconf -iv && ./configure # --enable-debug
+# TODO: Prod and Dev cases
+autoreconf -iv && ./configure --enable-debug

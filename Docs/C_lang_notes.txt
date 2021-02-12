@@ -1032,4 +1032,8 @@
 %
 [TIP] Make the problem easier to solve as introduce new helper functions.
       Wishful thinking.
-
+%
+[TIP] Look at Autotools macros as calling functions that will change build process.
+%
+[TIP] Calling ./configure you compile Autotools code.
+%

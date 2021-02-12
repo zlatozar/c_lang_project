@@ -1,4 +1,4 @@
-# Usage: astyle --options="<path to>/astylerc" src/*.c include/*.h
+# Usage: astyle --options="<path to>/astylerc" --recursive "src/*.c"
 # NOTE: could be stored in local directory as ~/.astylerc
 
 # or allman
@@ -45,7 +45,7 @@
 --suffix=none
 
 # Exclude if needed
-# --exclude="src/first.c"
-# --exclude="src/second.c"
+--exclude="src/libs/lang/include/lang/except.h"
+# --exclude="src/something_else.c"
 
 --ignore-exclude-errors

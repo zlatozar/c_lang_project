@@ -15,6 +15,9 @@ MOSTLYCLEANFILES = *.stackdump
 # other targets
 # --------------------------------------
 
+format:
+	astyle --recursive "src/libs/*.c,*h" "src/bin/*.c,*h" --verbose --options="tools-setup/astylerc"
+
 sync_submodules:
 	@git submodule init
 	@git submodule update
