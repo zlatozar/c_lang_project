@@ -52,6 +52,10 @@ the `Changes to be committed` list: the `.gitmodules` file and the path
 to the submodule. When you commit and push these files you commit/push
 the submodule to the origin.
 
+For example:
+
+    git submodule add https://github.com/silentbicycle/greatest src/ext-libs/greatest/include
+
 
 ### Getting the submodule's code
 
@@ -80,7 +84,7 @@ submodule's directory). However, you should also let the **main**
 repository know that you've updated the submodule's repository, and make
 it use the latest commit of the repository of the submodule. Because if
 you make new commits inside a submodule, the **main** repository will
-still **point to the old commit**. 
+still **point to the old commit**.
 
 So, if you want to have these changes in your **main** repository too, you
 should tell the **main** repository to use the latest commit of the
