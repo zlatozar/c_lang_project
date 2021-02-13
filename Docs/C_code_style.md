@@ -163,7 +163,7 @@ for (i = 0; i < 10; ++i) ...
 void
 a_name(void)
 {
-  /* Avoid function calls when declaring variable */
+  /* Avoid function calls when declaring variables */
   int32_t a, b = sum(1, 2);
 
   /* Use this */
@@ -1113,6 +1113,7 @@ int32_t my_variable;        /* Actually defined in source */
   `#include X.h` in `A.c`, so that `A.c` is not dependent on `X.h` accidentally being `#included` somewhere else.
 - Do not include module private declarations in header file
 - Include definitions of **data structures** and **enumerations** that are shared amongst multiple source files
+- The order of declarations in header file and there definitions in .c file should be the same
 
 - Header file example (no license for sake of an example)
 ```c

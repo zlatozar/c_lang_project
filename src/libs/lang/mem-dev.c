@@ -8,10 +8,6 @@
 #include "lang/assert.h"
 
 union align {
-#ifdef MAXALIGN
-  char pad[MAXALIGN];
-
-#else
   int i;
   long l;
   long* lp;
@@ -20,7 +16,6 @@ union align {
   float f;
   double d;
   long double ld;
-#endif
 };
 
 #define TOTAL_BUCKETS 2048
@@ -28,7 +23,8 @@ union align {
 
 #define hash(p, t) (((unsigned long)(p) >> 3) & (sizeof (t) / sizeof ((t)[0]) - 1))
 
-#define NALLOC (((TOTAL_BUCKETS*2) + sizeof (union align) - 1) / (sizeof (union align))) * (sizeof (union align))
+#define NALLOC (((TOTAL_BUCKETS * 2) + sizeof (union align) - 1) / (sizeof (union align))) \
+  * (sizeof (union align))
 
 /* Initialize GLOBAL. Could be thrown from anywhere. */
 const Except_T Mem_Failed = { "Allocation failed" };

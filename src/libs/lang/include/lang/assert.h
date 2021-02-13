@@ -16,8 +16,10 @@
  * @brief    Ad hoc program logic check.
  *
  * Raises `Assert_Failed` if `exp` is zero. Syntactically, `Assert(exp)`
- * is an expression. If NDEBUG is defined when `assert.h` is included,
- * assertions are disabled.
+ * is an expression.
+ *
+ * @note If NDEBUG is defined when `assert.h` is included,
+ *       assertions are disabled.
 */
 extern void Assert(int exp);
 /**

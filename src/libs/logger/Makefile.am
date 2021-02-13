@@ -1,25 +1,16 @@
 ## Process this file with automake to produce Makefile.in
 
-AM_CFLAGS = -std=c11 -I$(top_srcdir)/src/libs/logger/include  \
-						-I$(top_srcdir)/src/libs/lang/include
+AM_CFLAGS = -std=c11 -I$(top_srcdir)/src/libs/logger/include
 
 # Enable all warnings
 AM_CFLAGS += -Wformat=2 -Wno-unused-parameter -Wshadow -Wundef           \
 						 -Wwrite-strings -Wstrict-prototypes -Wold-style-definition  \
 						 -Wredundant-decls -Wnested-externs -Wmissing-include-dirs   \
 						 -Wjump-misses-init -Wlogical-op -Wmaybe-uninitialized       \
-						 \
-						 -Wno-conversion  # checked - conventions are safe
+						 -Wconversion
 
-noinst_LIBRARIES = liblang.a
-
-# The files to add to the library and to the source distribution
-liblang_a_SOURCES = assert.c  \
-										\
-										except.c  \
-										\
-										mem-dev.c \
-										mem.c
+noinst_LIBRARIES = liblogger.a
+liblogger_a_SOURCES = log.c
 
 AM_LDFLAGS = -version-info @LIBVERSION@
 

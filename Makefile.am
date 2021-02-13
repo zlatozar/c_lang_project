@@ -3,14 +3,6 @@
 SUBDIRS = src/libs \
 	  src/bin
 
-MAINTAINERCLEANFILES = configure config.in aclocal.m4        \
-build-aux/ar-lib build-aux/config.guess build-aux/depcomp    \
-build-aux/ltmain.sh build-aux/test-driver build-aux/compile  \
-build-aux/config.sub build-aux/missing build-aux/install-sh  \
-Makefile.in
-
-MOSTLYCLEANFILES = *.stackdump
-
 # --------------------------------------
 # other targets
 # --------------------------------------
@@ -21,3 +13,11 @@ format:
 sync_submodules:
 	@git submodule init
 	@git submodule update
+
+MAINTAINERCLEANFILES = configure config.in aclocal.m4        \
+build-aux/ar-lib build-aux/config.guess build-aux/depcomp    \
+build-aux/ltmain.sh build-aux/test-driver build-aux/compile  \
+build-aux/config.sub build-aux/missing build-aux/install-sh  \
+Makefile.in
+
+MOSTLYCLEANFILES = *.stackdump

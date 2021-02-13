@@ -3,6 +3,7 @@
 #include <stdlib.h>      /* abort                   */
 #include <stdio.h>       /* fprintf, stderr, fflush */
 #include "lang/assert.h"
+#include "logger/log.h"
 
 /* Initialize exception stack before usage */
 Except_Frame* Except_stack = NULL;

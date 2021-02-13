@@ -49,8 +49,9 @@ Mem_free(void* ptr, const char* file, int line)
   UNUSED(file);
   UNUSED(line);
 
-  if (ptr)
-  { free(ptr); }
+  if (ptr) {
+    free(ptr);
+  }
 }
 
 void*

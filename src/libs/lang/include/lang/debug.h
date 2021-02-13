@@ -3,15 +3,15 @@
 
 #include <stdio.h>  /* fprintf, stderr */
 
-#ifdef DEBUG
+#if defined(DEBUG)
 #define DEBUG 1
 #else
 #define DEBUG 0
 #endif
 
-# define COLOR_RED     "\033[31m"
-# define COLOR_GREEN   "\033[32m"
-# define COLOR_RESET   "\033[0m"
+#define COLOR_RED     "\033[31m"
+#define COLOR_GREEN   "\033[32m"
+#define COLOR_RESET   "\033[0m"
 
 #define debug_print(fmt, ...) do {           \
     if (DEBUG)                               \

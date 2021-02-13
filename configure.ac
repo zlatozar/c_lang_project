@@ -77,15 +77,7 @@ AC_CHECK_HEADERS( \
     string.h      \
     strings.h     \
     time.h        \
-    sys/ioctl.h   \
-    sys/param.h   \
-    sys/socket.h  \
-    sys/stat.h    \
-    sys/syslimits.h \
-    sys/types.h     \
-    sys/time.h      \
-    sys/wait.h      \
-    sys/uio.h
+    sys/ioctl.h
 )
 
 ##########################################
@@ -139,6 +131,7 @@ AC_SUBST([CFLAGS])
 
 dnl Project libraries
 AC_CONFIG_FILES([src/libs/lang/Makefile])
+AC_CONFIG_FILES([src/libs/logger/Makefile])
 AC_CONFIG_FILES([src/libs/Makefile])
 
 dnl Project

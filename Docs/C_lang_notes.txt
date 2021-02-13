@@ -1037,3 +1037,22 @@
 %
 [TIP] Calling ./configure you compile Autotools code.
 %
+[TIP] You don't know where C project will be compiled to native code and you
+      don't know if everything needed is installed that's why you asset
+      environment using Autotools.
+%
+[GCC] The -Wl,xxx option for gcc passes a comma-separated list of tokens as a
+      space-separated list of arguments to the linker. Example:
+          gcc -Wl,aaa,bbb,ccc
+      eventually becomes a linker call
+          ld aaa bbb ccc
+%
+[TIP]         *** No rule to make target `all'.  Stop.
+      This means that compilation chains configuration.ac-Makefile.am is broken.
+      Check AC_CONFIG_FILES in configuration.ac and SUBDIRS in Makefile.am.
+%
+[TIP]         #define _LOG(msg, ...)  printf(msg "%s", __VA_ARGS__)
+              #define LOG(...)        _LOG(__VA_ARGS__, "\n")
+      then
+              LOG("Hello World!");
+              LOG("Hello World! %i", 56);
