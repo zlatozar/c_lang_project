@@ -9,20 +9,18 @@
 #if !defined(DEBUG)
 #  define LOG_COLOR    0
 #  define LOG_LEVEL    ERROR_LEVEL
-
 #else
-
 #  define LOG_COLOR    1
 #  define LOG_LEVEL    DEBUG_LEVEL
 #endif
 
 #if LOG_COLOR
+#  define COLOR_BLACK  "\033[0;30m"
 #  define COLOR_BLUE   "\033[1;34m"
 #  define COLOR_RED    "\033[0;31m"
 #  define COLOR_RESET  "\033[0m"
-
 #else
-
+#  define COLOR_BLACK
 #  define COLOR_BLUE
 #  define COLOR_RED
 #  define COLOR_RESET
@@ -33,17 +31,14 @@ char* time_now(void);
 
 #define __FILE    strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__
 
-/* time | LOG_TAG + color | file name | function : line | */
-#define LOG_FMT     "%s | %-5s | %-15s | %s:%d | "
-
-#define DEBUG_TAG   "DEBUG"
-
 #ifdef LOG_COLOR
+#  define LOG_FMT     "%s | %-16s | %-15s | %s:%d | "
+#  define DEBUG_TAG   COLOR_BLACK "DEBUG" COLOR_RESET
 #  define INFO_TAG    COLOR_BLUE "INFO" COLOR_RESET
 #  define ERROR_TAG   COLOR_RED "ERROR" COLOR_RESET
-
 #else
-
+#   define LOG_FMT    "%s | %-5s | %-15s | %s:%d | "
+#  define DEBUG_TAG   "DEBUG"
 #  define INFO_TAG    "INFO"
 #  define ERROR_TAG   "ERROR"
 #endif  /* LOG_COLOR */

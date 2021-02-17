@@ -11,8 +11,6 @@ dnl implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 AC_PREREQ([2.69])
 
 AC_INIT([c_lang_project], [0.1], [zlatozar@gmail.com])
-AC_SUBST(LIBVERSION)
-LIBVERSION=1:0:0
 
 dnl Must come before AM_INIT_AUTOMAKE.
 AC_CONFIG_AUX_DIR([build-aux])

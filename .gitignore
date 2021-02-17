@@ -10,6 +10,8 @@
 ## Project specific
 build-aux/
 test/atconfig
+*.log
+*.trs
 src/bin/c-lang-project
 
 ## http://www.gnu.org/software/automake

@@ -1056,3 +1056,26 @@
       then
               LOG("Hello World!");
               LOG("Hello World! %i", 56);
+%
+[TIP] Just as Eskimos have 10 words for snow, so C have many words for digital
+      types.
+%
+[STYLE] typedef for function pointers defines functional interface. Example:
+              typedef double (*int_to_double_fn)(int);
+        This represents a type with the name int_to_double_fn's which encompasses
+        all functions that have an int as an argument and result in a double value.
+%
+[TIP] You can't divide C solution form the environment. All environment tools are
+      part of the C program and vice verse.
+%
+[TEST] Use linker(ld) flag -Wl,--wrap around an existing function. In this way a
+       mocking could be done in C. Unfortunately, you can’t have two different
+       wrappers for the same function in an executable. This could lead to
+       having to write several executables for each, or making your wrapper
+       function smart enough to have several configurable outcomes.
+%
+[STYLE] Do not cast explicit let compiler do the job. You have to be sure that
+        cast will not cause damage use -Wconvertion option.
+%
+[TEST] Valgrind could be used to check thread code: valgrind --tool=helgrind
+%

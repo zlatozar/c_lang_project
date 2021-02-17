@@ -404,7 +404,23 @@ void myfunc(void);
 void MYFunc(void);
 void myFunc();
 ```
-
+- Function return values or calculations that are obtained and then never change declare
+  them `const`
+```c
+/* OK */
+char *repeat_str(const char *str, size_t n)
+{
+  const size_t len = strlen(str);
+  const size_t buf_size = 1 + (len * n);
+  ...
+}
+```
+- Never use `const` in a function prototype for a parameter passed by value. It
+  has no meaning and is hence just 'noise'.
+```c
+/* Wrong */
+int find(const int *data, size_t size, int value);
+```
 - When function returns pointer, align asterisk to return type
 ```c
 /* OK */
@@ -923,6 +939,14 @@ int32_t x = 5 * (3) + (4);  /* It is evaluated to this, final result = 19 which 
     long l;
     long double ld;
 #endif
+
+/* OK */
+#if !defined(DEBUG)
+#  define LOG_COLOR    0
+#else
+#  define LOG_COLOR    1
+#endif
+
 ```
 
 ## Documentation

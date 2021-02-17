@@ -18,12 +18,12 @@
 #### C Philosophy
 - [C exercism](https://exercism.io/tracks/c)
 - _"Data Structures: An Advanced Approach Using C"_ by Jeffry Esakov <br/>
-- _"C Interfaces and Implementations: Techniques for Creating Reusable Software"_ by David Hanson  <br/>
-  [source code](https://github.com/zlatozar/cii)
+- _"C Interfaces and Implementations: Techniques for Creating Reusable Software"_ by David Hanson
 - _"Functional C"_ by Hartel  <br/>
   [book and source](https://research.utwente.nl/en/publications/functional-c)
 
 ### Multi-threading
+- (pdf)[An Introduction to Programming with Threads](https://www.hpl.hp.com/techreports/Compaq-DEC/SRC-RR-35.pdf)
 - [PThreads tutorial](https://computing.llnl.gov/tutorials/pthreads/)
 
 ### Building Tools
@@ -31,9 +31,9 @@
 - [Autotools example](http://www.bioinf.uni-freiburg.de/~mmann/HowTo/automake.html)
 
 ### Shell
-- _"Linux & Unix Shell Programming"_ by David Tansley
+- _"Shell Scripting: Expert Recipes for Linux, Bash, and More"_ by Steve Parker
 
-### LEX&YACC and compilers
+### lex&yacc and compilers
 - _"Introduction to Compiler Construction with Unix"_ by Axel T. Schreiner
 
 - _"Let's build a compiler"_ by by Jack Crenshaw (free book)  <br/>

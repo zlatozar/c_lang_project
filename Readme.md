@@ -15,12 +15,8 @@
 
 ## Dependencies
 
-### Logging
-[Log](https://github.com/rxi/log.c)
-
 ### Unit Testing
-[greatest](https://github.com/silentbicycle/greatest) (prefer) <br/>
-[Unity](https://github.com/ThrowTheSwitch/Unity)
+[greatest](https://github.com/silentbicycle/greatest)
 
 ### Protothreads (co-routines)
 [pt.h](http://dunkels.com/adam/pt/)
