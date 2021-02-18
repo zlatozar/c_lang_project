@@ -1,48 +1,46 @@
 ## Process this file with automake to produce Makefile.in
 
+ACLOCAL_AMFLAGS = -I m4
+
 AM_CFLAGS = -std=c11 -I$(top_srcdir)/src/libs/lang/include
+# checked - conventions are safe
+AM_CFLAGS += -Wno-conversion
 
-# Enable all warnings
-AM_CFLAGS += -Wformat=2 -Wno-unused-parameter -Wshadow -Wundef           \
-						 -Wwrite-strings -Wstrict-prototypes -Wold-style-definition  \
-						 -Wredundant-decls -Wnested-externs -Wmissing-include-dirs   \
-						 -Wjump-misses-init -Wlogical-op -Wmaybe-uninitialized       \
-						 \
-						 -Wno-conversion  # checked - conventions are safe
-
-noinst_LIBRARIES = liblang.a
+noinst_LTLIBRARIES = liblang.la
 
 # The files to add to the library and to the source distribution
-liblang_a_SOURCES = assert.c  \
-										\
-										except.c  \
-										\
-										mem-dev.c \
-										mem.c
-
-MAINTAINERCLEANFILES = Makefile.in
-MOSTLYCLEANFILES = *.stackdump
+liblang_la_SOURCES = assert.c  \
+										 \
+										 except.c  \
+										 \
+										 mem-dev.c \
+										 mem.c
+# The 'version info' is applicable only to shared libraries...
+# liblang_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
 # ______________________________________________________________________________
 #                                                                    Unit tests
 
-CHECK_CFLAGS = -g -O0 -DDEBUG -I$(top_srcdir)/src/ext-libs/greatest/include
-CHECK_LDADD = -L..
+CHECK_CFLAGS = -I$(top_srcdir)/src/ext-libs/greatest/include
+CHECK_LDADD = liblang.la
+
+# If you need to mock something
 # CHECK_LDFLAGS_EXTRA = -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc
 
-UNIT_TESTS = test/assert
+if HAVE_CHECK
 
-check_PROGRAMS = test/assert
-test_assert_CFLAGS = $(CHECK_CFLAGS)
-test_assert_LDADD = $(CHECK_LDADD)
-test_assert_SOURCES = test/assert.c
+TESTS = $(check_PROGRAMS)
+check_PROGRAMS = test/assert.run
 
-TESTS = $(UNIT_TESTS)
+test_assert_run_SOURCES = test/assert.c
+test_assert_run_CFLAGS = $(CHECK_CFLAGS)
+test_assert_run_LDADD = $(CHECK_LDADD)
+
+endif
+
+# 'memcheck' target
+include $(top_srcdir)/m4/valgrind.mk
 
 # ______________________________________________________________________________
 
-TESTS_ENVIRONMENT_WITH_VALGRIND="libtool --mode=execute valgrind --leak-check=full"
-
-.PHONY: valgrind-check
-valgrind-check:
-	$(MAKE) $(AM_MAKEFLAGS) check TESTS=$(UNIT_TESTS) TESTS_ENVIRONMENT=$(TESTS_ENVIRONMENT_WITH_VALGRIND)
+MAINTAINERCLEANFILES = Makefile.in

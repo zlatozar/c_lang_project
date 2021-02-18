@@ -10,7 +10,7 @@
 - lex/yacc
 - valgrind
 - cppcheck
-- astyle (manual build gcc version)
+- astyle _(manual build)_
 - fortune
 
 ## Dependencies
@@ -28,5 +28,5 @@
 ## Tools
 1. [Doxygen](https://www.doxygen.nl/index.html) <br/>
 2. [Valgrind](https://valgrind.org/)            <br/>
-3. Cppcheck (use linux package)                 <br/>
-4. [AStyle](http://astyle.sourceforge.net/)     <br/>
+3. Cppcheck _(use linux package)_               <br/>
+4. [AStyle](http://astyle.sourceforge.net/)

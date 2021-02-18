@@ -8,11 +8,12 @@
 # Autotools
 
 ## Project specific
+src/bin/c-lang-project
+
 build-aux/
 test/atconfig
 *.log
 *.trs
-src/bin/c-lang-project
 
 ## http://www.gnu.org/software/automake
 Makefile.in
@@ -44,6 +45,7 @@ autom4te.cache
 /stamp-h1
 
 ## https://www.gnu.org/software/libtool/
+/libtool
 /ltmain.sh
 
 ## http://www.gnu.org/software/m4/
@@ -54,7 +56,14 @@ m4/ltversion.m4
 m4/lt~obsolete.m4
 
 ## Generated
+*.sha256sum
+*.tar.gz
+Docs/api/html/
 Makefile
+tools-setup/Doxyfile
+
+## Unit tests
+*.run
 
 # Command line
 *.bak
