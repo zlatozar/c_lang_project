@@ -1,6 +1,9 @@
 #if !defined(LOGGER_LOG_H)
 #define LOGGER_LOG_H
 
+#include <stdio.h>     /* fprintf, stdout */
+#include <string.h>    /* strrchr         */
+
 #define NO_LOG         0x00
 #define ERROR_LEVEL    0x01
 #define INFO_LEVEL     0x02
@@ -81,5 +84,27 @@ char* time_now(void);
     if (condition)                                 \
       if (LOG_LEVEL >= ERROR_LEVEL)                \
         _log_error(__VA_ARGS__, "\n"); } while (0)
+
+// _____________________________________________________________________________
+//                                                                Debug session
+
+#define LOG_ENTER do {                                      \
+    if (DEBUG)                                              \
+      fprintf(stderr,                                       \
+              COLOR_GREEN                                   \
+              ">>>>>>>>>> ENTER: [%s:%d] %s() >>>>>>>>>>\n" \
+              COLOR_RESET,                                  \
+              __FILE__, __LINE__, __func__);                \
+  } while (0);
+
+#define LOG_EXIT do {                                       \
+    if (DEBUG)                                              \
+      fprintf(stderr,                                       \
+              COLOR_RED                                     \
+              "<<<<<<<<<< EXIT:  [%s:%d] %s() <<<<<<<<<<\n" \
+              COLOR_RESET,                                  \
+              __FILE__, __LINE__, __func__);                \
+  } while (0);
+
 
 #endif  /* LOGGER_LOG_H */

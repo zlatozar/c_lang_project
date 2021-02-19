@@ -1,5 +1,11 @@
 // --suppressions-list="<path to this list>"
 
+// cppcheck is really bad at finding standard/project include headers
+missingInclude
+
 // There is some functions that are expect to
 // be used in lates stage of the project.
 unusedFunction
+
+// Used in aligning
+unusedStructMember

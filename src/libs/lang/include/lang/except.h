@@ -13,7 +13,7 @@ struct Except_Frame {
   Except_Frame* prev;
   jmp_buf env;
   const char* file;
-  unsigned line;
+  int line;
   const Except_T* exception;
 };
 
@@ -35,7 +35,7 @@ extern const Except_T Invariant_Error;
  * It is a run-time error if exception is `NULL`.
  * Uncaught exceptions cause program termination.
  */
-void Except_raise(const Except_T* e, const char* file, unsigned line);
+void Except_raise(const Except_T* e, const char* file, int line);
 
 #define THROW(e) Except_raise(&(e), __FILE__, __LINE__)
 

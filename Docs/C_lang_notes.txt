@@ -1,43 +1,41 @@
-[TIP] This file could be a source for 'fotune' console quotes program.
+[TIP] This file could be a source for `fotune` console quotes program.
 %
-[STYLE] All macros and constants in caps: MAX_BUFFER_SIZE, TRACKING_ID_PREFIX.
+[STYLE] All macros and constants in caps: `MAX_BUFFER_SIZE`, `TRACKING_ID_PREFIX`.
 %
 [TIP] Don't use global variables. They are evil.
 %
 [STYLE] Functions that shouldn't be called directly, or have obscure uses, or
         whatever must start with one or more underscores at the beginning:
-        _refrobnicate_data_tables(), _destroy_cache().
+        `_refrobnicate_data_tables()`, `_destroy_cache()`.
 %
 [STYLE] Initialize variables in there declarations.
 %
 [LANG] String constant is an array of characters. The internal representation of
-       a string has a null character '\0' at the end, so physical storage
-       required is one more than the number of characters. 'strlen(s)' excludes
+       a string has a `null` character '\0' at the end, so physical storage
+       required is one more than the number of characters. `strlen(s)` excludes
        terminal '\0'.
 %
 [LANG] External and static variables are initialized to zero by default.
 %
-[STYLE] Use 'const' to show that you are not going to change value passed by
-        reference, especially in functions parameters: int strlen(const char[])
+[STYLE] Use `const` to show that you are not going to change value passed by
+        reference, especially in functions parameters: `int strlen(const char[])`
 %
-[LANG] Precedence of '&&' is higher than that of '||'.
+[LANG] Precedence of `&&` is higher than that of `||`.
 %
-[TIP] Specify 'signed' or 'unsigned' if non-character data is to be stored
-      in 'char' variables.
+[LANG] Logical operations in C are `0` or `1`. `!` operator inverts them.
+       Everything that is not `0`/`NULL` is true: `assert(!"Impossible")`
 %
-[LANG] Logical operations in C are 0 or 1. '!' operator inverts them.
-       Everything that is not 0/NULL is true: assert(!"Impossible")
+[LANG] `floats` are not automatically converted to `double`.
 %
-[LANG] 'floats' are not automatically converted to 'double'.
+[TIP] The main reason for using `float` is to save storage in a large arrays.
 %
-[TIP] The main reason for using 'float' is to save storage in a large arrays.
+[LANG]        `int x = f() + g();`
+       C do not define which function will be evaluated first. It is the same
+       for function arguments.
 %
-[LANG] x = f() + g() C do not define which function will be evaluated first.
-       It is the same for function arguments.
+[LANG] Non-zero means true: `assert("Pass");`
 %
-[LANG] Non-zero means true: assert("Pass")
-%
-[STYLE] When there is no initialization and re-initialization prefer 'while'.
+[STYLE] When there is no initialization and re-initialization prefer `while`.
 %
 [STYLE] Irrelevant details could be buried in the functions. In this way the
         chance of unwanted interactions is minimized and the pieces may even
@@ -46,7 +44,7 @@
 [TIP] Always limit C programs input with upper bounds.
 %
 [TIP] C programs are flat so functions are visible to any part of the entire
-      program. Make functions kind of private as declare them 'static'
+      program. Make functions kind of private as declare them `static`
 %
 [STYLE] Stick to onion architecture - layer can "see" only first below it.
 %
@@ -65,46 +63,46 @@
        the missing elements will be zero for external, static, and automatic
        variables.
 %
-[TIP] Do increment as usual i = i + 1; and when function is correct make it
+[TIP] Do increment as usual `int i = i + 1;` and when function is correct make it
       prefix or postfix.
 %
 [TIP] You can't nest functions but if it is needed definition should be used:
-      void reverse(char[] str) {
-          void reverser(char[] str, int i, int len);
-          reverser(str, 0, strlen(str));
-      }
-      void reverser(char[] str, int i, int len) {
-          ...
-      }
+          void reverse(char[] str) {
+            void reverser(char[] str, int i, int len);
+            reverser(str, 0, strlen(str));
+          }
+          void reverser(char[] str, int i, int len) {
+            ...
+          }
 %
-[STYLE] Use #include "foo.h" for your modules and #include <..> for standard.
+[STYLE] Use `#include "foo.h"` for your modules and `#include <..>` for standard.
 %
-[TIP] Prefer this type of declaration int *p_value;
-      Is a mnemonic - what p_value points to has type int.
+[TIP] Prefer this type of declaration `int *p_value;`
+      Is a mnemonic - what `p_value` points to has type `int`.
 %
 [STYLE] The single most important rule when writing code is this: check the
         surrounding code and try to imitate it. As a maintainer it is dismaying
         to receive a patch that is obviously in a different coding style to the
         surrounding code. This is disrespectful, like someone tromping into a
-        spotlessly-clean house with muddy shoes. If there is already written
+        spotlessly - clean house with muddy shoes. If there is already written
         code and you are patching it, keep its current style consistent even if
         it is not your favorite style.
 %
-[LANG]    (*p_value)++  // to increment value that p_value points to
+[LANG]      `(*p_value)++`  // to increment value that p_value points to
        The parentheses are necessary; without them, the expression would
-       increment 'p_value' instead of what it points to, because unary operators
-       like * and ++ associate right to left.
+       increment `p_value` instead of what it points to, because unary operators
+       like `*` and `++` associate right to left.
 %
-[LANG] In some cases it is better to look at &x as anonymous pointer rather
-       than address of x. Example: void swap(&x, &y) or int *ip; ip = &a[0];
+[LANG] In some cases it is better to look at `&x` as anonymous pointer rather
+       than address of `x`. Example: `void swap(&x, &y)` or `int *ip; ip = &a[0];`
 %
 [TIP] It is common for functions to use passed pointer as "wire" to set
       values as function side-effect.
 %
-[LANG] &a[i] and a+i are identical: a+i is the address of the i-th element
-       beyond a. a[i] C language converts it to *(a + i) - pointer and offset.
+[LANG] `&a[i]` and `a + i` are identical: `a + i` is the address of the i-th element
+       beyond `a`. `a[i]` C language converts it to `*(a + i)` - pointer and offset.
 %
-[LANG] char s[]; and char *s; are equivalent. Prefer latter. When an array name
+[LANG] `char s[];` and `char *s;` are equivalent. Prefer latter. When an array name
        is passed to a function, the function can at its convenience believe
        that it has been handed either an array or a pointer, and manipulate it
        accordingly.
@@ -113,7 +111,7 @@
        value of zero can be used to signal an abnormal event, in this case, no
        space. Pointers and integers are not interchangeable. Zero is the sole
        exception: the constant zero may be assigned to a pointer, and a pointer
-       may be compared with the constant zero. Check pointer with NULL.
+       may be compared with the constant zero. Check pointer with `NULL`.
 %
 [LANG] External and static variables are initialized to zero be default.
 %
@@ -124,8 +122,8 @@
 %
 [LANG] In C, any assignment, is an expression and returns a value, which is the
        value of the left hand side after the assignment. That's why it is
-       possible to write: while (*s++ = *t++) {;}, if s and t are pointers to
-       string. At the end assignment will return '\0' (same as 0) and the cycle
+       possible to write: `while (*s++ = *t++) {;}`, if `s` and `t` are pointers to
+       string. At the end assignment will return `\0` (same as `0`) and the cycle
        will exit.
 %
 [TIP] Programs should act intelligently when given zero-length input.
@@ -139,19 +137,19 @@
 [TIP] C language is like a Latin - gives you the base, everything else are rules,
       conventions, project structure, autotools magic and proper macros.
 %
-[LANG] Since main is a function like any other, it may return a value to its
-       caller, which is in effect the environment in which the program was
+[LANG] Since `main` is a function like any other, it may return a value to its
+       caller (OS), which is in effect the environment in which the program was
        executed. Typically, a return value of zero implies normal termination -
-       NO ERRORS; non-zero values signal unusual or erroneous termination
-       conditions - WITH ERRORS.
+       `NO ERRORS`; non-zero values signal unusual or erroneous termination
+       conditions - `WITH ERRORS`.
 %
-[LANG] int is the default return type.
+[LANG] `int` is the default return type.
 %
-[LANG] "Definition" refers to the place where the variable is created or
+[LANG] "definition" refers to the place where the variable is created or
        assigned storage; "declaration" refers to places where the nature of the
        variable is stated but no storage is allocated usually in header files.
 %
-[LANG] The first name in an enum has value 0, the next 1, and so on, unless
+[LANG] The first name in an `enum` has value `0`, the next `1`, and so on, unless
        explicit values are specified.
 %
 [TIP] When your build tool do compilation be sure that will recompile when
@@ -162,27 +160,27 @@
 [TIP] You can use pointer arithmetic only when have the starting point and
       a way to calculate offset.
 %
-[LANG] malloc() use stack in it's implementation so we have to apply free() in
-       reverse order.
+[LANG] `malloc()` use stack in it's implementation so we have to apply `free()`
+        in reverse order.
 %
-[LANG] *--p; decrements p before fetching the value that p points to.
+[LANG] `*--p;` decrements `p` before fetching the value that p points to.
        Examples:   *p++ = val;   /* push value onto stack */
                    val = *--p;   /* pop top of the stack into val */
 %
-[TRICK] The syntax a[i] is equivalent to *(a + i). Thus it is valid to say 5[a]
-        to get at the 5th element of a.
+[TRICK] The syntax `a[i]` is equivalent to `*(a + i)`. Thus it is valid to
+        say `5[a]` to get at the `5th` element of `a`.
 %
-[TIP] Pointer-arithmetic says that given a pointer p and an integer i, p + i the
-      pointer p advanced by i * sizeof(*p) bytes
+[TIP] Pointer-arithmetic says that given a pointer `p` and an integer `i`,
+      `p + i` means that the pointer `p` advanced by `i * sizeof(*p)` bytes
 %
-[TIP] The [] operator is defined on pointers, not arrays. In particular, it's
+[TIP] The `[]` operator is defined on pointers, not arrays. In particular, it's
       defined in terms of pointer arithmetic and pointer dereference.
 %
-[TIP] A pointer is abstractly a tuple (start, length, offset) with the condition
-      that 0 <= offset <= length. Pointer arithmetic is essentially lifted
-      arithmetic on the offset, with the caveat that if the result of the
+[TIP] A pointer is abstractly a triple `(start, length, offset)` with the
+      condition that `0 <= offset <= length`. Pointer arithmetic is essentially
+      lifted arithmetic on the offset, with the caveat that if the result of the
       operation violates the pointer condition, it is an undefined value.
-      Dereferencing a pointer adds an additional constraint that offset < length.
+      Dereferencing a pointer adds an additional constraint that `offset < length`.
 %
 [TIP] POSIX is a superset of the standard C library, and it's important to note
       that it defers to it. If C and POSIX is ever in conflict, C wins.
@@ -190,59 +188,57 @@
 [TIP] Mocking is strongly connected with the ability of dependency injection.
       Here a technique from functional programming could be used - replace all
       changeable steps in a workflow with functions. During testing you can
-      pass fake/mocked one.
+      pass fake/mocked one. There is also linker trick ;)
 %
 [TIP] Dependencies injection could be reached using - 'Dependency rejection' and
       'Dependency parameterization'
 %
 [TIP] Header files are sometimes also an appropriate location for ​struct​
       definitions. If other parts of the program will make direct use of the
-      ​struct​ fields, then the definition of that ​struct necessarily must appear
-      in the header file. If that is not the case, it is better to hide the
-      ​struct definition in a .​c​ file. A common practice is to use a ​typedef​
-      statement in a header file to declare a type for other parts of the
-      program, and hide the definition of that type.
+      ​`struct`​ fields, then the definition of that `​struct` necessarily must
+      appear in the header file. If that is not the case, it is better to hide
+      the ​struct definition in a `.​c`​ file. A common practice is to use a
+      ​typedef​ statement in a header file to declare a type for other parts of
+      the program, and hide the definition of that type.
 %
 [TIP] Having a long ​main​ function indicates a lack of abstraction, meaning that
       your code has not been sufficiently split into logical, smaller functions.
 %
 [TIP]           int a[10][20];
                 int *b[10];     // lazy initialization
-      The definition of b only allocates 10 pointers and does not initialize
+      The definition of `b` only allocates 10 pointers and does not initialize
       them; initialization must be done explicitly, either statically or with
       code. The important advantage of the pointer array is that the rows of
       the array may be of different lengths.
 %
-[TIP] During development wishful thinking can be used.
-      At the beginning of the file declare functions that you with to have
-      and continue to work on the algorithm. In this way also compilation
-      will be fast. When definitions are added or imported you can safely
-      remove them.
+[TIP] During development wishful thinking can be used. At the beginning of the
+      file declare functions that you with to have and continue to work on the
+      algorithm. In this way also compilation will be fast. When definitions are
+      added or imported you can safely remove them.
 %
-[LANG] (*++argv)[0]; because [] binds tighter than * and ++, the parentheses
-       are necessary. By the way **++argv; is an alternate valid form.
+[LANG] `(*++argv)[0];` because `[]` binds tighter than `*` and `++`, the
+       parentheses are necessary. By the way `**++argv;` is an alternate valid form.
 %
-[LANG] In expressions '[]' is with highest priority following by '->'. After
-       them are '++' and then '--', but for them keep in mind if they are used
-       as prefix or postfix operators. At last is '*' but it has some kind of
-       highest priority from '++' and '--' if they are used as postfix
-       operators(e.g. *p++)
+[LANG] In expressions `[]` is with highest priority following by `->`. After
+       them are `++` and then `--`, but for them keep in mind if they are used
+       as prefix or postfix operators. At last is `*` but it has some kind of
+       highest priority from `++` and `--` if they are used as postfix
+       operators(e.g. `*p++`)
 %
 [TIP] In C language, structures can be viewed as an some kind of memory template
       or model. Using it you can easily find out its parts or save at particular
       place. Using it the memory becomes a city with documented infrastructure.
 %
-[TIP] Glue C program during compilation through include/module/header_file.h.
+[TIP] Glue C program during compilation through `include/module/header_file.h`.
 %
-[TIP] If you constantly ask for a particular field in a struct automate access
-      with a macro e.g. #define OFFSET(s) (((struct symtab *) s) -> s_offset)
+[TIP] If you constantly work with a particular field in a `struct` automate access
+      with a macro e.g.
+          `#define VERTEX(p_e) (((edge.data *) DATA (p_e))-> vert ex_nunber)`
 %
 [TIP] Structures saves the state of the program in an organized way.
 %
-[TIP] Start writing program(or it's fragments) as first define 'in structures'
-      and 'out structures' then concentrate on actions.
-%
-[LANG] Struct declaration defines as a type (using typedef)
+[TIP] Start writing program (or it's fragments) as first define 'IN structures'
+      (input parameters) and 'OUT structures'(result) then concentrate on actions.
 %
 [LANG] A structure declaration that is not followed by a list of variables
        reserves no storage; it merely describes a template or the shape of a
@@ -253,7 +249,7 @@
        member.
 %
 [LANG] The only legal operations on a structure are copying it or assigning to
-       it as a unit, taking its address with &, and accessing its members. Copy
+       it as a unit, taking its address with `&`, and accessing its members. Copy
        and assignment include passing arguments to functions and returning
        values from functions as well.
 %
@@ -264,9 +260,9 @@
 [TIP] If a large structure is to be passed to a function, it is generally more
       efficient to pass a pointer than to copy the whole structure.
 %
-[STYLE] Always use '->' to access structure fields.
+[STYLE] Always use `->` to access structure fields.
 %
-[LANG] Note that the typedef name doesn't become visible until the end of the
+[LANG] Note that the `typedef` name doesn't become visible until the end of the
        declaration. If the structure contains a pointer to itself, you have use the
        struct version to refer to it:
                typedef struct node {
@@ -274,13 +270,13 @@
                    struct node *next; /* can't use just "node *next" here */
                } node;
 %
-[LANG] A typedef, in spite of the name, does not define a new type; it merely
-       creates a new name for an existing type.
+[LANG] A `typedef`, in spite of the name, does not define a new type; it merely
+       creates a new name (alias) for an existing type.
 %
-[LANG] It is common idiom to use both typedef and struct:
-              typedef struct S {
+[LANG] It is common idiom to use both `typedef` and `struct`:
+              typedef struct some_name {
                   int x;
-              } S;        // same name as struct tag!
+              } some_name_t;        // same name as struct tag!
        This gives you the convenience of the more concise typedef name but still
        allows you to use the full struct name if you need.
 %
@@ -288,41 +284,41 @@
                  int x;
              } S;
        Could be rewritten as:
-             struct S {  // define the identifier S within the struct name space
+             struct S {     // define the S within the struct name space
                  int x;
              };
              typedef struct S S;
-       Last line adds a type alias S in the global name space and thus allows
+       Last line adds a type alias `S` in the global name space and thus allows
        you to just write:
              void f(S arg); // struct keyword no longer needed
 %
 [LANG]       struct foo {
                  int n;
              };
-       The name 'foo' is a tag; it's meaningful only when it's immediately
+       The name `foo` is a tag; it's meaningful only when it's immediately
        preceded by the struct keyword.
 %
 [LANG]       struct foo {
                  int n;
              };
-       Giving the struct a name (i.e. struct foo) also enables you to provide
-       forward declarations of the struct. So in some other file, you could
-       write:
+       Giving the `struct` a name (i.e. `struct foo`) also enables you to
+       provide forward declarations of the `struct`. So in some other file, you
+       could write:
             struct foo;
             void doit(struct foo *ptr);
        without having to have access to the definition use just the name.
 %
-[LANG] The following code creates an anonymous struct with the alias MyStruct:
+[LANG] The following code creates an anonymous `struct` with the alias `my_struct_t`:
             typedef struct {
                 int one;
                 int two;
-            } MyStruct;
+            } my_struct_t;
        You can't refer it without the alias because you don't specify an
        identifier for the structure. Forward declaration also will not work:
-            struct MyStruct; // forward declaration in another file fails
+            struct my_struct_t; // forward declaration in another file fails
 %
-[LANG] Structure is a data type. You don't give values to a data type. You give
-       values to instances of data types. Here is an example:
+[TRICK] Structure is a data type. You don't give values to a data type. You give
+        values to instances of data types. Here is an example:
             struct my_struct {
                 int id;
             } MyStruct_default = {3};
@@ -332,8 +328,8 @@
 %
 [LANG] The size of the array is completely determined at compile time.
 %
-[LANG] A sizeof can not be used in a #if line, because the preprocessor does not
-       parse type names. But the expression in the #def ine is not evaluated by
+[LANG] A `sizeof` can not be used in a `#if` line, because the preprocessor does not
+       parse type names. But the expression in the `#define` is not evaluated by
        the preprocessor, so the code here is legal.
 %
 [TIP] To be testing/emulating/mocking easier use some of following techniques:
@@ -364,13 +360,13 @@
 [TIP] When use pointer arithmetic you work with relative addresses so it is very
       important to set the beginning and then calculate offset to find the right
       place. Here is an example:
-           for (p = keytab; p < keytab + NKEYS; p++) {...
-      'keytab' is the first element in an array, so the pointer p should be set
+           for (p = keytab; p < keytab + NKEYS; p++) {...}
+      `keytab` is the first element in an array, so the pointer `p` should be set
       to point it. It follows that the last element address is the beginning
-      plus the size of the array which forms offset: keytab + NKEYS
+      plus the size of the array which forms offset: `keytab + NKEYS`
 %
-[TIP] When calculate space to save a new string do not forget to include in
-      calculation '\0':
+[LANG] When calculate space to save a new string do not forget to include in
+       calculation `\0`:
            (char *) malloc(strlen(s) + 1);  // +1 for '\0'
 %
 [TIP] When write a function that do some operation on a structure always as
@@ -391,7 +387,7 @@
           ....
           root = addtreex(root, word, num, &found);
 %
-[TRACK]        do { ... } while(0);
+[TRICK]        do { ... } while(0);
         idiom ensures that the code acts like a statement - function call;
 %
 [TIP] The reading time for programs is much more than the writing time.
@@ -491,7 +487,7 @@
         program contains no global variables, one knows that each function
         manipulates only the data that is passed in the form of parameters.
 %
-[STYLE] Use abstract data types (ADT) - define types and possible operations
+[STYLE] Use Abstract Data Types (ADT) - define types and possible operations
         on them.
 %
 [TIP] Write generic/polymorphic functions. Although they often take slightly
@@ -506,7 +502,7 @@
         help to track logic errors during development.
 %
 [STYLE] Avoid explicit literals. Explicit literals (character, numeric, and string
-        values) make programs hard to modify. Use #define'd symbolic names instead.
+        values) make programs hard to modify. Use `#define`'d symbolic names instead.
 %
 [STYLE] C provides great freedom. Use it responsibly. Avoid side effects in
         logical tests. Avoid being overly compact at the expense of clarity.
@@ -518,7 +514,7 @@
       Remember it is always better to improve an algorithm than tune the clarity
       out of code.
 %
-[TIP] The effectiveness of a “modularization” is dependent upon the criteria
+[TIP] The effectiveness of a "modularization" is dependent upon the criteria
       used in dividing the system into modules. A timely reminder that it’s not
       simply about having lots of small modules, a large part of the success or
       otherwise of your system depends on how you choose to divide the system
@@ -541,13 +537,14 @@
 [STYLE] Declare your variables as close as possible to the place where you will
         use them.
 %
-[STYLE] Don’t use macros to create your own personal programming language.
+[STYLE] Don’t use macros to create your own personal programming language!
 %
 [STYLE] Don’t put closing braces more than one screen away from the matching
         opening brace.
 %
 [TIP] Do not use global variables instead pass a pointer to local variable
-      to the next function e.g. root = addtreex(root, word, num, &found);
+      to the next function e.g. `root = addtreex(root, word, num, &found);`
+      Side-effects are something normal in C.
 %
 [LANG] To ensure that result is not negative use unsigned numbers.
 %
@@ -566,13 +563,13 @@
            np->defun = strdup(s)
       otherwise a lot of pointer will point to the same.
 %
-[LANG] Assignment '=' is with very low priority (right to left associations).
+[LANG] Assignment `=` is with very low priority (right to left associations).
 %
-[LANG] typedef is not used only for data structures(struct). You can look on it
-       as #define, except that since it is interpreted by the compiler, it can
+[LANG] `typedef` is not used only for data structures(`struct`). You can look on it
+       as `#define`, except that since it is interpreted by the compiler, it can
        cope with textual substitutions that are beyond the capabilities of the
        preprocessor. For example you can make code more readable if you alias
-       complex function pointer declarations:
+       complex function interfaces:
            typedef int (*PFI) (char *, char *);
            PFI strcmp, numcmp;    // IDE will help you to go to the alias
 %
@@ -591,7 +588,7 @@
 [LANG] The same place regardless of its type this is the purpose of a union -
        a single variable that can legitimately hold any one of several types.
 %
-[LANG] A union may only be initialized with a value of the type of its first member.
+[LANG] A `union` may only be initialized with a value of the type of its first member.
 %
 [TIP] Unions are also sometimes used to implement pseudo-polymorphism in C, by
       giving a structure some tag indicating what type of object it contains, and then
@@ -599,16 +596,16 @@
            // easier to reuse memory that might be used in different ways
            enum Type { INTS, DOUBLE };
            struct S {
-               Type s_type;
-               union {
-                   int s_ints[2];
-                   double s_double;
-               };
-          };
-          ...
-          switch(s->s_type) {
-              case INTS:    // s->s_ints
-              case DOUBLE:  // s->s_double
+             Type s_type;
+             union {
+               int s_ints[2];
+               double s_double;
+             };
+           };
+           ...
+           switch(s->s_type) {
+             case INTS:    // s->s_ints
+             case DOUBLE:  // s->s_double
 %
 [LANG] Unions allow data members which are mutually exclusive to share the same memory.
        Following union will take up the space of a single int, rather than 3
@@ -619,7 +616,7 @@
                 int c;
             } u;
 %
-[TIP] Mask usage example:
+[TIP] Name bits with using `enum`. Mask usage example:
           enum { KEYWORD=01, EXTERNAL=02, STATIC=04 };
           // turns on the EXTERNAL and STATIC bits in flags
           flags |= EXTERNAL | STATIC;
@@ -630,12 +627,12 @@
 %
 [TIP] For reference use: https://en.cppreference.com/w/c
 %
-[TIP] When you call malloc(), you specify the amount of memory to allocate. The
+[TIP] When you call `malloc()`, you specify the amount of memory to allocate. The
       amount of memory actually used is slightly more than this, and includes
       extra information that records (at least) how big the block is. When you
-      call free(), it simply looks at the extra information to find out how big
-      the block is. That's why you can pass to free() any kind of pointer, even
-      (void *).
+      call `free()`, it simply looks at the extra information to find out how big
+      the block is. That's why you can pass to `free()` any kind of pointer, even
+      `(void *)`.
 %
 [TIP] Two goals in developing functions are to make the interfaces as clean as
       possible and to make the source code as readable as possible.
@@ -643,29 +640,26 @@
 [TIP] Think of the C types as kind of shaped piece of memory that is labeled.
       With them memory became mapped.
 %
-[LANG] It would be more correct to say that stdin, stdout, and stderr are "I/O
-       streams" rather than files. But the Unix philosophy, as far as I/O is
+[LANG] It would be more correct to say that `stdin`, `stdout`, and `stderr` are
+       "I/O streams" rather than files. But the Unix philosophy, as far as I/O is
        concerned, is "everything is a file".
 %
-[LANG] A width or precision of printf may be specified at runtime using *, in
-       which case the value is computed by converting the next argument (which
-       must be an int). For example, to print at most max characters from a
-       string s:
-             printf("%.*s", max, s);
+[LANG] A width or precision of `printf` may be specified at runtime using `*`,
+       in which case the value is computed by converting the next argument
+       (which must be an `int`). For example, to print at most max characters from
+       a string `s`: `printf("%.*s", max, s);`
 %
 [TIP] In C every unit test contains various "main methods" - push
       different input and checks if result is correct.
 %
-[TIP] Functions that return something that could be interpreted as length
-      should return size_t.
+[STYLE] Functions that return something that could be interpreted as length
+        should return `size_t`.
 %
 [TIP] If you delete something from a data structure then do not forget to
-      call free()!
+      call `free()`!
 %
-[TIP] struct should include typedef to remove the need to include "struct"
-      keyword through the code.
-%
-[TIP] typedefs that "hide" complex function pointers should have suffix '_fn'.
+[STYLE] Strucutre should include `typedef` to remove the need to include `struct`
+        keyword through the code.
 %
 [TIP] Forward declaration is a declaration preceeding an actual definition,
       usually for the purpose of being able to reference the declared type
@@ -673,7 +667,7 @@
       and there are a number of restrictions on its usage. This can be useful
       e.g. to break circular dependencies, or cut down the compilation time.
       For example:
-           truct X;               // forward declaration
+           struct X;              // forward declaration
            void f(struct X*) { }  // usage of the declared, undefined structure
         // void f(struct X) { }         // ILLEGAL
         // struct X x;                  // ILLEGAL
@@ -688,35 +682,37 @@
       case you're done). Each time you see a new modifier (either going right or
       left), attach it to the end of the current declaration sentence.
              int **x[5][2];
-      x is an array[5] of array[2] of pointer to pointer to int
+      `x` is an `array[5]` of `array[2]` of pointer to pointer to `int`
 %
-[TIP] setjmp instantiates exception handler(stop and check), longjmp raises an
-      exception and jmp_buff represents exception stack. That's why:
-              if (setjmp(jmp_buf) == 0) { <handle exception> }
-      setjmp do kind of 'ping-pong'. Stops and transfer control to the longjmp -
-      first return, second return is the result of longjmp return(it's second
-      paramenter). If longjmp(jmp_buf, 1) we have to process exception.
+[TIP] `setjmp` instantiates exception handler(stop and check), `longjmp` raises
+      an exception and `jmp_buff` represents exception stack. That's why:
+             if (setjmp(jmp_buf) == 0) { <handle exception> }
+      `setjmp` do kind of 'ping-pong'. Stops and transfer control to the
+      `longjmp` - first return, second return is the result of `longjmp`
+      return(it's second paramenter). If `longjmp(jmp_buf, 1)` we have to
+      process exception.
 %
-[LANG] Set NDEBUG to disable assert().
+[LANG] Set NDEBUG to disable `assert()`.
 %
-[TIP] If a function accepts pointer to a structure this is a hint
-      that this function will change the structure as side-effect.
+[TIP] If a function accepts pointer to a structure this is a hint that this
+      function will change the structure as side-effect. If not mark parameter
+      with `const`. This will be hint to the client.
 %
 [LANG] If you have function and macro with the same name, function
        name should be in parentheses to suppress macro expansion.
 %
-[TRICK] Use gcc -S main.c to see assembler code.
+[TRICK] Use `gcc -S main.c` to see assembler code.
 %
-[TIP] assert to check for situations that "can't happen", e.g. that violate the
+[TIP] `assert` to check for situations that "can't happen", e.g. that violate the
       invariants or postconditions of an algorithm, but probably not for input
       validation (certainly not in libraries). When detecting invalid input from
       clients, be friendly and return an error code.
 %
-[TIP] What asserts basically boil down to is "Why bother catching errors you
+[TIP] What `asserts` basically boil down to is "Why bother catching errors you
       can't handle? Just abort.". Your program logic should never reach such a
       situation.
 %
-[TIP] You can compare memory directly with memcmp because of possible different
+[TIP] You can compare memory directly with `memcmp` because of possible different
       padding. E.g.
             typedef struct Foo {
                 char a;
@@ -728,12 +724,12 @@
 %
 [LANG] If an object that has static storage duration is not initialized
        explicitly, then:
-         — if it has pointer type, it is initialized to a null pointer;
+         — if it has pointer type, it is initialized to a `null pointer`;
          — if it has arithmetic type, it is initialized to (positive or unsigned) zero;
          — if it is an aggregate, every member is initialized (recursively)
            according to these rules; There is no partial initialization everything
            or nothing.
-         — if it is a union, the first named member is initialized (recursively)
+         — if it is a `union`, the first named member is initialized (recursively)
            according to these rules.
 %
 [TIP] Stepping through a C program is less productive than thinking harder and adding
@@ -753,25 +749,24 @@
           - structures are allowed to have padding(at the end) between their members
           - arrays are not allowed to have padding between their elements
 %
-[MAKE] $@ The name of the full target name of the current target
-          (the one before the colon)
-       $< The name of the member of the current dependency
-          (the first, next, etc. one after the colon)
-       $^ The names of all the prerequisite (space separated)
-          Same as previous but take all not one by one
-       $* Refers to the current target name with its suffix deleted
-       %  Used in target names means match anything (dynamic targets)
+[MAKE] `$@` The name of the full target name of the current target
+            (the one before the colon)
+       `$<` The name of the member of the current dependency
+            (the first, next, etc. one after the colon)
+       `$^` The names of all the prerequisite (space separated)
+            Same as previous but take all not one by one
+       `$*` Refers to the current target name with its suffix deleted
+       `%`  Used in target names means match anything (dynamic targets)
 %
 [MAKE] Make is a project building programming language.
 %
-[LANG] There is no issue in returning a struct. It will be passed by value.
+[LANG] There is no issue in returning a `struct`. It will be passed by value.
 %
 [LANG] Since C lacks namespaces, you're left with prefixing the names of global
        functions and variables. Most libraries pick some short and "unique"
        prefix, and hope that no clashes occur.
 %
-[LANG] If you use in your library another one except .o you need its header
-       file too.
+[LANG] If you use in your library external one you need it's header file too.
 %
 [LANG] Order of header files matters.
 %
@@ -780,34 +775,34 @@
                 nm build/lib/<libname>.a
       Show what is exported from every object file.
 %
-[TIP] Use macros if it possible to simplify complex APIs
+[TIP] Use macros if it possible to simplify complex operations on `struct`.
 %
-[TIP] The utility 'ldd' examines an executable and displays a list of the shared
+[TIP] The utility `ldd` examines an executable and displays a list of the shared
       libraries that it needs.
 %
-[STYLE] Even in gcc command line have to keep some convention:
-            1. .h file corresponding to this .c file (if applicable)
+[STYLE] Even in `gcc` command line we have to keep some convention:
+            1. `.h` file corresponding to this `.c` file (if applicable)
             2. headers from the same component
             3. headers from other components
             4. system headers
 %
-[TIP] For objects, use the prefix operator(++obj) instead of the postfix operator
-      (obj++) because the prefix operator does not need a temporary copy.
+[TIP] For objects, use the prefix operator(`++obj`) instead of the postfix operator
+      (`obj++`) because the prefix operator does not need a temporary copy.
 %
 [TIP] If source files becomes more than ~500 lines may be it is time to divide
-      it logically through many .c files.
+      it logically through many `.c` files.
 %
-[LANG] When d and data pointed to by d both could not be modified
+[LANG] When `d` and data pointed to by `d` both could not be modified:
              void my_func(const void* const d)
 
-[LANG] (char *)0 is not a "pointer to a character at address 0". In C (char *)0
+[LANG] `(char *)0` is not a "pointer to a character at address 0". In C `(char *)0`
        is treated in a special way - it is guaranteed to produce a null-pointer
-       value of type char*
+       value of type `char*`
 %
-[MAKE] Each line in Makefile runs in a separate shell so for example
+[MAKE] Each line in `Makefile` runs in a separate shell so for example
        you can change directory without need to return.
 %
-[TIP] xs = List_tail(xs); is a way to go forward in a list.
+[TIP] `List_T xs = List_tail(xs);` is a way to go forward in a list.
 %
 [LANG] When a function deletes the last reference to a block of store, this
        block of store must be deallocated first.
@@ -820,8 +815,8 @@
           3. minimal — it doesn't define anything that is not needed by code
              that uses the header to access the facilities defined by the header.
 %
-[GCC] In gcc, you can enable specific warnings in gcc with -Wxxxx and
-      disable them with -Wno-xxxx.
+[GCC] In `gcc`, you can enable specific warnings in `gcc` with `-Wxxxx` and
+      disable them with `-Wno-xxxx`.
 %
 [TIP] The card is a pointer to your account. You don’t have to carry your
       account papers and a representative from the company around with you
@@ -836,21 +831,20 @@
       initialized, even if you don’t think it needs it. And that means not
       creating resources until you have something to initialize them with.
 %
-[LANG] Although (void *) and (char *) can be both equivalently cast to any other
-       pointer type, it is only legal to perform pointer arithmetic on a (char *) and
-       not with (void *) if you want to comply with Standard C.
+[LANG] Although `(void *)` and `(char *)` can be both equivalently cast to any other
+       pointer type, it is only legal to perform pointer arithmetic on a `(char *)` and
+       not with `(void *)` if you want to comply with Standard C.
 %
-[LANG] If you want to perform pointer arithmetic: use (char *).
+[LANG] If you want to perform pointer arithmetic: use `(char *)`.
        If you want to get the pointer address in order to cast it into another
-       type later on use (void *).
+       type later on use `(void *)`.
 %
-[TIP]      char *copy = malloc(strlen(buffer));
-       Classic 'strlen + 1' bug - use STR_ALLOC macro from the project.
+[TIP]  `char *copy = malloc(strlen(buffer));` // classic `strlen + 1` BUG
 %
 [LANG] Segmentation faults can also occur when your program runs out of stack
        space. This may not be a bug in your program, but may be due instead to
        your shell setting the stack size limit too small. To check memory
-       limits, use the 'ulimit'. Temporary try: ulimit -c unlimited
+       limits, use the `ulimit`. Temporary try: `ulimit -c unlimited`
 %
 [LANG] Classical "Array out of bounds" error cause segmentation faults.
 %
@@ -859,20 +853,20 @@
           - Forgetting to use "&" on the arguments to scanf
           - Accessing beyond the bounds of an array
           - Failure to initialize a pointer before accessing it
-          - Incorrect use of the "&" (address of) and "*" (dereferencing) operators
+          - Incorrect use of the `&` (address of) and `*` (dereferencing) operators
 %
 [TIP] To test for leaks at least in one test you need to allocate then free and this
       test should be run with valgrind.
 %
-[TIP] (*p_struct).some_field is very common that's why syntax sugar is introduced:
-      p_struct->some_field
+[TIP] `(*p_struct).some_field` is very common that's why syntax sugar is introduced:
+          `p_struct->some_field`
 %
 [TIP]       p_atom = ALLOC(NUM * sizeof(*p_atom))
       This is a broadly used pattern to allocate memory. The type is the type
-      that points p_atom. If you change p_atom to point to some other type there
+      that points `p_atom`. If you change `p_atom` to point to some other type there
       is no need to fix allocation.
 %
-[TIP] You can reference for C libraries functions using 'man 3 <function name>'
+[TIP] You can reference for C libraries functions using `man 3 <function name>`
 %
 [TIP] man docs have many levels. For C functions use level 3:
            1 User Commands
@@ -881,22 +875,22 @@
            4 Devices and Special Files
            ....
 %
-[TRICK] If you can't quite remember exactly function from C stdlib use 'man -k'.
+[TRICK] If you can't quite remember exactly function from C stdlib use `man -k`.
         E.g man -k '^printf'
 %
 [LANG] C represents procedure paradigm, it is verb-oriented. This is because typical
        first you see is a functions call which usually contains verb that gives you
        a hint what you want to accomplish. In OOP you see first noun (data, object).
 %
-[LANG] short s = -1; is represented all 1's 11111111 11111111
-       short us = 1; all 0;s 00000000 00000000
-       If you do int i = s; then sign extend will be applied so all 1's again.
+[LANG]   `short s = -1;` is represented all 1's 11111111 11111111
+         `short us = 1;` all 0's 00000000 00000000
+       If you do `int i = s;` then sign extend will be applied so all 1's again.
 %
 [TIP] C functions change data through side effects so it is very common to pass
       pointer to the struct and return void but actually the data will be
       changed. This paradigm is completely opposite to functional programming.
 %
-[STYLE] Prefer sizeof(varname) to sizeof(type).
+[STYLE] Prefer `sizeof(varname)` to `sizeof(type)`.
 %
 [TIP] While comments are very important, the best code is self-documented.
 %
@@ -910,10 +904,10 @@
           NEW(list);   // heap allocation
 %
 [LANG] If you have a structure with pointer fields you need(can) to after you
-       allocate it with malloc. If you try to this before malloc segmentation
-       error will be thrown.
+       allocate it with `malloc`. If you try to this before `malloc`
+       segmentation error will be thrown.
 %
-[STYLE] Try include/define precise pre-conditions and post-conditions with every
+[STYLE] Try to define precise pre-conditions and post-conditions with every
         function that you write.
 %
 [STYLE] Keep your input and output as separate functions, so they can be changed
@@ -928,10 +922,10 @@
               unsigned char x[3];
             } type24;
 %
-[LANG]  void* and char* are functionally equivalent: the key property of both is
-        that they are pointers that can be faithfully cast to any other pointer
-        type. The only difference is that legal to perform arithmetic on a
-        char*, but not on a void*.
+[LANG] `void*` and `char*` are functionally equivalent: the key property of both is
+       that they are pointers that can be faithfully cast to any other pointer
+       type. The only difference is that legal to perform arithmetic on a
+       `char*`, but not on a `void*`.
 %
 [TEST] For the programmer to be 99.95% sure of the 100,000-line program, the
        development procedure would have to be made more rigorous (and presumably
@@ -939,55 +933,56 @@
        99.999975% certain of being correct.
 %
 [TIP] Let the program "grow" from an initial skeleton of dummy functions.
-      Once the design is completed, the main() function can be written.
+      Once the design is completed, the `main()` function can be written.
 %
 [LANG] Opaque pointers:
-          typedef struct node_t node_t, *List_T // in .h
-          struct node_t {                       // fallowing in .c
+          typedef struct node_t* List_T; // in .h
+          struct node_t {                // fallowing in .c
             char* data;
             List_T next;
           };
 %
-[LANG] static means two different things in C:
+[LANG] `static` means two different things in C:
        - A static variable inside a function keeps its value between invocations.
        - A static global variable or a function is "seen" only in the file it's
          declared in.
 %
 [LANG] Dynamically allocated variables resides in heap.
 %
-[LANG] void* doesn't mean that points to nothing - it points to something that
+[LANG] `void*` doesn't mean that points to nothing - it points to something that
        has no type.
 %
 [TIP] Data dominates. If you've chosen the right data structures and organized
       things well, the algorithms will almost always be self-evident. Data structures,
       not algorithms, are central to programming.
 %
-[STYLE] Simple rule: include files should never include include files.
+[STYLE] Simple rule: include files should never include `.h files`.
 %
 [TIP] When we write generic functions we use void* parameters. Sometimes inside
       them we need to make pointer arithmetic but it is not possible to do that
-      with void*. How to proceed? Accept that (void*) points just to one byte so
-      cast it to (char*) - scale factor becomes one. To be pointer arithmetic
-      correct offset should be multiplied by size of the current type. E.g.
-           int lsearch(void* key, void* base, int size, int elmSize) {
+      with `void*`. How to proceed? Accept that `(void*)` points just to one
+      byte so cast it to `(char*)` - scale factor becomes one. To be pointer
+      arithmetic correct offset should be multiplied by size of the current
+      type. E.g.
+             int lsearch(void* key, void* base, int size, int size) {
                for (int i = 0; i < n; ++i) {
-                   void* elmAddres = (char*)base + i*size;
-                   ...
+                 void* elmAddres = (char*)base + i*size;
+                 ...
 %
-[LANG] memcmp works very well for what that could be in memory "rectangle"
-       (continues place) - simple types like int, float, double etc. and does not
-       work very well for char*, structs(aligning and pointers inside). For such
-       types pass comparison function.
+[LANG] `memcmp` works very well for what that could be in memory "rectangle"
+       (continues place) - simple types like `int`, `float`, `double` etc. and
+       does not work very well for `char*`, `structs`(aligning and pointers
+       inside). For such types pass comparison function.
 %
 [TIP] With threads, the operating system switches running threads preemptively
       according to its scheduler, which is an algorithm in the operating system
-      kernel. With coroutines (see pt.h), the programmer and programming
+      kernel. With coroutines (see `pt.h`), the programmer and programming
       language determine when to switch coroutines; in other words, tasks are
       cooperatively multitasked by pausing and resuming functions at set
       points, typically (but not necessarily) within a single thread.
 %
 [TIP] If you using protothreads(coroutines) all function-local variables that
-      should have their values saved between coroute returns should be static.
+      should have their values saved between coroute returns should be `static`!
 %
 [TIP] Co-routines are to state machines what recursion is to stacks. This is
       because co-routines save the control state of a function between calls.
@@ -996,10 +991,10 @@
 %
 [LANG] Pointers have the same size. It doesn't matter what they point.
 %
-[LANG] *(char**)vp1 is not the same as (char*)vp1. We have to reach the value first
-       then dereferenc.
+[LANG] `*(char**)vp1` is not the same as `(char*)vp1`. We have to reach the
+       value first then dereferens.
 %
-[STYLE] Always check malloc (and all of that kind) return value with assert. If
+[STYLE] Always check `malloc` (and all of that kind) return value with assert. If
         malloc fails you have to change your design -  current available memory is
         not enough.
 %
@@ -1021,7 +1016,7 @@
             int main () { return 0; }
 %
 [TIP] In some cases you do not know array size until size is not passed/calculated.
-      But even that we can handle that case using malloc:
+      But even that we can handle that case using `malloc`:
           bool* visited;
           int vertex_cnt;
           ...              // calculate vertex_cnt
@@ -1035,21 +1030,21 @@
 %
 [TIP] Look at Autotools macros as calling functions that will change build process.
 %
-[TIP] Calling ./configure you compile Autotools code.
+[TIP] Calling `./configure` you compile Autotools code.
 %
 [TIP] You don't know where C project will be compiled to native code and you
       don't know if everything needed is installed that's why you asset
       environment using Autotools.
 %
-[GCC] The -Wl,xxx option for gcc passes a comma-separated list of tokens as a
+[GCC] The `-Wl,xxx` option for `gcc` passes a comma-separated list of tokens as a
       space-separated list of arguments to the linker. Example:
           gcc -Wl,aaa,bbb,ccc
       eventually becomes a linker call
           ld aaa bbb ccc
 %
 [TIP]         *** No rule to make target `all'.  Stop.
-      This means that compilation chains configuration.ac-Makefile.am is broken.
-      Check AC_CONFIG_FILES in configuration.ac and SUBDIRS in Makefile.am.
+      This means that compilation chains `configuration.ac - Makefile.am` is broken.
+      Check AC_CONFIG_FILES in configuration.ac and SUBDIRS in `Makefile.am`.
 %
 [TIP]         #define _LOG(msg, ...)  printf(msg "%s", __VA_ARGS__)
               #define LOG(...)        _LOG(__VA_ARGS__, "\n")
@@ -1060,22 +1055,45 @@
 [TIP] Just as Eskimos have 10 words for snow, so C have many words for digital
       types.
 %
-[STYLE] typedef for function pointers defines functional interface. Example:
-              typedef double (*int_to_double_fn)(int);
-        This represents a type with the name int_to_double_fn's which encompasses
+[STYLE] `typedef` for function pointers defines functional interface. Example:
+              typedef double (*int_to_double_FN)(int);
+        This represents a type with the name `int_to_double_FN`'s which encompasses
         all functions that have an int as an argument and result in a double value.
 %
 [TIP] You can't divide C solution form the environment. All environment tools are
       part of the C program and vice verse.
 %
-[TEST] Use linker(ld) flag -Wl,--wrap around an existing function. In this way a
+[TEST] Use linker(`ld`) flag `-Wl,--wrap` around an existing function. In this way a
        mocking could be done in C. Unfortunately, you can’t have two different
        wrappers for the same function in an executable. This could lead to
        having to write several executables for each, or making your wrapper
        function smart enough to have several configurable outcomes.
 %
 [STYLE] Do not cast explicit let compiler do the job. You have to be sure that
-        cast will not cause damage use -Wconvertion option.
+        cast will not cause damage use `-Wconvertion` option.
 %
-[TEST] Valgrind could be used to check thread code: valgrind --tool=helgrind
+[TEST] Valgrind could be used to check thread code: `valgrind --tool=helgrind`
 %
+[GCC] If you say `-Wall`, plus `-Wextra`, you're actually saying "easy ones, plus
+      some". Better check that manual for more. The remaining `-W...` options
+      are not implied by `-Wall` because they warn about constructions that we
+      consider reasonable to use, on occasion, in clean programs.
+%
+[LANG] Each C file is a different translation unit. In other words, it is an
+       entire separate program, syntactically complete and correct. Thus, each C
+       file must compile independently of any other C file, and must contain
+       every declaration for every identifier it uses, regardless of whether
+       these declarations also appear in other C files. From the compiler point
+       of view, each C file is a complete program by itself (albeit with
+       unresolved references). Note that the header files should be also
+       self-contained. Having this you can easily reuse them because they do not
+       depend from the context.
+%
+[TRICK] There is a common pattern when working with bits - name them using `enum`!
+                 enum attack_type {
+                   None   = 0,      // 000000  0
+                   Melee  = 1 << 0, // 000001  1
+                   Fire   = 1 << 1, // 000010  2
+                   Ice    = 1 << 2, // 000100  4
+                   Poison = 1 << 3  // 001000  8
+                 }

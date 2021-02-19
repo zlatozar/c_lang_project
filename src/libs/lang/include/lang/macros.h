@@ -1,7 +1,7 @@
 #if !defined(LANG_MACROS_H)
 #define LANG_MACROS_H
 
-#include <stddef.h>
+#include <stddef.h>  /* size_t, offsetof */
 
 /*
  * Placed at the beginning of a function it suppress compiler
@@ -27,18 +27,23 @@
 // _____________________________________________________________________________
 //                                                                         Bits
 
-#define BIT(x)           (1 << (x))
-#define SETBIT(x, p)     ((x) | (1 << (p)))
-#define CLEARBIT(x, p)   ((x) & (~(1 << (p))))
-#define GETBIT(x, p)     (((x) >> (p)) & 1)
-#define TOGGLEBIT(x, p)  ((x) ^ (1 << (p)))
-#define LSB(x)           ((x) ^ ((x) - 1) & (x))
+#define BOOL(v)            (!(!(v)))
 
-// _____________________________________________________________________________
-//                                                                       String
+/* v = <target variable>, bn = <bit number to act upon 0 (first bit) up to n - 1 (last bit) */
+#define BIT_GET(v, bn)     (((v) >> (bn)) & 1UL)
+#define BIT_SET(v, bn)     ((v) |= (1UL << (bn)))     /* var |= 1UL << n;        */
+#define BIT_CLEAR(v, bn)   ((v) &= ~(1UL << (bn)))    /* var &= ~(1UL << n);     */
+#define TOGGLE_BIT(v, bn)  ((v) ^ (1UL << (bn)))      /* var ^= 1UL << n;        */
+#define BIT_CHECK(v, bn)   (!!((v) & (1UL << (bn))))
+#define BIT_FLIP(v, bn)    ((v) ^= (1UL << (bn)))
 
-#define STR_ALLOC(str)          ( (char *)malloc(strlen(str) + 1) )
-#define STR_CONCAT(str1, str2)  (str1 "" str2)
-#define STR_EQ(p, q)            (((*p)==(*q)) && (strcmp((p),(q)) == 0))
+#define LSB(v)             ((v) ^ ((v) - 1UL) & (v))
+
+/* x = <target variable>, y = mask */
+#define BITMASK_SET(v, m)        ((v) |= (m))
+#define BITMASK_CLEAR(v, m)      ((v) &= (~(m)))
+#define BITMASK_FLIP(v, m)       ((v) ^= (m))
+#define BITMASK_CHECK_ALL(v, m)  (!(~(v) & (m)))
+#define BITMASK_CHECK_ANY(v, m)  ((v) & (m))
 
 #endif  /* LANG_MACROS_H */

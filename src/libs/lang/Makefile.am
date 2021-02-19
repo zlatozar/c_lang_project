@@ -10,11 +10,12 @@ noinst_LTLIBRARIES = liblang.la
 
 # The files to add to the library and to the source distribution
 liblang_la_SOURCES = assert.c  \
-										 \
-										 except.c  \
-										 \
-										 mem-dev.c \
-										 mem.c
+                     \
+                     except.c  \
+                     \
+                     mem-dev.c \
+                     mem.c
+
 # The 'version info' is applicable only to shared libraries...
 # liblang_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
@@ -35,6 +36,9 @@ check_PROGRAMS = test/assert.run
 test_assert_run_SOURCES = test/assert.c
 test_assert_run_CFLAGS = $(CHECK_CFLAGS)
 test_assert_run_LDADD = $(CHECK_LDADD)
+
+# 'test/<test name>.run.debug' target
+include $(top_srcdir)/m4/gdb.mk
 
 endif
 

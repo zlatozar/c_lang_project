@@ -631,11 +631,12 @@ typedef struct {
 a_t a = {1, 2};
 ```
 
-- When new typedef is introduced for function handles, use `_fn` suffix
+- When new typedef is introduced for function handles, use `_FN` suffix to
+  indicate that this is a functional interface
 ```c
-/* Function accepts 2 parameters and returns uint8_t */
-/* Name of typedef has `_fn` suffix */
-typedef uint8_t (*my_func_typedef_fn)(uint8_t p1, const char* p2);
+/* Functions accept 2 parameters and returns uint8_t */
+/* Name of typedef has `_FN` suffix */
+typedef uint8_t (*my_func_typedef_FN)(uint8_t p1, const char* p2);
 ```
 
 ## Compound statements
