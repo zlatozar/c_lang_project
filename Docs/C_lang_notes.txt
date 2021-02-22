@@ -88,7 +88,7 @@
         code and you are patching it, keep its current style consistent even if
         it is not your favorite style.
 %
-[LANG]      `(*p_value)++`  // to increment value that p_value points to
+[LANG]      `(*p_value)++`  /* to increment value that p_value points to */
        The parentheses are necessary; without them, the expression would
        increment `p_value` instead of what it points to, because unary operators
        like `*` and `++` associate right to left.
@@ -205,7 +205,7 @@
       your code has not been sufficiently split into logical, smaller functions.
 %
 [TIP]           int a[10][20];
-                int *b[10];     // lazy initialization
+                int* b[10];     /* lazy initialization */
       The definition of `b` only allocates 10 pointers and does not initialize
       them; initialization must be done explicitly, either statically or with
       code. The important advantage of the pointer array is that the rows of
@@ -276,7 +276,7 @@
 [LANG] It is common idiom to use both `typedef` and `struct`:
               typedef struct some_name {
                   int x;
-              } some_name_t;        // same name as struct tag!
+              } some_name_t;   /* same name as struct tag! */
        This gives you the convenience of the more concise typedef name but still
        allows you to use the full struct name if you need.
 %
@@ -284,13 +284,13 @@
                  int x;
              } S;
        Could be rewritten as:
-             struct S {     // define the S within the struct name space
+             struct S {     /* define the S within the struct name space */
                  int x;
              };
              typedef struct S S;
        Last line adds a type alias `S` in the global name space and thus allows
        you to just write:
-             void f(S arg); // struct keyword no longer needed
+             void f(S arg); /* struct keyword no longer needed */
 %
 [LANG]       struct foo {
                  int n;
@@ -315,7 +315,7 @@
             } my_struct_t;
        You can't refer it without the alias because you don't specify an
        identifier for the structure. Forward declaration also will not work:
-            struct my_struct_t; // forward declaration in another file fails
+            struct my_struct_t; /* forward declaration in another file fails */
 %
 [TRICK] Structure is a data type. You don't give values to a data type. You give
         values to instances of data types. Here is an example:
@@ -323,7 +323,7 @@
                 int id;
             } MyStruct_default = {3};
             typedef struct my_struct MyStruct;
-            // then it is possible to initialize every instance
+            /* then it is possible to initialize every instance */
             MyStruct mInstance = MyStruct_default;
 %
 [LANG] The size of the array is completely determined at compile time.
@@ -354,8 +354,8 @@
 %
 [LANG] Addition of two pointer is illegal but subtraction is not! If you want to
        calculate middle of a string using pointers:
-             mid = (low + high) / 2         // WRONG
-             mid = low + (high - low) / 2   // Correct
+             mid = (low + high) / 2         /* Wrong */
+             mid = low + (high - low) / 2   /* OK    */
 %
 [TIP] When use pointer arithmetic you work with relative addresses so it is very
       important to set the beginning and then calculate offset to find the right
@@ -367,7 +367,7 @@
 %
 [LANG] When calculate space to save a new string do not forget to include in
        calculation `\0`:
-           (char *) malloc(strlen(s) + 1);  // +1 for '\0'
+           (char *) malloc(strlen(s) + 1);  /* +1 for '\0' */
 %
 [TIP] When write a function that do some operation on a structure always as
       first argument pass the structure:
@@ -377,7 +377,7 @@
 [TIP]     struct tnode {
               char *word;
               int count;
-              struct tnode *left;   // pointer to the left
+              struct tnode *left;   /* pointer to the left */
               struct tnode *right;
           };
       Tree is recursive structure that's why tnode is a tree
@@ -571,7 +571,7 @@
        preprocessor. For example you can make code more readable if you alias
        complex function interfaces:
            typedef int (*PFI) (char *, char *);
-           PFI strcmp, numcmp;    // IDE will help you to go to the alias
+           PFI strcmp, numcmp;    /* IDE will help you to go to the alias */
 %
 [LANG] Unions are similar to structures, except that a variable can hold data
        for only a single member at any given time - same "structure" for
@@ -593,7 +593,7 @@
 [TIP] Unions are also sometimes used to implement pseudo-polymorphism in C, by
       giving a structure some tag indicating what type of object it contains, and then
       unioning the possible types together:
-           // easier to reuse memory that might be used in different ways
+           /* easier to reuse memory that might be used in different ways */
            enum Type { INTS, DOUBLE };
            struct S {
              Type s_type;
@@ -604,8 +604,8 @@
            };
            ...
            switch(s->s_type) {
-             case INTS:    // s->s_ints
-             case DOUBLE:  // s->s_double
+             case INTS:    /* s->s_ints   */
+             case DOUBLE:  /* s->s_double */
 %
 [LANG] Unions allow data members which are mutually exclusive to share the same memory.
        Following union will take up the space of a single int, rather than 3
@@ -618,11 +618,11 @@
 %
 [TIP] Name bits with using `enum`. Mask usage example:
           enum { KEYWORD=01, EXTERNAL=02, STATIC=04 };
-          // turns on the EXTERNAL and STATIC bits in flags
+          /* turns on the EXTERNAL and STATIC bits in flags */
           flags |= EXTERNAL | STATIC;
-          // turns them off
+          /* turns them off */
           flags &= ~(EXTERNAL | STATIC);
-          // is true if both bits are off
+          /* is true if both bits are off */
           if ((flags & (EXTERNAL | STATIC)) == 0)
 %
 [TIP] For reference use: https://en.cppreference.com/w/c
@@ -667,8 +667,8 @@
       and there are a number of restrictions on its usage. This can be useful
       e.g. to break circular dependencies, or cut down the compilation time.
       For example:
-           struct X;              // forward declaration
-           void f(struct X*) { }  // usage of the declared, undefined structure
+           struct X;              /* forward declaration */
+           void f(struct X*) { }  /* usage of the declared, undefined structure */
         // void f(struct X) { }         // ILLEGAL
         // struct X x;                  // ILLEGAL
         // int n = sizeof(struct X);    // ILLEGAL
@@ -773,7 +773,8 @@
 [TIP]           ar -t build/lib/<libname>.a
       Will list object files that are part of the static library.
                 nm build/lib/<libname>.a
-      Show what is exported from every object file.
+      Show what is exported from every object file. This tools are not
+      applicable for libtool `.la` files.
 %
 [TIP] Use macros if it possible to simplify complex operations on `struct`.
 %
@@ -839,7 +840,7 @@
        If you want to get the pointer address in order to cast it into another
        type later on use `(void *)`.
 %
-[TIP]  `char *copy = malloc(strlen(buffer));` // classic `strlen + 1` BUG
+[TIP]  `char* copy = malloc(strlen(buffer));` /* classic `strlen + 1` BUG */
 %
 [LANG] Segmentation faults can also occur when your program runs out of stack
        space. This may not be a bug in your program, but may be due instead to
@@ -901,7 +902,7 @@
        fields with default values or to have initialization function (pointer
        fields are special case) followed by memory allocation. E.g.
           List_T list;
-          NEW(list);   // heap allocation
+          NEW(list);   /* heap allocation */
 %
 [LANG] If you have a structure with pointer fields you need(can) to after you
        allocate it with `malloc`. If you try to this before `malloc`
@@ -936,8 +937,8 @@
       Once the design is completed, the `main()` function can be written.
 %
 [LANG] Opaque pointers:
-          typedef struct node_t* List_T; // in .h
-          struct node_t {                // fallowing in .c
+          typedef struct node_t* List_T; /* in .h file      */
+          struct node_t {                /* fallowing in .c */
             char* data;
             List_T next;
           };
@@ -1091,9 +1092,9 @@
 %
 [TRICK] There is a common pattern when working with bits - name them using `enum`!
                  enum attack_type {
-                   None   = 0,      // 000000  0
-                   Melee  = 1 << 0, // 000001  1
-                   Fire   = 1 << 1, // 000010  2
-                   Ice    = 1 << 2, // 000100  4
-                   Poison = 1 << 3  // 001000  8
+                   None   = 0,      /* 000000  0 */
+                   Melee  = 1 << 0, /* 000001  1 */
+                   Fire   = 1 << 1, /* 000010  2 */
+                   Ice    = 1 << 2, /* 000100  4 */
+                   Poison = 1 << 3  /* 001000  8 */
                  }

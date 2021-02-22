@@ -72,7 +72,7 @@ extern void* Mem_resize(void* ptr, long nbytes, const char* file, int line);
 #define NEW(p)    ((p) = ALLOC( (long)sizeof * (p)) )
 #define NEW_0(p)  ((p) = CALLOC(1, (long)sizeof * (p)) )
 
-#define FREE(ptr)            ((void)(Mem_free((ptr), __FILE__, __LINE__), (ptr) = 0))
+#define FREE(ptr)            ((void)(Mem_free((ptr), __FILE__, __LINE__), (ptr) = NULL))
 #define RESIZE(ptr, nbytes)  ((ptr) = Mem_resize((ptr), (nbytes), __FILE__, __LINE__))
 
 #endif  /* LANG_MEM_H */

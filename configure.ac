@@ -17,7 +17,7 @@ AC_PREREQ([2.69])
 # If functions have been added or backward-compatibility has been broken:
 #     interface_age = 0
 m4_define([major_version], [0])
-m4_define([minor_version], [1])
+m4_define([minor_version], [2])
 m4_define([micro_version], [0])
 
 m4_define([interface_age], [0])
@@ -77,8 +77,7 @@ AC_LANG([C])
 ####   Checks for libraries.  ####
 ##################################
 
-AC_SEARCH_LIBS(socket, nsl)
-AC_SEARCH_LIBS(pthread_barrier_wait, nsl)
+AX_PTHREAD
 
 ##################################
 #### Checks for header files. ####
@@ -121,13 +120,17 @@ AC_CHECK_FILE(/dev/random,
 
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
-AC_CHECK_FUNCS([memset])
+AC_CHECK_FUNCS([memcpy])
 
 ##################################
 ###  Checks for build process. ###
 ##################################
 
 AX_PROG_VALGRIND
+# OS-specific settings
+AS_CASE([$host_os],
+        [darwin*], [VALGRIND_FLAGS="--dsymutil=yes"])
+
 AX_PROG_DOXYGEN
 AX_PROG_GDB
 
@@ -143,12 +146,6 @@ PKG_CHECK_MODULES([CHECK], [check >= 0.9],
                   [have_check=no
                     AC_MSG_WARN([Unable to run unit tests.])])
 AM_CONDITIONAL([HAVE_CHECK], [test "x$have_check" = "xyes"])
-
-# OS-specific settings
-AS_CASE([$host_os],
-[darwin*],
-  [VALGRIND_FLAGS="--dsymutil=yes"]
-)
 
 ##################################
 ###  Setup compilation flags.  ###
@@ -204,6 +201,12 @@ else
 fi
 
 ##################################
+###  Add memory check support  ###
+##################################
+
+AM_CONDITIONAL([MEMDEV_MODE], [test "x$debugit" = "xyes"])
+
+##################################
 ####    Chain build files.    ####
 ##################################
 
@@ -215,7 +218,7 @@ AC_CONFIG_FILES([src/libs/Makefile])
 dnl API documentation
 AC_CONFIG_FILES([tools-setup/Doxyfile])
 
-dnl Project
+dnl Project executable
 AC_CONFIG_FILES([src/bin/Makefile])
 AC_CONFIG_FILES([Makefile])
 

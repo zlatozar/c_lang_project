@@ -41,6 +41,7 @@ extern void Ensure(int exp);
  */
 extern void Invariant(int exp);
 
+/* Throws exception if condition failed */
 #define Assert(exp)     ( (void)((exp) || (THROW(Assert_Failed), 0)) )
 #define Require(exp)    ( (void)((exp) || (THROW(Precondition_Failed), 0)) )
 #define Ensure(exp)     ( (void)((exp) || (THROW(Postcondition_Failed), 0)) )

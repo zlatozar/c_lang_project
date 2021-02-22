@@ -337,8 +337,8 @@ if (is_ok == 0)     /* Wrong, use ! for negative check */
 
 - Never change state within an expression (e.g. with assignments or `++`)
 ```c
-trie_add( *child, ++word );     // Bad
-trie_add( *child, word + 1 );   // Good
+trie_add( *child, ++word );     /* Wrong */
+trie_add( *child, word + 1 );   /* OK    */
 ```
 - Always include check for `C++` with `extern` keyword in header file
 - Every function in header file must include *doxygen-enabled* comment,

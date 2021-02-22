@@ -1,20 +1,27 @@
-#include "lang/assert.h"
+#include "lang/mem.h"
 #include "greatest.h"
 
-TEST x_should_equal_1(void)
+typedef struct {
+  int a;
+  int b;
+} test_t;
+
+typedef test_t* Test_T;
+
+TEST allocate_macro(void)
 {
-  Require(1);
+  Test_T test;
 
-  int x = 1;
+  NEW(test);
+  FREE(test);
 
-  ASSERT_EQ(1, x);
   PASS();
 }
 
 /* Suites can group multiple tests with common setup. */
 SUITE(the_suite)
 {
-  RUN_TEST(x_should_equal_1);
+  RUN_TEST(allocate_macro);
 }
 
 GREATEST_MAIN_DEFS();

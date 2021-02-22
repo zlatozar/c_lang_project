@@ -29,8 +29,8 @@ union align {
 /* Initialize GLOBAL. Could be thrown from anywhere. */
 const Except_T Mem_Failed = { "Allocation failed" };
 
-//______________________________________________________________________________
-//                                                                        Local
+/* __________________________________________________________________________ */
+/*                                                                     Local  */
 
 LOCAL struct descriptor {
   struct descriptor* free;
@@ -56,7 +56,7 @@ find(const void* ptr)
   return bp;
 }
 
-//______________________________________________________________________________
+/* __________________________________________________________________________ */
 
 void
 Mem_free(void* ptr, const char* file, int line)
@@ -116,6 +116,8 @@ Mem_calloc(long count, long nbytes, const char* file, int line)
 LOCAL struct descriptor*
 dalloc(void* ptr, long size, const char* file, int line)
 {
+  Require(ptr);
+
   static struct descriptor* avail;
   static int nleft;
 
@@ -145,6 +147,7 @@ Mem_alloc(long nbytes, const char* file, int line)
 {
   Require(nbytes > 0);
 
+  /* Note that the number of bytes are multiple of the align size */
   nbytes = ((nbytes + sizeof (union align) - 1) / (sizeof (union align))) *
            (sizeof (union align));
 
@@ -173,11 +176,17 @@ Mem_alloc(long nbytes, const char* file, int line)
       }
     }
 
+    /* No suitable chuck was found in the freelist circle */
     if (bp == &freelist) {
       struct descriptor* newptr = NULL;
 
       if ((ptr = malloc(nbytes + NALLOC)) == NULL
           || (newptr = dalloc(ptr, nbytes + NALLOC, __FILE__, __LINE__)) == NULL) {
+
+        if (ptr != NULL) {
+          free(ptr);
+          ptr = NULL;
+        }
 
         if (file == NULL)
         { THROW(Mem_Failed); }

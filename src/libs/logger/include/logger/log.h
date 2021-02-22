@@ -46,8 +46,8 @@ char* time_now(void);
 #  define ERROR_TAG   "ERROR"
 #endif  /* LOG_COLOR */
 
-// _____________________________________________________________________________
-//                                                                   Categories
+/* __________________________________________________________________________ */
+/*                                                                Categories  */
 
 #define _log_debug(msg, ...) do {                                   \
     if (LOG_LEVEL >= DEBUG_LEVEL)                                   \
@@ -85,8 +85,8 @@ char* time_now(void);
       if (LOG_LEVEL >= ERROR_LEVEL)                \
         _log_error(__VA_ARGS__, "\n"); } while (0)
 
-// _____________________________________________________________________________
-//                                                                Debug session
+/* __________________________________________________________________________ */
+/*                                                             Debug session  */
 
 #define LOG_ENTER do {                                      \
     if (DEBUG)                                              \

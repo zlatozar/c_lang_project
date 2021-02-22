@@ -8,6 +8,6 @@
    ...
    fun:Mem_alloc
    ...
-   fun:UnityDefaultTestRun
+   fun:greatest_run_suite
    fun:main
 }

@@ -1,7 +1,7 @@
 #if !defined(LANG_EXCEPT_H)
 #define LANG_EXCEPT_H
 
-#include <setjmp.h>
+#include <setjmp.h>  /* jmp_buf */
 
 typedef struct Except_T {
   const char* message;
@@ -23,7 +23,8 @@ enum { Except_entered = 0, Except_raised,
 
 /* GLOBAL */
 extern Except_Frame* Except_stack;
-/* GLOBAL */
+
+/* GLOBAL exceptions types */
 extern const Except_T Assert_Failed;
 extern const Except_T Precondition_Failed;
 extern const Except_T Postcondition_Failed;

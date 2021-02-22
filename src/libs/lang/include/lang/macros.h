@@ -24,18 +24,18 @@
 
 #define CONTAINER_OF(ptr, type, member)  ((type *)(((char *)ptr) - offsetof(type, member)))
 
-// _____________________________________________________________________________
-//                                                                         Bits
+/* __________________________________________________________________________ */
+/*                                                                      Bits  */
 
 #define BOOL(v)            (!(!(v)))
 
 /* v = <target variable>, bn = <bit number to act upon 0 (first bit) up to n - 1 (last bit) */
 #define BIT_GET(v, bn)     (((v) >> (bn)) & 1UL)
-#define BIT_SET(v, bn)     ((v) |= (1UL << (bn)))     /* var |= 1UL << n;        */
-#define BIT_CLEAR(v, bn)   ((v) &= ~(1UL << (bn)))    /* var &= ~(1UL << n);     */
-#define TOGGLE_BIT(v, bn)  ((v) ^ (1UL << (bn)))      /* var ^= 1UL << n;        */
-#define BIT_CHECK(v, bn)   (!!((v) & (1UL << (bn))))
+#define BIT_SET(v, bn)     ((v) |= (1UL << (bn)))     /* var |= 1UL << n;     */
+#define BIT_CLEAR(v, bn)   ((v) &= ~(1UL << (bn)))    /* var &= ~(1UL << n);  */
+#define BIT_TOGGLE(v, bn)  ((v) ^ (1UL << (bn)))      /* var ^= 1UL << n;     */
 #define BIT_FLIP(v, bn)    ((v) ^= (1UL << (bn)))
+#define BIT_CHECK(v, bn)   (!(!((v) & (1UL << (bn)))))
 
 #define LSB(v)             ((v) ^ ((v) - 1UL) & (v))
 
@@ -44,6 +44,6 @@
 #define BITMASK_CLEAR(v, m)      ((v) &= (~(m)))
 #define BITMASK_FLIP(v, m)       ((v) ^= (m))
 #define BITMASK_CHECK_ALL(v, m)  (!(~(v) & (m)))
-#define BITMASK_CHECK_ANY(v, m)  ((v) & (m))
+#define BITMASK_CHECK_ANY(v, m)  (((v) & (m)) == (m))
 
 #endif  /* LANG_MACROS_H */
