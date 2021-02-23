@@ -24,7 +24,7 @@ enum { Except_entered = 0, Except_raised,
 /* GLOBAL */
 extern Except_Frame* Except_stack;
 
-/* GLOBAL exceptions types */
+/* GLOBAL exceptions types. If the exception is not caught program abort. */
 extern const Except_T Assert_Failed;
 extern const Except_T Precondition_Failed;
 extern const Except_T Postcondition_Failed;

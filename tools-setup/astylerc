@@ -30,9 +30,9 @@
 --break-return-type
 
 --convert-tabs
---max-code-length=80
+--max-code-length=100
 --min-conditional-indent=0
---max-continuation-indent=100
+--max-continuation-indent=120
 
 --attach-closing-while
 

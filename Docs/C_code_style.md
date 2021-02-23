@@ -30,7 +30,7 @@ This document describes C code style used by `Company Ltd.` in his projects.
 Here are listed most obvious and important general rules. Please check them
 carefully before you continue with other chapters.
 
-- Never have more than `80` characters per line
+- Never have more than `100` characters per line
 - Write to the most modern standard you can. `c11` is current
 - Do not use **tabs**, use **spaces** instead
 - Use `2` spaces per indent level
@@ -137,7 +137,7 @@ List_T result = ylist;
 List_T* p_result = &result;  /* Double pointer in practice */
 ```
 
-- Declare counter variables in `for` loop (for index never use signed type)
+- Declare counter variables in `for` loop
 ```c
 /* OK */
 for (size_t i = 0; i < 10; ++i)
@@ -175,13 +175,18 @@ a_name(void)
   unit8_t b = 4;
 }
 ```
-- Use `char` to represent text
-- Use unsigned types for bit values and bitwise operators
-- Do not math with **unsigned** types
-- Avoid mixing signed and unsigned integers in the same expression
+**unsigned** should be a conscious choice that makes the developer think about potential risks,
+used only there where you are **absolutely** sure that you can never go negative _(not even accidentally)_,
+and that you need the additional value space.
+
+- As a rough rule of thumb, use `unsigned int`s for **counting** things, and `signed int`s
+  for **measuring** things (that goes up and down)
+- _In most cases for function interfaces use signed and document that a variable is non-negative using assertions_
+- Use `unsigned` types for bit values and bitwise operators
+- Do not math with `unsigned` types.
+- Avoid mixing signed and unsigned integers in the same expression. `-Wconversion` will take care for this
 - Use integer **exact** types (eg. `int8_t`) when you need an integer object of an exact (fixed) length
 - Use `size_t` as the type of an object, parameter or return type representing an **object size** in bytes.
-- It is possible to use `int` in loops
 - Use `int_least8_t` and so on to represent **small** integer values
 - Use `double` rather than `float`, unless you have a specific reason otherwise
 ```c
@@ -193,7 +198,7 @@ status = 0;
 #include <stdbool.h>
 bool status = true;
 ```
-Integer exact types defined in `<stdint.h>`:
+Integer exact types defined in _most_ `<stdint.h>`:
 ```
     char                uint8_t   8     Unsigned       0 .. 255
     signed char         int8_t	  8     Signed      -128 .. 127
@@ -362,13 +367,14 @@ trie_add( *child, word + 1 );   /* OK    */
 
 ## Comments
 
-- Comments should provide something extra - not just paraphrase the code.
+- Comments should provide something extra - not just paraphrase the code
 - Comments starting with `//` are not allowed. Always use `/* comment */`, even for single-line comment
 ```c
 // This is comment (wrong)
 /* This is comment (ok) */
 ```
-
+- Comments should be complete sentences. The first word should be capitalized,
+  unless it is an identifier that begins with a lower case letter
 - For multi-line comments use `space+asterisk` for every line
 ```c
 /*

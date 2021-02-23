@@ -40,7 +40,7 @@ char* time_now(void);
 #  define INFO_TAG    COLOR_BLUE "INFO" COLOR_RESET
 #  define ERROR_TAG   COLOR_RED "ERROR" COLOR_RESET
 #else
-#   define LOG_FMT    "%s | %-5s | %-15s | %s:%d | "
+#  define LOG_FMT    "%s | %-5s | %-15s | %s:%d | "
 #  define DEBUG_TAG   "DEBUG"
 #  define INFO_TAG    "INFO"
 #  define ERROR_TAG   "ERROR"

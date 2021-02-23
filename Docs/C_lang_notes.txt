@@ -1072,7 +1072,7 @@
        function smart enough to have several configurable outcomes.
 %
 [STYLE] Do not cast explicit let compiler do the job. You have to be sure that
-        cast will not cause damage use `-Wconvertion` option.
+        cast will not cause damage use `-Wconversion` option.
 %
 [TEST] Valgrind could be used to check thread code: `valgrind --tool=helgrind`
 %
@@ -1110,3 +1110,18 @@
 %
 [GCC] To see enabled/disabled warnings: `gcc -Q --help=warning`.
       If you want to see what is included: `gcc -Wall -Wextra -Q --help=warning`
+%
+[LANG] `unsigned` is always `unsigned int`, but `size_t` can be any unsigned type.
+%
+[STYLE] `unsigned` should be a conscious choice that makes the developer think
+        about potential risks, used only there where you are absolutely sure that you
+        can never go negative (not even accidentally), and that you need the additional
+        value space.
+%
+[STYLE] Prefer using `signed` types in function interface and document that a
+        variable is non-negative using assertions.
+%
+[LANG] Converting from `signed` to `unsigned` is well-defined, but converting
+       from `unsigned` to `signed` has undefined behavior if the value is too
+       large to fit.
+%

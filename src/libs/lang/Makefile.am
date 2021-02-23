@@ -12,7 +12,10 @@ liblang_la_SOURCES = assert.c  \
 										 except.c  \
 										 \
 										 mem-dev.c \
-										 mem.c
+										 mem.c     \
+										 \
+										 atom.c    \
+										 arena.c
 
 # The 'version info' is applicable only to shared libraries...
 # liblang_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
