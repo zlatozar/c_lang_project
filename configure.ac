@@ -59,7 +59,7 @@ AC_SUBST([LT_REVISION])
 AC_SUBST([LT_AGE])
 
 ##################################
-#### Checks for integer size. ####
+## Checks for integer `sizeof`. ##
 ##################################
 
 AC_CHECK_SIZEOF(void*)
@@ -85,22 +85,21 @@ AX_PTHREAD
 
 AC_HEADER_STDC
 AC_CHECK_HEADERS( \
-    stddef.h      \
+    stdint.h      \
+    string.h      \
     ctype.h       \
-    errno.h       \
+    stdbool.h     \
+    stddef.h      \
+    stdio.h       \
+    stdarg.h      \
+    stdlib.h      \
     limits.h      \
-    pthread.h     \
-    semaphore.h   \
+    errno.h       \
+    time.h        \
     regex.h       \
     signal.h      \
-    stdarg.h      \
-    stdio.h       \
-    stdint.h      \
-    stdlib.h      \
-    string.h      \
-    strings.h     \
-    time.h        \
-    sys/ioctl.h
+    pthread.h     \
+    semaphore.h
 )
 
 ##########################################
@@ -160,28 +159,32 @@ AX_TRY_CFLAGS([-Wall], [AX_CFLAGS([-Wall])])
 AX_TRY_CFLAGS([-Wextra], [AX_CFLAGS([-Wextra])])
 AX_TRY_CFLAGS([-pedantic], [AX_CFLAGS([-pedantic])])
 
-dnl Enable all warnings
+dnl Enable additional warnings
+AX_TRY_CFLAGS([-Wnull-dereference], [AX_CFLAGS([-Wnull-dereference])])
+AX_TRY_CFLAGS([-Wduplicated-cond], [AX_CFLAGS([-Wduplicated-cond])])
+AX_TRY_CFLAGS([-Wduplicated-branches], [AX_CFLAGS([-Wduplicated-branches])])
+
 AX_TRY_CFLAGS([-Wformat], [AX_CFLAGS([-Wformat=2])])
-AX_TRY_CFLAGS([-Wno-unused-parameter], [AX_CFLAGS([-Wno-unused-parameter])])
 AX_TRY_CFLAGS([-Wundef], [AX_CFLAGS([-Wundef])])
 AX_TRY_CFLAGS([-Wshadow], [AX_CFLAGS([-Wshadow])])
 AX_TRY_CFLAGS([-Wwrite-strings], [AX_CFLAGS([-Wwrite-strings])])
 AX_TRY_CFLAGS([-Wstrict-prototypes], [AX_CFLAGS([-Wstrict-prototypes])])
-AX_TRY_CFLAGS([-Wold-style-definition], [AX_CFLAGS([-Wold-style-definition])])
 AX_TRY_CFLAGS([-Wredundant-decls], [AX_CFLAGS([-Wredundant-decls])])
 AX_TRY_CFLAGS([-Wnested-externs], [AX_CFLAGS([-Wnested-externs])])
-AX_TRY_CFLAGS([-Wmaybe-uninitialized], [AX_CFLAGS([-Wmaybe-uninitialized])])
 AX_TRY_CFLAGS([-Wlogical-op], [AX_CFLAGS([-Wlogical-op])])
 AX_TRY_CFLAGS([-Wjump-misses-init], [AX_CFLAGS([-Wjump-misses-init])])
 AX_TRY_CFLAGS([-Wmissing-include-dirs], [AX_CFLAGS([-Wmissing-include-dirs])])
+AX_TRY_CFLAGS([-Wconversion], [AX_CFLAGS([-Wconversion])])
 AX_TRY_CFLAGS([-fno-common], [AX_CFLAGS([-fno-common])])
+AX_TRY_CFLAGS([-Wno-unused-parameter], [AX_CFLAGS([-Wno-unused-parameter])])
 
+dnl Warns for performance problems
 AX_TRY_CFLAGS([-Wcast-align], [AX_CFLAGS([-Wcast-align])])
 
 AX_TRY_LDFLAGS([-Wl,--no-undefined], [AX_LDFLAGS([-Wl,--no-undefined])])
 
 ##################################
-####     Add debug support    ####
+####    Add debug support.    ####
 ##################################
 
 AC_MSG_CHECKING([Whether to build with debug information])
@@ -201,7 +204,7 @@ else
 fi
 
 ##################################
-###  Add memory check support  ###
+### Add memory check support.  ###
 ##################################
 
 AM_CONDITIONAL([MEMDEV_MODE], [test "x$debugit" = "xyes"])

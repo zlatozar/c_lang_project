@@ -45,7 +45,7 @@
 --suffix=none
 
 # Exclude if needed
+--exclude="test"
 --exclude="src/libs/lang/include/lang/except.h"
-# --exclude="src/something_else.c"
 
 --ignore-exclude-errors

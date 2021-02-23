@@ -10,7 +10,7 @@
 const Except_T Mem_Failed = { "Memory allocation failed" };
 
 void*
-Mem_alloc(long nbytes, const char* file, int line)
+Mem_alloc(size_t nbytes, const char* file, int line)
 {
   Require(nbytes > 0);
 
@@ -26,7 +26,7 @@ Mem_alloc(long nbytes, const char* file, int line)
 }
 
 void*
-Mem_calloc(long count, long nbytes, const char* file, int line)
+Mem_calloc(size_t count, size_t nbytes, const char* file, int line)
 {
   Require(count > 0);
   Require(nbytes > 0);
@@ -55,7 +55,7 @@ Mem_free(void* ptr, const char* file, int line)
 }
 
 void*
-Mem_resize(void* ptr, long nbytes, const char* file, int line)
+Mem_resize(void* ptr, size_t nbytes, const char* file, int line)
 {
   Require(ptr);
   Require(nbytes > 0);

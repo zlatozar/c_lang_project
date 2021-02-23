@@ -1,4 +1,4 @@
-#if !defined(NDEBUG)     /*  Development version */
+#if !defined(NDEBUG)     /* Memory checked version */
 
 #include "lang/mem.h"
 
@@ -36,7 +36,7 @@ LOCAL struct descriptor {
   struct descriptor* free;
   struct descriptor* link;
   const void* ptr;
-  long size;
+  size_t size;
   const char* file;
   int line;
 }* htab[TOTAL_BUCKETS];
@@ -78,7 +78,7 @@ Mem_free(void* ptr, const char* file, int line)
 }
 
 void*
-Mem_resize(void* ptr, long nbytes, const char* file, int line)
+Mem_resize(void* ptr, size_t nbytes, const char* file, int line)
 {
   Require(ptr);
   Require(nbytes > 0);
@@ -102,7 +102,7 @@ Mem_resize(void* ptr, long nbytes, const char* file, int line)
 }
 
 void*
-Mem_calloc(long count, long nbytes, const char* file, int line)
+Mem_calloc(size_t count, size_t nbytes, const char* file, int line)
 {
   Require(count > 0);
   Require(nbytes > 0);
@@ -114,7 +114,7 @@ Mem_calloc(long count, long nbytes, const char* file, int line)
 }
 
 LOCAL struct descriptor*
-dalloc(void* ptr, long size, const char* file, int line)
+dalloc(void* ptr, size_t size, const char* file, int line)
 {
   Require(ptr);
 
@@ -143,7 +143,7 @@ dalloc(void* ptr, long size, const char* file, int line)
 }
 
 void*
-Mem_alloc(long nbytes, const char* file, int line)
+Mem_alloc(size_t nbytes, const char* file, int line)
 {
   Require(nbytes > 0);
 
@@ -176,7 +176,7 @@ Mem_alloc(long nbytes, const char* file, int line)
       }
     }
 
-    /* No suitable chuck was found in the freelist circle */
+    /* No suitable chuck was found in the `freelist` circle */
     if (bp == &freelist) {
       struct descriptor* newptr = NULL;
 

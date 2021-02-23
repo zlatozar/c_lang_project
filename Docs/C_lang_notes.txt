@@ -867,7 +867,8 @@
       that points `p_atom`. If you change `p_atom` to point to some other type there
       is no need to fix allocation.
 %
-[TIP] You can reference for C libraries functions using `man 3 <function name>`
+[TIP] You can reference for C libraries functions using `man 3 <function name>`.
+      For header files use level 0 eg. `man ctype.h`
 %
 [TIP] man docs have many levels. For C functions use level 3:
            1 User Commands
@@ -1098,3 +1099,14 @@
                    Ice    = 1 << 2, /* 000100  4 */
                    Poison = 1 << 3  /* 001000  8 */
                  }
+%
+[LANG] Here is what is guaranteed by C standard:
+            1              ==  sizeof(char)   // `byte` is base unit !
+            1              <=  sizeof(bool)
+            sizeof(char)   <=  sizeof(short)
+            sizeof(short)  <=  sizeof(int)
+            sizeof(int)    <=  sizeof(long)
+            sizeof(long)   <=  sizeof(long long)
+%
+[GCC] To see enabled/disabled warnings: `gcc -Q --help=warning`.
+      If you want to see what is included: `gcc -Wall -Wextra -Q --help=warning`

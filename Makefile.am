@@ -26,10 +26,15 @@ include $(top_srcdir)/m4/doxygen.mk
 release: dist
 	$(AM_V_GEN)sha256sum $(DIST_ARCHIVES) > $(PACKAGE)-$(VERSION).sha256sum
 
+.PHONY:
+clean-release:
+	@rm -fv $(top_srcdir)/c_lang_project-*.sha256sum
+	@rm -fv $(top_srcdir)/c_lang_project-*.tar.gz
+
 # ______________________________________________________________________________
 #                                                                         Other
 
-sync_submodules:
+sync-submodules:
 	@git submodule init
 	@git submodule update
 
@@ -41,18 +46,17 @@ build-aux/ltmain.sh build-aux/test-driver build-aux/compile  \
 build-aux/config.sub build-aux/missing build-aux/install-sh  \
 Makefile.in
 
-MOSTLYCLEANFILES = *.stackdump
-
 help:
 	@echo
 	@echo -e "Usage:\n  make <target>"
 	@echo
 	@echo "(default) all ............. Build project"
-	@echo "          sync_submodules . Update `git` submodules"
+	@echo "          sync-submodules . Update `git` submodules"
 	@echo "          check ........... Run all unit tests"
 	@echo "          cppcheck ........ Statically checks all .c files"
 	@echo "          memcheck ........ Run unit test using Valgirnd to check memory leaks"
 	@echo "          format .......... Format code using `astyle`"
 	@echo "          html ............ Generate API documentation in `Docs/api/html`"
 	@echo "          release ......... Build projcect and create distribution as `tar.gz`"
+	@echo "          clean-release ... Remove release files"
 	@echo

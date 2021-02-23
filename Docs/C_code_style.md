@@ -175,7 +175,14 @@ a_name(void)
   unit8_t b = 4;
 }
 ```
-- Except `char`, `float` or `double`, try to use types declared in `stdint.h` library, eg. `uint8_t` for `unsigned 8-bit`, etc.
+- Use `char` to represent text
+- Use unsigned types for bit values and bitwise operators
+- Do not math with **unsigned** types
+- Avoid mixing signed and unsigned integers in the same expression
+- Use integer **exact** types (eg. `int8_t`) when you need an integer object of an exact (fixed) length
+- Use `size_t` as the type of an object, parameter or return type representing an **object size** in bytes.
+- It is possible to use `int` in loops
+- Use `int_least8_t` and so on to represent **small** integer values
 - Use `double` rather than `float`, unless you have a specific reason otherwise
 ```c
 /* OK */
@@ -186,7 +193,7 @@ status = 0;
 #include <stdbool.h>
 bool status = true;
 ```
-Integer types:
+Integer exact types defined in `<stdint.h>`:
 ```
     char                uint8_t   8     Unsigned       0 .. 255
     signed char         int8_t	  8     Signed      -128 .. 127
@@ -468,7 +475,7 @@ const char* foo(void)
 }
 ```
 
-- Extensively use `assert` to outline the function contract
+- Extensively use `assert` to outline the function contract. See also project `assert.h`
 - When defining function's parameters order is this: structure(changed by side-effects),
   then additional params
 - If function has *output* parameters they should be at the end and suffixed with `_`

@@ -3,8 +3,6 @@
 ACLOCAL_AMFLAGS = -I m4
 
 AM_CFLAGS = -std=c11 -I$(top_srcdir)/src/libs/lang/include
-# checked - conventions are safe
-AM_CFLAGS += -Wno-conversion
 
 noinst_LTLIBRARIES = liblang.la
 
@@ -54,7 +52,7 @@ test_assert_run_CFLAGS = $(AM_CFLAGS) $(CHECK_CFLAGS)
 test_assert_run_LDADD = $(CHECK_LDADD)
 
 test_macros_h_run_SOURCES = test/macros_h.c
-test_macros_h_run_CFLAGS = $(AM_CFLAGS)
+test_macros_h_run_CFLAGS = $(AM_CFLAGS) $(CHECK_CFLAGS)
 
 test_mem_h_run_SOURCES = test/mem_h.c
 test_mem_h_run_CFLAGS = $(AM_CFLAGS)
