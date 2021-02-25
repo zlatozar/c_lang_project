@@ -1,5 +1,5 @@
+#include <greatest.h>
 #include "lang/mem.h"
-#include "greatest.h"
 
 typedef struct {
   int a;
@@ -18,16 +18,10 @@ TEST allocate_macro(void)
   PASS();
 }
 
-/* Suites can group multiple tests with common setup. */
-SUITE(the_suite)
-{
-  RUN_TEST(allocate_macro);
-}
-
 GREATEST_MAIN_DEFS();
 int main(int argc, char** argv)
 {
   GREATEST_MAIN_BEGIN();
-  RUN_SUITE(the_suite);
+  RUN_TEST(allocate_macro);
   GREATEST_MAIN_END();
 }

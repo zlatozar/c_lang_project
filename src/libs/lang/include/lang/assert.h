@@ -1,3 +1,7 @@
+/**
+ * @file    assert.h
+ * @brief   Contains tools to do contracts between function.
+ */
 #if !defined(LANG_ASSERT_H)
 #define LANG_ASSERT_H
 

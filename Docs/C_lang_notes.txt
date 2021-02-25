@@ -1125,3 +1125,8 @@
        from `unsigned` to `signed` has undefined behavior if the value is too
        large to fit.
 %
+[TIP] You can completely separate sources from build process placing path to
+      sources relative to `SRCDIR=$(top_srcdir)/src/` in Makefile.am file. Eg.
+      in `c_lang_project` the structure containing Makefile.am files in `src`
+      same structure containing only sources.
+%

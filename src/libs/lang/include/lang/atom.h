@@ -1,3 +1,10 @@
+/**
+ * @file    arena.h
+ * @brief   Atom definition.
+ *
+ * Atoms could be used as keys in data structures. Two atoms are
+ * identical if they point to the same location.
+ */
 #if !defined(LANG_ATOM_H)
 #define LANG_ATOM_H
 

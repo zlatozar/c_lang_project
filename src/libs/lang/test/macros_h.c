@@ -1,5 +1,5 @@
 #include "lang/macros.h"
-#include "greatest.h"
+#include <greatest.h>
 
 TEST bitsizeof_macro(void)
 {

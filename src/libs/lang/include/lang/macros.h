@@ -1,3 +1,7 @@
+/**
+ * @file    macros.h
+ * @brief   Various macros definitions to easy day to day coding.
+ */
 #if !defined(LANG_MACROS_H)
 #define LANG_MACROS_H
 
@@ -30,7 +34,7 @@
 
 #define BOOL(v)            ( !(!(v)) )
 
-/* v = <target variable>, bn = <bit number to act upon 0 (first bit) up to n - 1 (last bit) */
+/* v = <target variable>, bn = <bit number to act upon 0 (first bit) up to n - 1 (last bit)> */
 #define BIT_GET(v, bn)     ( ((v) >> (bn)) & 1UL   )
 #define BIT_SET(v, bn)     ( (v) |= (1UL << (bn))  )    /* var |= 1UL << n;     */
 #define BIT_CLEAR(v, bn)   ( (v) &= ~(1UL << (bn)) )    /* var &= ~(1UL << n);  */
@@ -38,6 +42,7 @@
 #define BIT_FLIP(v, bn)    ( (v) ^= (1UL << (bn))  )
 #define BIT_CHECK(v, bn)   ( !(!((v) & (1UL << (bn)))) )
 
+/* Select least significant bit */
 #define LSB(v)             ( (v) ^ ((v) - 1UL) & (v) )
 
 /* x = <target variable>, y = mask */

@@ -1,3 +1,10 @@
+/**
+ * @file    mem.h
+ * @brief   Less prone memory management.
+ *
+ * This interface repackages these routines as a set of macros and routines
+ * that are less prone to error and that provide a few additional capabilities.
+ */
 #if !defined(LANG_MEM_H)
 #define LANG_MEM_H
 

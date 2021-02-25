@@ -1,3 +1,7 @@
+/**
+ * @file     log.h
+ * @brief    Logs with different levels
+ */
 #if !defined(LOGGER_LOG_H)
 #define LOGGER_LOG_H
 

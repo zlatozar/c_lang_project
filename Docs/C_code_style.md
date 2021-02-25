@@ -1155,8 +1155,13 @@ int32_t my_variable;        /* Actually defined in source */
 
 - Header file example (no license for sake of an example)
 ```c
+/**
+ * @file    template.h
+ * @brief   Template header file
+ */
+
 /* License comes here */
-#ifndef TEMPLATE_HDR_H
+#if !defined(TEMPLATE_HDR_H)
 #define TEMPLATE_HDR_H
 
 /* Include headers */
@@ -1171,7 +1176,7 @@ extern "C" {
 }
 #endif        /* __cplusplus */
 
-#endif /* TEMPLATE_HDR_H */
+#endif  /* TEMPLATE_HDR_H */
 ```
 
 ### Header file best practices

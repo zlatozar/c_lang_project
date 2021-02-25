@@ -1,3 +1,7 @@
+/**
+ * @file    except.h
+ * @brief   Exceptions definition.
+ */
 #if !defined(LANG_EXCEPT_H)
 #define LANG_EXCEPT_H
 

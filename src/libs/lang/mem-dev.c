@@ -134,7 +134,6 @@ dalloc(void* ptr, size_t size, const char* file, int line)
   avail->size = size;
   avail->file = file;
   avail->line = line;
-
   avail->free = avail->link = NULL;
 
   nleft--;

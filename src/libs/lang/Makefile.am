@@ -2,7 +2,8 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-AM_CFLAGS = -std=c11 -I$(top_srcdir)/src/libs/lang/include
+# Common for sources and tests
+LIB_HEADER = -I$(top_srcdir)/src/libs/lang/include
 
 noinst_LTLIBRARIES = liblang.la
 
@@ -17,13 +18,15 @@ liblang_la_SOURCES = assert.c  \
 										 atom.c    \
 										 arena.c
 
+liblang_la_CFLAGS = $(LIB_HEADER)
+
 # The 'version info' is applicable only to shared libraries...
 # liblang_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
 # ______________________________________________________________________________
 #                                                                    Unit tests
 
-CHECK_CFLAGS = -I$(top_srcdir)/src/ext-libs/greatest/include
+GREATEST = -I$(top_srcdir)/src/ext-libs/greatest/include
 CHECK_LDADD = liblang.la
 
 # If you need to mock something
@@ -45,23 +48,22 @@ check_PROGRAMS = test/except_h.run \
 								 test/mem_dev.run
 
 test_except_h_run_SOURCES = test/except_h.c
-test_except_h_run_CFLAGS = $(AM_CFLAGS)
+test_except_h_run_CFLAGS = $(LIB_HEADER)
 
 test_assert_h_run_SOURCES = test/assert_h.c
-test_assert_h_run_CFLAGS = $(AM_CFLAGS)
+test_assert_h_run_CFLAGS = $(LIB_HEADER)
 
 test_assert_run_SOURCES = test/assert.c
-test_assert_run_CFLAGS = $(AM_CFLAGS) $(CHECK_CFLAGS)
-test_assert_run_LDADD = $(CHECK_LDADD)
+test_assert_run_CFLAGS = $(LIB_HEADER) $(GREATEST)
 
 test_macros_h_run_SOURCES = test/macros_h.c
-test_macros_h_run_CFLAGS = $(AM_CFLAGS) $(CHECK_CFLAGS)
+test_macros_h_run_CFLAGS = $(LIB_HEADER) $(GREATEST)
 
 test_mem_h_run_SOURCES = test/mem_h.c
-test_mem_h_run_CFLAGS = $(AM_CFLAGS)
+test_mem_h_run_CFLAGS = $(LIB_HEADER)
 
 test_mem_dev_run_SOURCES = test/mem-dev.c
-test_mem_dev_run_CFLAGS = $(AM_CFLAGS) $(CHECK_CFLAGS)
+test_mem_dev_run_CFLAGS = $(LIB_HEADER) $(GREATEST)
 test_mem_dev_run_LDADD = $(CHECK_LDADD)
 
 # 'test/<test name>.run.debug' target

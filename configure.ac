@@ -197,10 +197,10 @@ AC_MSG_RESULT([$debugit])
 
 if test x"$debugit" = x"yes"; then
     AC_DEFINE([DEBUG],[],[Debug Mode])
-    CFLAGS="$CFLAGS -g -Og -DDEBUG -fno-inline -fmax-errors=5"
+    CFLAGS="$CFLAGS -std=c11 -g -Og -DDEBUG -fno-inline -fmax-errors=5"
 else
     AC_DEFINE([NDEBUG],[],[No-debug Mode])
-    CFLAGS="$CFLAGS -g -O3 -DNDEBUG"
+    CFLAGS="$CFLAGS -std=c11 -g -O3 -DNDEBUG"
 fi
 
 ##################################
@@ -216,6 +216,8 @@ AM_CONDITIONAL([MEMDEV_MODE], [test "x$debugit" = "xyes"])
 dnl Project libraries
 AC_CONFIG_FILES([src/libs/lang/Makefile])
 AC_CONFIG_FILES([src/libs/logger/Makefile])
+AC_CONFIG_FILES([src/libs/data_structs/Makefile])
+AC_CONFIG_FILES([src/libs/algorithms/Makefile])
 AC_CONFIG_FILES([src/libs/Makefile])
 
 dnl API documentation
