@@ -2,16 +2,9 @@
  * @file    mem.h
  * @brief   Less prone memory management.
  *
- * This interface repackages these routines as a set of macros and routines
- * that are less prone to error and that provide a few additional capabilities.
- */
-#if !defined(LANG_MEM_H)
-#define LANG_MEM_H
-
-#include <stddef.h>
-#include "except.h"
-
-/**
+ * Provides a set of macros and routines that are less prone to error and that
+ * provide a few additional capabilities.
+ *
  * Three kinds of errors occur in programs: user errors, runtime errors (checked
  * and unchecked), and exceptions.
  *   1. User errors are expected because they’re likely
@@ -26,6 +19,11 @@
  *    3. An exception is an error that may be rare and perhaps unexpected, but from
  * which recovery may be possible.
  */
+#if !defined(LANG_MEM_H)
+#define LANG_MEM_H
+
+#include <stddef.h>
+#include "except.h"
 
 /* GLOBAL declaration */
 extern const Except_T Mem_Failed;
@@ -35,9 +33,10 @@ extern const Except_T Mem_Failed;
  * bytes are uninitialized. If `Mem_alloc` raises `Mem_Failed`, file and
  * line are reported as the offending source coordinates.
  *
- * @throw `Mem_Failed` if NDEBUG is not defined
+ * @throw `Mem_Failed` if not succeed.
  */
 extern void* Mem_alloc(size_t nbytes, const char* file, int line);
+
 /**
  * Allocates space for an array of `count` elements, each occupying `nbytes`
  * bytes, and returns a pointer to the first element. It is a checked run-time
@@ -46,7 +45,7 @@ extern void* Mem_alloc(size_t nbytes, const char* file, int line);
  * raises `Mem_Failed`, file and line are reported as the offending source
  * coordinate.
  *
- * @throw `Mem_Failed` if NDEBUG is not defined
+ * @throw `Mem_Failed` if not succeed.
  */
 extern void* Mem_calloc(size_t count, size_t nbytes, const char* file, int line);
 
@@ -55,30 +54,28 @@ extern void* Mem_calloc(size_t count, size_t nbytes, const char* file, int line)
  * for `ptr` to be a pointer that was not returned by a previous call to a
  * `Mem_alloc` function. Implementations may use file and line to report
  * memory-usage errors.
- *
- * @throw `Mem_Failed` if NDEBUG is not defined
  */
 extern void  Mem_free(void* ptr, const char* file, int line);
 
 /**
  * Changes the size of the block at `ptr` to hold `nbytes` bytes, and returns a
  * pointer to the first byte of the new block. If `nbytes` exceeds the size of
- * the original block, the **excess bytes** are uninitialized. If `nbytes` is
- * less than the size of the original block, only `nbytes` of its bytes appear
- * in the new block. If `Mem_resize` raises `Mem_Failed`, file and line are
- * reported as the offending source coordinates. It is a checked run-time error
- * for `ptr=NULL`, and it is a unchecked for `ptr` to be a pointer that was not
+ * the original block, the excess bytes are uninitialized. If `nbytes` is less
+ * than the size of the original block, only `nbytes` of its bytes appear in the
+ * new block. If `Mem_resize` raises `Mem_Failed`, file and line are reported as
+ * the offending source coordinates. It is a checked run-time error for
+ * `ptr=NULL`, and it is a unchecked for `ptr` to be a pointer that was not
  * returned by a previous call to a `Mem_alloc` function.
  *
- * @throw `Mem_Failed` if NDEBUG is not defined
+ * @throw `Mem_Failed` if not succeed.
  */
 extern void* Mem_resize(void* ptr, size_t nbytes, const char* file, int line);
 
 #define ALLOC(nbytes)          Mem_alloc((nbytes), __FILE__, __LINE__)
 #define CALLOC(count, nbytes)  Mem_calloc((count), (nbytes), __FILE__, __LINE__)
 
-#define NEW(p)    ( (p) = ALLOC( (long)sizeof * (p))    )
-#define NEW_0(p)  ( (p) = CALLOC(1, (long)sizeof * (p)) )
+#define NEW(ptr)    ( (ptr) = ALLOC(    (long)sizeof(*(ptr))) )
+#define NEW_0(ptr)  ( (ptr) = CALLOC(1, (long)sizeof(*(ptr))) )
 
 #define FREE(ptr)            ( (void)(Mem_free((ptr), __FILE__, __LINE__), (ptr) = NULL) )
 #define RESIZE(ptr, nbytes)  ( (ptr) = Mem_resize((ptr), (nbytes), __FILE__, __LINE__)   )

@@ -18,12 +18,12 @@ Except_raise(const Except_T* e, const char* file, int line)
     fprintf(stderr, "Uncaught exception!");
 
     if (e->message)
-    { fprintf(stderr, " %s", e->message); }
+    { fprintf(stderr, "  %s", e->message); }
     else
-    { fprintf(stderr, " at 0x%p", (void*)e); }
+    { fprintf(stderr, "  at 0x%p", (void*)e); }
 
     if (file && line > 0)
-    { fprintf(stderr, " raised at [%s: %d]\n", file, line); }
+    { fprintf(stderr, "  raised at [%s: %d]\n", file, line); }
 
     fprintf(stderr, "Aborting...\n");
     fflush(stderr);

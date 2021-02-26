@@ -22,6 +22,7 @@ Mem_alloc(size_t nbytes, const char* file, int line)
     else
     { Except_raise(&Mem_Failed, file, line); }
   }
+
   return ptr;
 }
 

@@ -484,7 +484,7 @@ const char* foo(void)
 - Extensively use `assert` to outline the function contract. See also project `assert.h`
 - When defining function's parameters order is this: structure(changed by side-effects),
   then additional params
-- If function has *output* parameters they should be at the end and suffixed with `_`
+- If function has *output* parameters they should be at the end and suffixed with `_`, actual parameters(that will be passed) has suffix `_out`
 ```c
 static Matrix_T
 Matrix_get(Matrix_T m, int row, int col, void* p_value_) {

@@ -9,7 +9,8 @@ noinst_LTLIBRARIES = libdatastructs.la
 
 # The files to add to the library and to the source distribution
 libdatastructs_la_SOURCES = list.c
-libdatastructs_la_CFLAGS = $(LIB_HEADER)
+libdatastructs_la_CFLAGS = $(LIB_HEADER) -I$(top_srcdir)/src/libs/lang/include
+libdatastructs_la_LIBADD = $(top_srcdir)/src/libs/lang/liblang.la
 
 # ______________________________________________________________________________
 #                                                                    Unit tests

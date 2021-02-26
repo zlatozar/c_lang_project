@@ -1,4 +1,6 @@
 # Usage: astyle --options="<path to>/astylerc" --recursive "src/*.c"
+# ATTENTION: It will fails if there is unsaved IDE files.
+#
 # NOTE: could be stored in local directory as ~/.astylerc
 
 # or allman

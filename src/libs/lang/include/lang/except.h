@@ -1,6 +1,9 @@
 /**
  * @file    except.h
  * @brief   Exceptions definition.
+ *
+ * If the exception is not caught the behavior is as `assertion` failure - logs
+ * where is thrown and aborts program.
  */
 #if !defined(LANG_EXCEPT_H)
 #define LANG_EXCEPT_H
