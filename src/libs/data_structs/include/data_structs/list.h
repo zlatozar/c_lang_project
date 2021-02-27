@@ -5,14 +5,17 @@
 #if !defined(DATA_STRUCTS_LIST_H)
 #define DATA_STRUCTS_LIST_H
 
-#include <stdbool.h>  /* bool */
+#include <stdbool.h>     /* bool                    */
+#include "lang/extend.h" /* generic_ptr, mem_status */
 
 #ifdef __cplusplus
 extern "C" {
 #endif        /* __cplusplus */
 
-/* Use `List_T` or `note_t*` for the readability sake. */
+/* Particular node from the list */
 typedef struct node node_t;
+
+/* Interpret `List_T list as a whole, `node_t*` is a pointer to a note. */
 typedef node_t* List_T;
 
 /**
@@ -20,7 +23,7 @@ typedef node_t* List_T;
  *
  * @throws `Mem_Failed` exception if not succeed.
  */
-extern void List_allocate_node(List_T* p_List, void* data);
+extern mem_status List_allocate_node(List_T* p_List, generic_ptr data);
 extern void List_free_node(List_T* p_List);
 
 /**
@@ -36,12 +39,12 @@ extern bool List_is_empty(List_T List);
 /**
  * Insert a new node containing data as the first item in *p_List.
  */
-extern void List_insert(List_T* p_List, void* data);
+extern mem_status List_insert(List_T* p_List, generic_ptr data);
 
 /**
  * Append a new node containing data as the last item in *p_List.
  */
-extern void List_append(List_T* p_List, void* data);
+extern void List_append(List_T* p_List, generic_ptr data);
 
 /**
  * Delete `node` from *p_List. It is checked runtime error
@@ -55,7 +58,7 @@ extern bool List_delete_node(List_T* p_List, node_t* p_node);
  *
  * @param p_data_[out]    deleted node data
  */
-extern bool List_delete(List_T* p_List, void* p_data_);
+extern bool List_delete(List_T* p_List, generic_ptr* p_data_);
 
 
 #ifdef __cplusplus

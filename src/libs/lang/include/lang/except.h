@@ -43,11 +43,11 @@ extern const Except_T Invariant_Error;
  * It is a run-time error if exception is `NULL`.
  * Uncaught exceptions cause program termination.
  */
-void Except_raise(const Except_T* e, const char* file, int line);
+void Except_throw(const Except_T* e, const char* file, int line);
 
-#define THROW(e) Except_raise(&(e), __FILE__, __LINE__)
+#define THROW(e) Except_throw(&(e), __FILE__, __LINE__)
 
-#define RETHROW Except_raise(Except_frame.exception,             \
+#define RETHROW Except_throw(Except_frame.exception,             \
                              Except_frame.file, Except_frame.line)
 
 /**

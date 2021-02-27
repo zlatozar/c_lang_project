@@ -10,6 +10,7 @@ const Except_T Invariant_Error = { "Invariant error" };
 
 void (Assert)(int exp)
 {
+  /* Invoke macro. */
   Assert(exp);
 }
 

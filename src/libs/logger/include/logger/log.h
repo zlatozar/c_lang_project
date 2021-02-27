@@ -59,7 +59,7 @@ char* time_now(void);
               time_now(), DEBUG_TAG,                                \
               __FILE, __func__, __LINE__, __VA_ARGS__); } while (0)
 
-#define log_debug(...) do {                      \
+#define Log_debug(...) do {                      \
     if (LOG_LEVEL >= DEBUG_LEVEL)                \
       _log_debug(__VA_ARGS__, "\n"); } while (0)
 
@@ -69,7 +69,7 @@ char* time_now(void);
               time_now(), INFO_TAG,                                 \
               __FILE, __func__, __LINE__, __VA_ARGS__); } while (0)
 
-#define log_info(...) do {                      \
+#define Log_info(...) do {                      \
     if (LOG_LEVEL >= INFO_LEVEL)                \
       _log_info(__VA_ARGS__, "\n"); } while (0)
 
@@ -80,11 +80,11 @@ char* time_now(void);
               time_now(), ERROR_TAG,                                \
               __FILE, __func__, __LINE__, __VA_ARGS__); } while (0)
 
-#define log_error(...) do {                       \
+#define Log_error(...) do {                       \
     if (LOG_LEVEL >= ERROR_LEVEL)                 \
       _log_error(__VA_ARGS__, "\n"); } while (0)
 
-#define log_error_if(condition, ...) do {          \
+#define Log_error_if(condition, ...) do {          \
     if (condition)                                 \
       if (LOG_LEVEL >= ERROR_LEVEL)                \
         _log_error(__VA_ARGS__, "\n"); } while (0)

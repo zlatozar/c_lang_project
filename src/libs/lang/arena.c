@@ -36,9 +36,9 @@ union header {
   union align a;
 };
 
-LOCAL Arena_T freechunks;
+static Arena_T freechunks;
 
-LOCAL int nfree;
+static int nfree;
 
 /* __________________________________________________________________________ */
 
@@ -85,7 +85,7 @@ Arena_alloc(Arena_T self, size_t nbytes, const char* file, int line)
         if (file == NULL)
         { THROW(Arena_Failed); }
         else
-        { Except_raise(&Arena_Failed, file, line); }
+        { Except_throw(&Arena_Failed, file, line); }
       }
 
       limit = (char*)ptr + m;

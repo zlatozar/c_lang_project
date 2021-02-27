@@ -6,7 +6,6 @@
 #define LANG_MACROS_H
 
 #include <stddef.h>  /* size_t, offsetof */
-#include <limits.h>  /* CHAR_BIT         */
 
 /*
  * Placed at the beginning of a function it suppress compiler
@@ -15,9 +14,6 @@
 #define UNUSED(param_name)                                   \
   ( (void)(0 ? ((param_name) = (param_name)) : (param_name)) )
 
-/* LOCAL void foo (void); makes clear that 'foo' is local in its module */
-#define LOCAL   static
-
 #define bitsizeof(type)  ((CHAR_BIT) * sizeof(type))
 
 #define ARRAY_SIZE(a)                                                  \
@@ -25,9 +21,6 @@
 
 #define CONTAINER_OF(ptr, type, member)              \
   ( (type *)(((char *)ptr) - offsetof(type, member)) )
-
-#define INT_TO_PTR(i)    ( (void*)(uintptr_t)(i) )
-#define PTR_TO_INT(p)    ( (int)(uintptr_t)(p)   )
 
 /* __________________________________________________________________________ */
 /*                                                                      Bits  */

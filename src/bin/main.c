@@ -18,11 +18,11 @@ main(void)
   Assert(1);
   printf("%s\n", "Usage of printf....");
 
-  log_debug("log_debug message");
-  log_debug("log_debug message with %s", "parameter");
-  log_info("log_info message");
-  log_error("log_error message");
-  log_error_if(1, "Condition is %d", 1);
+  Log_debug("Log_debug message");
+  Log_debug("Log_debug message with %s", "parameter");
+  Log_info("Log_info message");
+  Log_error("Log_error message");
+  Log_error_if(1, "Condition is %d", 1);
 
   return EXIT_SUCCESS;
 }

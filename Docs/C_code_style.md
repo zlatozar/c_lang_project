@@ -417,11 +417,12 @@ void myfunc(void);
 void MYFunc(void);
 void myFunc();
 ```
+- Local(private) functions should be prefixed with `__`
 - Function return values or calculations that are obtained and then never change declare
   them `const`
 ```c
 /* OK */
-char *repeat_str(const char *str, size_t n)
+char* repeat_str(const char *str, size_t n)
 {
   const size_t len = strlen(str);
   const size_t buf_size = 1 + (len * n);
@@ -484,7 +485,8 @@ const char* foo(void)
 - Extensively use `assert` to outline the function contract. See also project `assert.h`
 - When defining function's parameters order is this: structure(changed by side-effects),
   then additional params
-- If function has *output* parameters they should be at the end and suffixed with `_`, actual parameters(that will be passed) has suffix `_out`
+- If function has *output* parameters they should be at the end and suffixed with `__`,
+  actual parameters(that will be passed) has suffix `_out`
 ```c
 static Matrix_T
 Matrix_get(Matrix_T m, int row, int col, void* p_value_) {

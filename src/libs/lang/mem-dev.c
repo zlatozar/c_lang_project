@@ -32,7 +32,7 @@ const Except_T Mem_Failed = { "Allocation failed" };
 /* __________________________________________________________________________ */
 /*                                                                     Local  */
 
-LOCAL struct descriptor {
+static struct descriptor {
   struct descriptor* free;
   struct descriptor* link;
   const void* ptr;
@@ -42,10 +42,10 @@ LOCAL struct descriptor {
 }* htab[TOTAL_BUCKETS];
 
 /* Point to itself because we build cyclic list. */
-LOCAL struct descriptor freelist = { .free = &freelist };
+static struct descriptor freelist = { .free = &freelist };
 
-LOCAL struct descriptor*
-find(const void* ptr)
+static struct descriptor*
+__find(const void* ptr)
 {
   struct descriptor* bp = htab[hash(ptr, htab)];
 
@@ -65,9 +65,9 @@ Mem_free(void* ptr, const char* file, int line)
     struct descriptor* bp = NULL;
 
     if (((unsigned long)ptr) % (sizeof (union align)) != 0
-        || (bp = find(ptr)) == NULL || bp->free) {
+        || (bp = __find(ptr)) == NULL || bp->free) {
 
-      Except_raise(&Assert_Failed, file, line);
+      Except_throw(&Assert_Failed, file, line);
     }
 
     Ensure(bp);
@@ -86,9 +86,9 @@ Mem_resize(void* ptr, size_t nbytes, const char* file, int line)
   struct descriptor* bp = NULL;
 
   if (((unsigned long)ptr) % (sizeof (union align)) != 0
-      || (bp = find(ptr)) == NULL || bp->free) {
+      || (bp = __find(ptr)) == NULL || bp->free) {
 
-    Except_raise(&Assert_Failed, file, line);
+    Except_throw(&Assert_Failed, file, line);
   }
 
   Ensure(bp);
@@ -113,8 +113,8 @@ Mem_calloc(size_t count, size_t nbytes, const char* file, int line)
   return ptr;
 }
 
-LOCAL struct descriptor*
-dalloc(void* ptr, size_t size, const char* file, int line)
+static struct descriptor*
+__dalloc(void* ptr, size_t size, const char* file, int line)
 {
   Require(ptr);
 
@@ -159,7 +159,7 @@ Mem_alloc(size_t nbytes, const char* file, int line)
       bp->size -= nbytes;
       ptr = (char*)bp->ptr + bp->size;
 
-      if ((bp = dalloc(ptr, nbytes, file, line)) != NULL) {
+      if ((bp = __dalloc(ptr, nbytes, file, line)) != NULL) {
         unsigned h = hash(ptr, htab);
         bp->link = htab[h];
         htab[h] = bp;
@@ -171,7 +171,7 @@ Mem_alloc(size_t nbytes, const char* file, int line)
         if (file == NULL)
         { THROW(Mem_Failed); }
         else
-        { Except_raise(&Mem_Failed, file, line); }
+        { Except_throw(&Mem_Failed, file, line); }
       }
     }
 
@@ -180,7 +180,7 @@ Mem_alloc(size_t nbytes, const char* file, int line)
       struct descriptor* newptr = NULL;
 
       if ((ptr = malloc(nbytes + NALLOC)) == NULL
-          || (newptr = dalloc(ptr, nbytes + NALLOC, __FILE__, __LINE__)) == NULL) {
+          || (newptr = __dalloc(ptr, nbytes + NALLOC, __FILE__, __LINE__)) == NULL) {
 
         if (ptr != NULL) {
           free(ptr);
@@ -190,7 +190,7 @@ Mem_alloc(size_t nbytes, const char* file, int line)
         if (file == NULL)
         { THROW(Mem_Failed); }
         else
-        { Except_raise(&Mem_Failed, file, line); }
+        { Except_throw(&Mem_Failed, file, line); }
       }
 
       Ensure(newptr);
