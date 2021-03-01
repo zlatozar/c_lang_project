@@ -125,6 +125,9 @@ AC_CHECK_FUNCS([memcpy])
 ###  Checks for build process. ###
 ##################################
 
+AM_PROG_LEX
+AC_PROG_YACC
+
 AX_PROG_VALGRIND
 # OS-specific settings
 AS_CASE([$host_os],

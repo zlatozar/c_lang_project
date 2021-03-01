@@ -29,7 +29,7 @@ liblang_la_CFLAGS = $(LIB_HEADER)
 GREATEST = -I$(top_srcdir)/src/ext-libs/greatest/include
 CHECK_LDADD = liblang.la
 
-# If you need to mock something
+# If you need to simulate memory fails.
 # CHECK_LDFLAGS_EXTRA = -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc
 
 if MEMDEV_MODE

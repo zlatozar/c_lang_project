@@ -5,12 +5,13 @@
 #if !defined(LANG_EXTEND_H)
 #define LANG_EXTEND_H
 
+#include <stdbool.h> /* bool     */
 #include <limits.h>  /* CHAR_BIT */
 
 /**
  *          | current ... | current + 1 ...
  *        __v_________    v
- *  T -> |char*|next*|-->
+ *  T -> |char*|next*|--> ...
  *        -----------
  *          |
  *          v
@@ -22,6 +23,22 @@
  * functions. Because this pattern is very common this alias is created.
  */
 typedef char* generic_ptr;
+
+/* Function types */
+
+/**
+ * When working with `void*` data compare function should be passed in
+ * some operations.
+ */
+typedef bool (*compare_data_FN)(generic_ptr, generic_ptr);
+
+/**
+ * Proper deallocation depends on the precise interface provided by functions.
+ * It is therefore vital to document not only the functionality of functions,
+ * but also how they manage the store. Because we don't know what will be stored,
+ * function interface is introduced.
+ */
+typedef void (*free_data_FN)(generic_ptr);
 
 /**
  * @brief    Used to indicate if allocation de-allocation succeed.

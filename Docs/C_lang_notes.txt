@@ -1130,3 +1130,41 @@
       in `c_lang_project` the structure containing Makefile.am files in `src`
       same structure containing only sources.
 %
+[STYLE] In `switch` construction always place `default` clause. If you are sure
+        that will not be reached add `assert(0)` in it.
+%
+[STYLE] Type casts are highly undesirable in C - compiler will silently will
+        accept everything. It is better to leave the coercions to the compiler.
+%
+[LANG] In C a function can not return an array as a result, where is it can
+       return a structure.
+%
+[LANG] The order of the assignments is undefined.
+%
+[LANG] Assignment is in itself an expression, the value on the right hand
+       side being the value of the expression.
+%
+[TIP] The rule to prevent a dangling pointer is: the pointer must have a
+      lifetime that is not longer than the lifetime of the variable that is
+      being pointed to.
+%
+[STYLE] It is good practice to destroy data in the same function where the
+        pointer to the data is destroyed (provided, that the pointer has not
+        been copied!).
+%
+[LANG] Memory allocation is an expensive operation.
+%
+[TIP] `Open list` technique: by remembering where the previous iteration has
+      appended an element, the next element can be appended at that point,
+      without requiring further list traversal. The name `open list' stems from
+      the fact that at each stage, the result list is still open ended, as more
+      elements are yet to be added to the right.
+%
+[STYLE] The danger of using functions that have side effect: they make it
+        difficult to create good building blocks. It depends on the
+        circumstances whether a function that relies on side effects has the
+        desired behaviour or not.
+%
+[GCC] Use `objdump` to see generated assembly code line by line:
+            objdump -S libdatastructs.o
+%
