@@ -14,8 +14,6 @@
 #define UNUSED(param_name)                                   \
   ( (void)(0 ? ((param_name) = (param_name)) : (param_name)) )
 
-#define bitsizeof(type)  ((CHAR_BIT) * sizeof(type))
-
 #define ARRAY_SIZE(a)                                                  \
   ( (sizeof(a)/sizeof(0[a])) / ((size_t)(!(sizeof(a) % sizeof(0[a])))) )
 

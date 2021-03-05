@@ -179,7 +179,6 @@ AX_TRY_CFLAGS([-Wjump-misses-init], [AX_CFLAGS([-Wjump-misses-init])])
 AX_TRY_CFLAGS([-Wmissing-include-dirs], [AX_CFLAGS([-Wmissing-include-dirs])])
 AX_TRY_CFLAGS([-Wconversion], [AX_CFLAGS([-Wconversion])])
 AX_TRY_CFLAGS([-fno-common], [AX_CFLAGS([-fno-common])])
-AX_TRY_CFLAGS([-Wno-unused-parameter], [AX_CFLAGS([-Wno-unused-parameter])])
 
 dnl Warns for performance problems
 AX_TRY_CFLAGS([-Wcast-align], [AX_CFLAGS([-Wcast-align])])

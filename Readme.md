@@ -4,15 +4,22 @@
 
 - git
 - gcc
-- make
-- cmake
 - autotools
+- make
 - lex/yacc
 - valgrind
 - cppcheck
 - astyle _(manual build)_
 - fortune
 
+## Build
+
+```text
+$ ./bootstrap.sh
+$ make
+$ make check
+$ make help
+```
 ## Dependencies
 
 ### Unit Testing
@@ -20,10 +27,6 @@
 
 ### Protothreads (co-routines)
 [pt.h](http://dunkels.com/adam/pt/)
-
-### Neural Network
-[Tiny Neural Network](https://github.com/glouw/tinn) <br/>
-[Genann](https://github.com/codeplea/genann)
 
 ## Tools
 1. [Doxygen](https://www.doxygen.nl/index.html) <br/>

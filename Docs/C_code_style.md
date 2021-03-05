@@ -21,9 +21,9 @@ This document describes C code style used by `Company Ltd.` in his projects.
 
 - If you are using abbreviations like `usd`, `mph`, `kwh` put them as a suffix
   e.g. `sum_in_usd` and make sure you establish these ahead of time.
-- If you have parameters from the same type prefix them with `x_`, `y_`, `z_` e.g. `x_list` and `y_list`.
 - Team have to agreed for common abbreviations and use them constantly.
 - Avoid names with similar meanings.
+- Suffix variables with `_str` if point to `(char*)` and should be treated as _string_.
 
 ## General rules
 

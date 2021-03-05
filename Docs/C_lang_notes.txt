@@ -1168,3 +1168,16 @@
 [GCC] Use `objdump` to see generated assembly code line by line:
             objdump -S libdatastructs.o
 %
+[PERF] Get to use `gprof` to profile your application. Project should be compiled
+       with `-pg` option.
+%
+[PERF] `callgrind` (part of `valgrind` project) is a nice tool for profiling.
+%
+[TIP] Comment in case of doubt.
+%
+[TRICK] Sometimes it is useful to have message in `assert`:
+             assert(condition && "Your message here");
+%
+[GCC] ld error `undefined reference to 'Except_throw'` means that
+      'Except_throw' has declaration in header file but does not have
+      in corresponding .c file.

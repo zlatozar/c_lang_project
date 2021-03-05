@@ -5,12 +5,9 @@
 #if !defined(DATA_STRUCTS_LIST_H)
 #define DATA_STRUCTS_LIST_H
 
-#include <stdbool.h>     /* bool */
+#include <stdbool.h>    /* bool   */
+#include <stddef.h>     /* size_t */
 #include "lang/extend.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif        /* __cplusplus */
 
 
 struct node {
@@ -37,7 +34,7 @@ typedef node_t* List_T;
  * @throws `Mem_Failed` exception if not succeed.
  */
 extern mem_status List_allocate_node(List_T* p_List, generic_ptr p_data);
-extern void List_free_node(List_T* p_List);
+extern void List_free_node(node_t** pp_node);
 
 /**
  * Initialize *p_List by setting the list pointer to NULL.
@@ -57,25 +54,26 @@ extern mem_status List_insert(List_T* p_List, generic_ptr p_data);
 /**
  * Append a new node containing data as the last item in *p_List.
  */
-extern void List_append(List_T* p_List, generic_ptr p_data);
+extern mem_status List_append(List_T* p_List, generic_ptr p_data);
 
 /**
- * Delete `node` from *p_List. It is checked runtime error
- * if `p_List` is empty.
+ * Delete `node` from *p_List. It is checked runtime error if `p_List` is empty.
  */
-extern bool List_delete_node(List_T* p_List, node_t* p_node);
+extern status List_delete_node(List_T* p_List, node_t* p_node);
 
 /**
- * Delete the first node in `*p_List` and return deleted DATA if operation
- * succeed otherwise NULL. It is checked runtime error if given list is empty.
+ * Delete the first node in `*p_List` and return pointer to deleted DATA in
+ * `pp_data__` if operation succeed otherwise FAIL. It is checked runtime error
+ * if given list is empty. Client should take care to free memory of the
+ * returned data.
  */
-extern generic_ptr List_delete(List_T* p_List);
+extern status List_delete_head(List_T* p_List, generic_ptr* pp_data__);
 
 /**
  * Call `apply_fn` with the DATA field of each node in `List_T`.
- * If `apply_fn` ever returns ERROR, this function returns ERROR.
+ * If `apply_fn` ever returns FAIL, this function returns FAIL.
  */
-extern bool List_traverse(List_T self, bool (*apply_fn)(generic_ptr));
+extern status List_traverse(List_T self, status (*apply_fn)(generic_ptr));
 
 /**
  * @brief    Return each item of list in turn.
@@ -87,12 +85,18 @@ extern bool List_traverse(List_T self, bool (*apply_fn)(generic_ptr));
 extern List_T List_iterator(List_T self, List_T last_return);
 
 /**
+ * @brief    Number of list elements.
+ */
+extern size_t List_length(List_T self);
+
+/**
  * @brief    Find the node in the list that has a data—matching key.
  *
- * If the node is found, it is passed back in `*p_keynode`. True is returned.
- * `comp_fn` is a comparison function that returns `true` when there is a match.
+ * If the node is found, it is passed back in `*pp_keynode__`. SUCC is returned.
+ * `comp_data_fn` is a comparison function that returns `true` when there is a match.
  */
-extern bool List_find_key(List_T self, compare_data_FN comp_data_fn, generic_ptr key, node_t** p_keynode);
+extern status List_find_key(List_T self, compare_data_FN comp_data_fn, generic_ptr key,
+                          node_t** pp_keynode__);
 
 /**
  * @brief    Delete every node in the given list.
@@ -101,8 +105,9 @@ extern bool List_find_key(List_T self, compare_data_FN comp_data_fn, generic_ptr
  */
 extern void List_destroy(List_T* p_List, free_data_FN free_data_fn);
 
-#ifdef __cplusplus
-}
-#endif        /* __cplusplus */
+/**
+ * @brief    Print list data.
+ */
+extern void List_print(const List_T self, print_data_FN print_data_fn);
 
 #endif  /* DATA_STRUCTS_LIST_H */

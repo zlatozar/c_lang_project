@@ -8,7 +8,7 @@
 Except_Frame* Except_stack = NULL;
 
 void
-Except_raise(const Except_T* e, const char* file, int line)
+Except_throw(const Except_T* e, const char* file, int line)
 {
   Require(e);
 
