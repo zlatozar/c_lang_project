@@ -9,11 +9,14 @@
 #include <limits.h>  /* CHAR_BIT */
 
 /**
- * To emphasize that we work with raw data.
+ * To emphasize that we work with raw data with no type information
+ * and it's size we assume is one.
  */
 typedef char byte;
 
 /**
+ * @brief    Generic pointer.
+ *
  *          |-current ... |-(current + 1) ...
  *        __v_________    v
  *  T -> |char*|next*|--> ...
@@ -22,12 +25,12 @@ typedef char byte;
  *          v
  *         data
  *
- * In the base data structure we can move around with pointer to the data
- * because it is `char*` so pointer arithmetic is possible. Operation that
- * include knowing of particular data type is done from client(wrapped)
- * functions. Because this pattern is very common this alias is created.
+ * In the base data structures we can move around using pointer to the data
+ * because it is `char*`, so pointer arithmetic is possible. Operation that
+ * include knowledge of particular data type is done from client(wrapped)
+ * functions. Because this pattern is very common this alias was created.
  */
-typedef byte* generic_ptr;
+typedef byte* Generic_T;
 
 /* Function types */
 
@@ -35,7 +38,7 @@ typedef byte* generic_ptr;
  * When working with `void*` data compare function should be passed in
  * some operations.
  */
-typedef bool compare_data_FN(generic_ptr, generic_ptr);
+typedef bool compare_data_FN(Generic_T, Generic_T);
 
 /**
  * Proper deallocation depends on the precise interface provided by functions.
@@ -50,7 +53,7 @@ typedef void (*free_data_FN)(void*);
  * without type information that's why additional functions with this knowledge
  * should be passed.
  */
-typedef void print_data_FN(generic_ptr);
+typedef void print_data_FN(Generic_T);
 
 /**
  * @brief    Used to indicate if allocation de-allocation succeed.

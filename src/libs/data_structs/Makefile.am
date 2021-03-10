@@ -8,7 +8,9 @@ LIB_HEADER = -I$(top_srcdir)/src/libs/data_structs/include
 noinst_LTLIBRARIES = libdatastructs.la
 
 # The files to add to the library and to the source distribution
-libdatastructs_la_SOURCES = list.c
+libdatastructs_la_SOURCES = list.c      \
+														array_stack.c
+
 libdatastructs_la_CFLAGS = $(LIB_HEADER)                           \
 													 -I$(top_srcdir)/src/libs/lang/include   \
 													 -I$(top_srcdir)/src/libs/logger/include

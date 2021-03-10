@@ -8,32 +8,34 @@ typedef struct {
   int x;
 } data_t;
 
-static generic_ptr
+typedef data_t* Data_T;
+
+static Generic_T
 get_next_elm(int elm)
 {
-  data_t* data = malloc(sizeof(data_t));
+  Data_T data = malloc(sizeof(*data));
   data->x = elm;
 
-  return (generic_ptr)data;
+  return (Generic_T)data;
 }
 
 static void
-print_data_fn(generic_ptr data)
+print_data_fn(Generic_T data)
 {
-  printf("%d ", ((data_t*)data)->x);
+  printf("%d ", ((Data_T)data)->x);
 }
 
 static status
-apply_fn(generic_ptr data)
+apply_fn(Generic_T data)
 {
   print_data_fn(data);
   return SUCC;
 }
 
 static bool
-comp_data_fn(generic_ptr a_data, generic_ptr b_data)
+comp_data_fn(Generic_T a_data, Generic_T b_data)
 {
-  return ((data_t*)a_data)->x == ((data_t*)b_data)->x;
+  return ((Data_T)a_data)->x == ((Data_T)b_data)->x;
 }
 
 /* __________________________________________________________________________ */
@@ -79,9 +81,9 @@ TEST delete_head(void)
   List_insert(&list, get_next_elm(1));
 
   /* Common pattern when work with pointer to pointer. */
-  data_t* p_deleted;
-  List_delete_head(&list, (generic_ptr*) &p_deleted);
-  free(p_deleted);
+  Data_T deleted;
+  List_delete_head(&list, (Generic_T*) &deleted);
+  free(deleted);
 
   ASSERT_EQ(2, List_length(list));
 
@@ -129,15 +131,16 @@ TEST find_key(void)
   List_append(&list, get_next_elm(3));
   List_append(&list, get_next_elm(42));
 
-  data_t* key = malloc(sizeof(data_t));
+  Data_T key = malloc(sizeof(data_t));
   key->x = 42;
 
+  /* Contains found node. */
   node_t* match_node;
 
-  List_find_key(list, comp_data_fn, (generic_ptr)key, &match_node);
-  data_t* p_match_node_data = (data_t*)DATA(match_node);
+  List_find_key(list, comp_data_fn, (Generic_T)key, &match_node);
+  Data_T match_node_data = (Data_T)DATA(match_node);
 
-  ASSERT(p_match_node_data->x == 42);
+  ASSERT(match_node_data->x == 42);
 
   List_destroy(&list, free);
   free(key);

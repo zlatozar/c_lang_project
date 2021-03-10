@@ -8,9 +8,9 @@
 /*                                                                    Public  */
 
 mem_status
-List_allocate_node(List_T* p_List, generic_ptr p_data)
+List_allocate_node(List_T* p_List, Generic_T data)
 {
-  node_t* p_node = malloc(sizeof(node_t));
+  node_t* p_node = malloc(sizeof(*p_node));
   if (p_node == NULL) {
     Log_error("Root cause - 'malloc' do not succeed.");
     return ERROR;
@@ -18,7 +18,7 @@ List_allocate_node(List_T* p_List, generic_ptr p_data)
 
   *p_List = p_node;
 
-  DATA(p_node) = p_data;
+  DATA(p_node) = data;
   NEXT(p_node) = NULL;
 
   return OK;
@@ -38,16 +38,16 @@ List_init(List_T* p_List)
 }
 
 bool
-List_is_empty(List_T self)
+List_is_empty(List_T list)
 {
-  return (self == NULL) ? true : false;
+  return (list == NULL) ? true : false;
 }
 
 mem_status
-List_insert(List_T* p_List, generic_ptr p_data)
+List_insert(List_T* p_List, Generic_T data)
 {
   node_t* p_node;
-  if (List_allocate_node(&p_node, p_data) == ERROR) {
+  if (List_allocate_node(&p_node, data) == ERROR) {
     Log_error("     Can't insert node.");
     return ERROR;
   }
@@ -59,11 +59,11 @@ List_insert(List_T* p_List, generic_ptr p_data)
 }
 
 mem_status
-List_append(List_T* p_List, generic_ptr p_data)
+List_append(List_T* p_List, Generic_T data)
 {
   node_t* p_node;
 
-  if (List_allocate_node(&p_node, p_data) == ERROR) {
+  if (List_allocate_node(&p_node, data) == ERROR) {
     Log_error("     Can't append to list.");
     return ERROR;
   }
@@ -111,51 +111,52 @@ List_delete_node(List_T* p_List, node_t* p_node)
 
 /* Instead return pointer to pointer it is more convenient to pass out param. */
 status
-List_delete_head(List_T* p_List, generic_ptr* pp_data__)
+List_delete_head(List_T* p_List, Generic_T* p_data__)
 {
   Require(*p_List);
 
-  *pp_data__ = DATA(*p_List);
+  *p_data__ = DATA(*p_List);
   return List_delete_node(p_List, *p_List /* fist node in practice */);
 }
 
 status
-List_traverse(List_T self, status (*apply_fn)(generic_ptr))
+List_traverse(List_T list, status (*apply_fn)(Generic_T))
 {
-  if (List_is_empty(self))
+  if (List_is_empty(list))
   { return SUCC; }
 
-  if ((*apply_fn)(DATA(self)) == FAIL) {
+  if ((*apply_fn)(DATA(list)) == FAIL) {
     return FAIL;
 
   } else {
-    return List_traverse(NEXT(self), apply_fn);
+    return List_traverse(NEXT(list), apply_fn);
   }
 }
 
 List_T
-List_iterator(List_T self, List_T last_return)
+List_iterator(List_T list, List_T last_return)
 {
-  return (last_return == NULL) ? self : NEXT(last_return);
+  return (last_return == NULL) ? list : NEXT(last_return);
 }
 
 size_t
-List_length(List_T self)
+List_length(List_T list)
 {
   size_t accum = 0;
   node_t* curr_node = NULL;
 
-  while ((curr_node = List_iterator(self, curr_node)) != NULL)
+  while ((curr_node = List_iterator(list, curr_node)) != NULL)
   { ++accum; }
 
   return accum;
 }
 
+/* Searching same as `key` and if found, `pp_keynode__` is instance of it in the list. */
 status
-List_find_key(List_T self, compare_data_FN comp_data_fn, generic_ptr key, node_t** pp_keynode__)
+List_find_key(List_T list, compare_data_FN comp_data_fn, Generic_T key, node_t** pp_keynode__)
 {
   node_t* p_curr = NULL;
-  while ((p_curr = List_iterator(self, p_curr)) != NULL) {
+  while ((p_curr = List_iterator(list, p_curr)) != NULL) {
 
     if (comp_data_fn(key, DATA(p_curr)) == true) {
       *pp_keynode__ = p_curr;
@@ -180,10 +181,10 @@ List_destroy(List_T* p_List, free_data_FN free_data_fn)
 }
 
 void
-List_print(const List_T self, print_data_FN print_data_fn)
+List_print(const List_T list, print_data_FN print_data_fn)
 {
   node_t* curr_node = NULL;
-  while ((curr_node = List_iterator(self, curr_node)) != NULL) {
+  while ((curr_node = List_iterator(list, curr_node)) != NULL) {
     print_data_fn(DATA(curr_node));
   }
 }
