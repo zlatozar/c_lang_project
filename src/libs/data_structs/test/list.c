@@ -42,8 +42,7 @@ comp_data_fn(Generic_T a_data, Generic_T b_data)
 
 TEST insert(void)
 {
-  List_T list;
-  List_init(&list);
+  List_T list = List_new();
   ASSERT(List_is_empty(list));
 
   List_insert(&list, get_next_elm(1));
@@ -58,8 +57,7 @@ TEST insert(void)
 
 TEST print(void)
 {
-  List_T list;
-  List_init(&list);
+  List_T list = List_new();
 
   List_insert(&list, get_next_elm(3));
   List_insert(&list, get_next_elm(2));
@@ -73,8 +71,7 @@ TEST print(void)
 
 TEST delete_head(void)
 {
-  List_T list;
-  List_init(&list);
+  List_T list = List_new();
 
   List_insert(&list, get_next_elm(3));
   List_insert(&list, get_next_elm(2));
@@ -93,8 +90,7 @@ TEST delete_head(void)
 
 TEST append(void)
 {
-  List_T list;
-  List_init(&list);
+  List_T list = List_new();
 
   List_insert(&list, get_next_elm(2));
   List_insert(&list, get_next_elm(1));
@@ -108,14 +104,14 @@ TEST append(void)
 
 TEST traverse(void)
 {
-  List_T list;
-  List_init(&list);
+  List_T list = List_new();
 
   List_insert(&list, get_next_elm(30));
   List_insert(&list, get_next_elm(20));
   List_insert(&list, get_next_elm(10));
 
-  List_traverse(list, apply_fn);
+  status traversed = List_traverse(list, apply_fn);
+  ASSERT(traversed == SUCC);
 
   List_destroy(&list, free);
   PASS();
@@ -123,8 +119,7 @@ TEST traverse(void)
 
 TEST find_key(void)
 {
-  List_T list;
-  List_init(&list);
+  List_T list = List_new();
 
   List_append(&list, get_next_elm(1));
   List_append(&list, get_next_elm(2));
@@ -137,9 +132,10 @@ TEST find_key(void)
   /* Contains found node. */
   node_t* match_node;
 
-  List_find_key(list, comp_data_fn, (Generic_T)key, &match_node);
-  Data_T match_node_data = (Data_T)DATA(match_node);
+  status found = List_find_key(list, comp_data_fn, (Generic_T)key, &match_node);
+  ASSERT(found == SUCC);
 
+  Data_T match_node_data = (Data_T)DATA(match_node);
   ASSERT(match_node_data->x == 42);
 
   List_destroy(&list, free);

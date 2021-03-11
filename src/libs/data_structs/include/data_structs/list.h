@@ -37,9 +37,9 @@ extern mem_status List_allocate_node(List_T* p_List, Generic_T p_data);
 extern void List_free_node(node_t** pp_node);
 
 /**
- * Initialize *p_List by setting the list pointer to NULL.
+ * Initialize a list by setting the list pointer to NULL.
  */
-extern void List_init(List_T* p_List);
+extern List_T List_new(void);
 
 /**
  * Return `true` if given list is an empty list, `false` otherwise.
@@ -99,15 +99,15 @@ extern status List_find_key(List_T list, compare_data_FN comp_data_fn, Generic_T
                             node_t** pp_keynode__);
 
 /**
+ * @brief    Print list data.
+ */
+extern void List_print(const List_T list, print_data_FN print_data_fn);
+
+/**
  * @brief    Delete every node in the given list.
  *
  * If list is non null, call it with the data stored in each node.
  */
 extern void List_destroy(List_T* p_List, free_data_FN free_data_fn);
-
-/**
- * @brief    Print list data.
- */
-extern void List_print(const List_T list, print_data_FN print_data_fn);
 
 #endif  /* DATA_STRUCTS_LIST_H */

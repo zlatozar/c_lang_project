@@ -321,7 +321,7 @@
         values to instances of data types. Here is an example:
             struct my_struct {
                 int id;
-            } MyStruct_default = {3};
+            } MyStruct_default = { .id = 3 };
             typedef struct my_struct MyStruct;
             /* then it is possible to initialize every instance */
             MyStruct mInstance = MyStruct_default;

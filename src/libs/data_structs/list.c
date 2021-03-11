@@ -12,7 +12,7 @@ List_allocate_node(List_T* p_List, Generic_T data)
 {
   node_t* p_node = malloc(sizeof(*p_node));
   if (p_node == NULL) {
-    Log_error("Root cause - 'malloc' do not succeed.");
+    Log_error("Root cause - 'malloc' does not succeed.");
     return ERROR;
   }
 
@@ -25,16 +25,17 @@ List_allocate_node(List_T* p_List, Generic_T data)
 }
 
 void
-List_free_node(node_t** p_node)
+List_free_node(node_t** pp_node)
 {
-  free(*p_node);
-  *p_node = NULL;
+  free(*pp_node);
+  *pp_node = NULL;
 }
 
-void
-List_init(List_T* p_List)
+List_T
+List_new(void)
 {
-  *p_List = NULL;
+  List_T list = NULL;
+  return list;
 }
 
 bool
@@ -68,7 +69,7 @@ List_append(List_T* p_List, Generic_T data)
     return ERROR;
   }
 
-  if (List_is_empty(*p_List) == true) {
+  if (List_is_empty(*p_List)) {
     *p_List = p_node;
 
   } else {
@@ -158,12 +159,21 @@ List_find_key(List_T list, compare_data_FN comp_data_fn, Generic_T key, node_t**
   node_t* p_curr = NULL;
   while ((p_curr = List_iterator(list, p_curr)) != NULL) {
 
-    if (comp_data_fn(key, DATA(p_curr)) == true) {
+    if (comp_data_fn(key, DATA(p_curr))) {
       *pp_keynode__ = p_curr;
       return SUCC;
     }
   }
   return FAIL;
+}
+
+void
+List_print(const List_T list, print_data_FN print_data_fn)
+{
+  node_t* curr_node = NULL;
+  while ((curr_node = List_iterator(list, curr_node)) != NULL) {
+    print_data_fn(DATA(curr_node));
+  }
 }
 
 /* Recursively delete all connections then free each node's data */
@@ -177,14 +187,5 @@ List_destroy(List_T* p_List, free_data_FN free_data_fn)
     { free_data_fn(DATA(*p_List)); }
 
     List_free_node(p_List);
-  }
-}
-
-void
-List_print(const List_T list, print_data_FN print_data_fn)
-{
-  node_t* curr_node = NULL;
-  while ((curr_node = List_iterator(list, curr_node)) != NULL) {
-    print_data_fn(DATA(curr_node));
   }
 }
