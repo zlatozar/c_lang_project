@@ -4,7 +4,6 @@
 
 #include <stdlib.h>      /* malloc, calloc, realloc, free */
 #include <string.h>      /* memset                        */
-#include "lang/macros.h"
 #include "lang/assert.h"
 
 union align {

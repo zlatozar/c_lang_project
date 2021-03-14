@@ -1181,3 +1181,29 @@
 [GCC] ld error `undefined reference to 'Except_throw'` means that
       'Except_throw' has declaration in header file but does not have
       in corresponding .c file.
+%
+[TIP] Address from the stacktrace could be easily converted to line in two ways:
+          (gdb) list *<address>
+      or
+          $ addr2line -pfCe <executable> <addresses>
+      Of course executable should be compiled with debug information.
+%
+[TRICK]            struct example {
+                     int a;
+                     float b };
+        #define example_DEFAULT { .a = 0, .b = 0.0f }
+        struct example on_stack = example_DEFAULT;
+%
+[TRICK]            struct example {
+                     int a;
+                     float b };
+        struct example* example_new(void) {
+          struct example* ptr = malloc(sizeof example);
+          if(!ptr)
+            return ptr;
+
+          *ptr = example_DEFAULT;
+          return ptr;
+        }
+        struct example *on_heap = example_new();
+%

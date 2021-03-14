@@ -40,6 +40,7 @@ if HAVE_CHECK
 
 TESTS = $(check_PROGRAMS)
 check_PROGRAMS = test/except_h.run \
+								 test/except.run   \
 								 test/assert_h.run \
 								 test/assert.run   \
 								 test/macros_h.run \
@@ -49,6 +50,10 @@ check_PROGRAMS = test/except_h.run \
 
 test_except_h_run_SOURCES = test/except_h.c
 test_except_h_run_CFLAGS = $(LIB_HEADER)
+
+test_except_run_SOURCES = test/except.c
+test_except_run_CFLAGS = $(LIB_HEADER) $(GREATEST)
+test_except_run_LDADD = $(CHECK_LDADD)
 
 test_assert_h_run_SOURCES = test/assert_h.c
 test_assert_h_run_CFLAGS = $(LIB_HEADER)

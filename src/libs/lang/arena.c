@@ -1,9 +1,8 @@
 #include "lang/arena.h"
 
-#include <stdlib.h>
-#include <string.h>
+#include <stdlib.h>      /* malloc, free */
+#include <string.h>      /* memset       */
 #include "lang/assert.h"
-#include "lang/macros.h"
 
 /* Initialize exceptions */
 const Except_T Arena_NewFailed = { "Arena creation failed" };

@@ -17,7 +17,7 @@
 ```text
 $ ./bootstrap.sh
 $ make
-$ make check
+$ make check cppcheck
 $ make help
 ```
 ## Dependencies

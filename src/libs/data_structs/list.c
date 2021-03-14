@@ -1,35 +1,31 @@
 #include "data_structs/list.h"
 
-#include <stdlib.h>       /* malloc, free */
 #include "lang/assert.h"
+#include "lang/mem.h"
 #include "logger/log.h"
 
 /* __________________________________________________________________________ */
-/*                                                                    Public  */
+/*                                                                     Local  */
 
-mem_status
-List_allocate_node(List_T* p_List, Generic_T data)
+static void
+List_allocate_node(node_t** pp_node, Generic_T data)
 {
-  node_t* p_node = malloc(sizeof(*p_node));
-  if (p_node == NULL) {
-    Log_error("Root cause - 'malloc' does not succeed.");
-    return ERROR;
-  }
+  node_t* p_node;
+  NEW(p_node);
 
-  *p_List = p_node;
+  *pp_node = p_node;
 
   DATA(p_node) = data;
   NEXT(p_node) = NULL;
-
-  return OK;
 }
 
-void
+static void
 List_free_node(node_t** pp_node)
 {
-  free(*pp_node);
-  *pp_node = NULL;
+  FREE(*pp_node);
 }
+
+/* __________________________________________________________________________ */
 
 List_T
 List_new(void)
@@ -44,30 +40,21 @@ List_is_empty(List_T list)
   return (list == NULL) ? true : false;
 }
 
-mem_status
+void
 List_insert(List_T* p_List, Generic_T data)
 {
   node_t* p_node;
-  if (List_allocate_node(&p_node, data) == ERROR) {
-    Log_error("     Can't insert node.");
-    return ERROR;
-  }
+  List_allocate_node(&p_node, data);
 
   NEXT(p_node) = *p_List;
   *p_List = p_node;
-
-  return OK;
 }
 
-mem_status
+void
 List_append(List_T* p_List, Generic_T data)
 {
   node_t* p_node;
-
-  if (List_allocate_node(&p_node, data) == ERROR) {
-    Log_error("     Can't append to list.");
-    return ERROR;
-  }
+  List_allocate_node(&p_node, data);
 
   if (List_is_empty(*p_List)) {
     *p_List = p_node;
@@ -80,8 +67,6 @@ List_append(List_T* p_List, Generic_T data)
 
     NEXT(iter_node) = p_node;
   }
-
-  return OK;
 }
 
 status
@@ -99,6 +84,7 @@ List_delete_node(List_T* p_List, node_t* p_node)
     }
 
     if (iter_node == NULL) {
+      /* Delete from empty list. */
       return FAIL;
 
     } else {

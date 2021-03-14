@@ -3,7 +3,6 @@
 #include "lang/mem.h"
 
 #include <stdlib.h>       /* malloc, calloc, realloc, free */
-#include "lang/macros.h"
 #include "lang/assert.h"
 
 /* Initialize GLOBAL. Could be thrown from anywhere. */

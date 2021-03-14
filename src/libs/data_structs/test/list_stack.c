@@ -42,20 +42,6 @@ TEST free_empty(void)
 
   ASSERT(Stack_is_empty(stack));
 
-  Stack_destroy(stack, free);
-  PASS();
-}
-
-TEST free_not_empty(void)
-{
-  Stack_T stack = Stack_new();
-  ASSERT(Stack_is_empty(stack));
-
-  Stack_push(stack, get_next_elm(3));
-  Stack_push(stack, get_next_elm(2));
-  Stack_push(stack, get_next_elm(1));
-  ASSERT_FALSE(Stack_is_empty(stack));
-
   Stack_destroy(stack, free_elm);
   PASS();
 }
@@ -65,6 +51,5 @@ int main(int argc, char** argv)
 {
   GREATEST_MAIN_BEGIN();
   RUN_TEST(free_empty);
-  RUN_TEST(free_not_empty);
   GREATEST_MAIN_END();
 }

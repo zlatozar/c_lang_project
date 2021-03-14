@@ -1,13 +1,12 @@
 # valgrind --leak-check=full --show-leak-kinds=all --gen-suppressions=all \
 #          --show-reachable=yes --error-limit=no ./bin/<test_name>
 {
-   <insert_a_suppression_name_here>
+   "Use it when checked memory use enabled"
    Memcheck:Leak
    match-leak-kinds: possible
    fun:malloc
    ...
    fun:Mem_alloc
    ...
-   fun:greatest_run_suite
    fun:main
 }

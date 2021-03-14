@@ -19,22 +19,14 @@ struct node {
 typedef struct node node_t;
 
 /*
- * For readability `List_T` and `node_t*` could be used. Use `List_T` when you
- * mean list as a whole and `note_t*` respectively when you deal with a pointer
- * to a note.
+ * For readability both `List_T` and `node_t*` could be used. Use `List_T` when
+ * you mean list as a whole and `note_t*` respectively when you deal with a
+ * pointer to a node.
  */
 typedef node_t* List_T;
 
 #define DATA(p_node) ((p_node)->datapointer)
 #define NEXT(p_node) ((p_node)->next)
-
-/**
- * Allocate node with the size of the notes of a given list.
- *
- * @throws `Mem_Failed` exception if not succeed.
- */
-extern mem_status List_allocate_node(List_T* p_List, Generic_T p_data);
-extern void List_free_node(node_t** pp_node);
 
 /**
  * Initialize a list by setting the list pointer to NULL.
@@ -49,15 +41,16 @@ extern bool List_is_empty(List_T List);
 /**
  * Insert a new node containing data as the first item in *p_List.
  */
-extern mem_status List_insert(List_T* p_List, Generic_T p_data);
+extern void List_insert(List_T* p_List, Generic_T p_data);
 
 /**
  * Append a new node containing data as the last item in *p_List.
  */
-extern mem_status List_append(List_T* p_List, Generic_T p_data);
+extern void List_append(List_T* p_List, Generic_T p_data);
 
 /**
- * Delete `node` from *p_List. It is checked runtime error if `p_List` is empty.
+ * Delete given `p_node` from *p_List. It is checked runtime error
+ * if `p_List` is empty.
  */
 extern status List_delete_node(List_T* p_List, node_t* p_node);
 

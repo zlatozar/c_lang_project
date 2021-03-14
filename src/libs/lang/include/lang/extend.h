@@ -80,7 +80,7 @@ typedef enum { OK, ERROR } mem_status;
  * is to mark as FAIL and pass error to the next level. Another case is when
  * out parameters are passed - we have to know if they contain correct data.
  */
-typedef enum { SUCC=200, FAIL=400 } status;
+typedef enum { SUCC = 200, FAIL = 400 } status;
 
 #define bitsizeof(type)  ((CHAR_BIT) * sizeof(type))
 

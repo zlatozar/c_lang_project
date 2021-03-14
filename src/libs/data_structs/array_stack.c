@@ -1,7 +1,7 @@
 #include "data_structs/stack.h"
 
-#include <stdlib.h>       /* malloc, realloc, NULL */
 #include "lang/assert.h"
+#include "lang/mem.h"
 #include "logger/log.h"
 
 /* __________________________________________________________________________ */
@@ -15,24 +15,21 @@ struct stack {
   unsigned size;
 } empty_stack = { .storage = NULL,
                   .top = NULL,
-                  .size = 0 };
+                  .size = 0
+                };
 
 #define CURRENT_STACKSIZE(stack) ((stack)->top - (stack)->storage)
+#define STORAGE(stack) (stack->storage)
 
 /* __________________________________________________________________________ */
 
 Stack_T
 Stack_new(void)
 {
-  /* Initialize underneath. */
-  Stack_T stack = malloc(sizeof(*stack));
+  Stack_T stack;
+  NEW(stack);
 
-  stack->storage = malloc(STACK_INCREMENT * sizeof(Generic_T));
-
-  if (stack->storage == NULL) {
-    Log_error("Can't create stack. 'malloc' does not succeed.");
-    return NULL;
-  }
+  stack->storage = ALLOC(STACK_INCREMENT * sizeof(Generic_T));
 
   /* 'sp' points to storage[0] so stack is empty. */
   stack->top = stack->storage;
@@ -48,19 +45,14 @@ Stack_is_empty(Stack_T stack)
   return stack->top == stack->storage;
 }
 
-mem_status
+void
 Stack_push(Stack_T stack, Generic_T data)
 {
   Require(stack);
 
   if (CURRENT_STACKSIZE(stack) == stack->size) {
-    Generic_T* p_newstack =
-      realloc(stack->storage, (stack->size + STACK_INCREMENT) * sizeof(Generic_T*));
-
-    if (p_newstack == NULL) {
-      Log_error("Root cause - 'realloc' does not succeed.");
-      return ERROR;
-    }
+    Generic_T* p_newstack = RESIZE(stack->storage,
+                                   (stack->size + STACK_INCREMENT) * sizeof(Generic_T*));
 
     stack->storage = p_newstack;
     stack->top = stack->storage + stack->size;
@@ -69,8 +61,6 @@ Stack_push(Stack_T stack, Generic_T data)
   }
   *stack->top = data;
   stack->top++;
-
-  return OK;
 }
 
 status
@@ -78,8 +68,9 @@ Stack_pop(Stack_T stack, Generic_T* p_data__)
 {
   Require(stack);
 
-  if (Stack_is_empty(stack))
+  if (Stack_is_empty(stack)) {
     return FAIL;
+  }
 
   /* Next push will override poped data. */
   stack->top--;
@@ -87,14 +78,14 @@ Stack_pop(Stack_T stack, Generic_T* p_data__)
   return SUCC;
 }
 
-/* It is `pop` then `push` again. */
 status
 Stack_peel(Stack_T stack, Generic_T* p_data__)
 {
   if (Stack_pop(stack, p_data__) == FAIL)
-    return FAIL;
+  { return FAIL; }
 
-  return Stack_push(stack, *p_data__) == ERROR ? FAIL : SUCC;
+  Stack_push(stack, *p_data__);
+  return OK;
 }
 
 void
@@ -111,9 +102,9 @@ Stack_destroy(Stack_T stack, free_data_FN free_data_fn)
     }
   }
 
-  free(stack->storage);
+  FREE(stack->storage);
   *stack = empty_stack;
 
-  free(stack);
+  FREE(stack);
   stack = NULL;
 }

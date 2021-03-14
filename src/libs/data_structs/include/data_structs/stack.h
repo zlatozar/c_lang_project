@@ -25,7 +25,7 @@ extern bool Stack_is_empty(Stack_T stack);
  * If there is no more room in the stack, allocate a larger
  * chunk of memory.
  */
-extern mem_status Stack_push(Stack_T self, Generic_T data);
+extern void Stack_push(Stack_T stack, Generic_T data);
 
 /**
  * @brief    Pop the top value of the stack and put in `p_data__`.
@@ -40,14 +40,15 @@ extern status Stack_pop(Stack_T stack, Generic_T* p_data__);
  *
  * It is checked runtime error if empty stack is passed.
  * Client code should be responsible to free poped data.
+ * Note: It is `pop` then `push` operation.
  */
 extern status Stack_peel(Stack_T stack, Generic_T* p_data__);
 
 /**
  * @brief    Destroy stack as free all left data.
  *
- * It is good practice too destroy empty stack. If `stack` is not empty
- * error message will be logged.
+ * It is good practice to destroy empty stack. If `stack` has left
+ * elements info message will be logged.
  */
 extern void Stack_destroy(Stack_T stack, free_data_FN free_data_fn);
 

@@ -2,8 +2,11 @@
  * @file    except.h
  * @brief   Exceptions definition.
  *
+ * ATTENTION: Not thread safe.
+ *
  * If the exception is not caught the behavior is as `assertion` failure - logs
- * where is thrown and aborts program.
+ * where is thrown and aborts program. Use exceptions when you need and you can
+ * recover after error.
  */
 #if !defined(LANG_EXCEPT_H)
 #define LANG_EXCEPT_H
