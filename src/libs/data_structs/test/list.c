@@ -109,6 +109,7 @@ TEST traverse(void)
   List_insert(&list, get_next_elm(30));
   List_insert(&list, get_next_elm(20));
   List_insert(&list, get_next_elm(10));
+  ASSERT_EQ(3, List_length(list));
 
   status traversed = List_traverse(list, apply_fn);
   ASSERT(traversed == SUCC);
@@ -143,6 +144,16 @@ TEST find_key(void)
   PASS();
 }
 
+TEST length(void)
+{
+  List_T list = List_new();
+
+  ASSERT_EQ(0, List_length(list));
+
+  List_destroy(&list, free);
+  PASS();
+}
+
 GREATEST_MAIN_DEFS();
 int main(int argc, char** argv)
 {
@@ -153,5 +164,6 @@ int main(int argc, char** argv)
   RUN_TEST(append);
   RUN_TEST(traverse);
   RUN_TEST(find_key);
+  RUN_TEST(length);
   GREATEST_MAIN_END();
 }

@@ -21,6 +21,10 @@ except_backtrace()
   if (names_str == NULL)
   { return; }
 
+  /*
+   * NOTE: In stack trace number of function's end brace
+   *       is returned instead of return statement.
+   */
   for (int i = 0; i < size; i++) {
     char* line = names_str[i];
     fprintf(stderr, "[%d] %s\n", i, line);
@@ -44,7 +48,7 @@ Except_throw(const Except_T* e, const char* file, int line)
   Except_Frame* p = Except_stack;
 
   if (p == NULL) {
-    fprintf(stderr, "\nUncaught exception!");
+    fprintf(stderr, "\n\nUncaught exception!");
 
     if (e->message)
     { fprintf(stderr, "  Message: '%s'", e->message); }

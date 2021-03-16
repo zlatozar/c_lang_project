@@ -7,7 +7,8 @@
 /* __________________________________________________________________________ */
 /*                                                                     Local  */
 
-#define STACK_INCREMENT 100
+#define INITIAL_SIZE 50
+#define RESIZE_STEP 100
 
 struct stack {
   Generic_T* storage;
@@ -18,7 +19,7 @@ struct stack {
                   .size = 0
                 };
 
-#define CURRENT_STACKSIZE(stack) ((stack)->top - (stack)->storage)
+#define CURRENT_SIZE(stack) ((stack)->top - (stack)->storage)
 #define STORAGE(stack) (stack->storage)
 
 /* __________________________________________________________________________ */
@@ -29,11 +30,11 @@ Stack_new(void)
   Stack_T stack;
   NEW(stack);
 
-  stack->storage = ALLOC(STACK_INCREMENT * sizeof(Generic_T));
+  stack->storage = ALLOC(INITIAL_SIZE * sizeof(Generic_T));
 
   /* 'sp' points to storage[0] so stack is empty. */
   stack->top = stack->storage;
-  stack->size = STACK_INCREMENT;
+  stack->size = INITIAL_SIZE;
 
   return stack;
 }
@@ -50,14 +51,14 @@ Stack_push(Stack_T stack, Generic_T data)
 {
   Require(stack);
 
-  if (CURRENT_STACKSIZE(stack) == stack->size) {
+  if (CURRENT_SIZE(stack) == stack->size) {
     Generic_T* p_newstack = RESIZE(stack->storage,
-                                   (stack->size + STACK_INCREMENT) * sizeof(Generic_T*));
+                                   (stack->size + RESIZE_STEP) * sizeof(Generic_T*));
 
     stack->storage = p_newstack;
     stack->top = stack->storage + stack->size;
 
-    stack->size += STACK_INCREMENT;
+    stack->size += RESIZE_STEP;
   }
   *stack->top = data;
   stack->top++;

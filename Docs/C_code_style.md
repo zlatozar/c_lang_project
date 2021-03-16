@@ -400,6 +400,41 @@ trie_add( *child, word + 1 );   /* OK    */
 
 ## Functions
 
+- Choose the right style for your API: change in place, or return changed structure:
+
+```c
+void
+List_insert(List_T* p_List, Generic_T data)
+{
+  node_t* p_node;
+  List_allocate_node(&p_node, data);
+
+  NEXT(p_node) = *p_List;
+  *p_List = p_node;
+}
+/* Mater of style */
+List_T list = List_new();
+List_insert(&list, data1);
+List_insert(&list, data2);
+```
+
+```c
+List_T
+List_insert(List_T list, Generic_T data)
+{
+  node_t* p_node;
+  List_allocate_node(&p_node, data);
+
+  NEXT(p_node) = list;
+  list = p_node;
+
+  return list;
+}
+List_T list = List_new();
+list = List_insert(list, data1);
+list = List_insert(List_insert(list, data2), data3);
+```
+
 - Be consistent in your variable names across functions
   Using different names for the same values in functions is suspicious, and
   forces your readers to reason about unimportant things.

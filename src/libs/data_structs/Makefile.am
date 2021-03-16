@@ -8,8 +8,10 @@ LIB_HEADER = -I$(top_srcdir)/src/libs/data_structs/include
 noinst_LTLIBRARIES = libdatastructs.la
 
 # The files to add to the library and to the source distribution
-libdatastructs_la_SOURCES = list.c      \
-														array_stack.c
+libdatastructs_la_SOURCES = list.c        \
+														array_stack.c \
+														try1.c        \
+														try2.c
 
 libdatastructs_la_CFLAGS = $(LIB_HEADER)                           \
 													 -I$(top_srcdir)/src/libs/lang/include   \
@@ -35,8 +37,9 @@ endif
 if HAVE_CHECK
 
 TESTS = $(check_PROGRAMS)
-check_PROGRAMS = test/list.run      \
-								 test/array_stack.run
+check_PROGRAMS = test/list.run        \
+								 test/array_stack.run \
+								 test/try.run
 
 test_list_run_SOURCES = test/list.c
 test_list_run_CFLAGS = $(CHECK_CFLAGS)
@@ -45,6 +48,10 @@ test_list_run_LDADD = $(CHECK_LDADD)
 test_array_stack_run_SOURCES = test/array_stack.c
 test_array_stack_run_CFLAGS = $(CHECK_CFLAGS)
 test_array_stack_run_LDADD = $(CHECK_LDADD)
+
+test_try_run_SOURCES = test/try.c
+test_try_run_CFLAGS = $(CHECK_CFLAGS)
+test_try_run_LDADD = $(CHECK_LDADD)
 
 # 'test/<test name>.run.debug' target
 include $(top_srcdir)/m4/gdb.mk

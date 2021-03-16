@@ -43,6 +43,8 @@ List_is_empty(List_T list)
 void
 List_insert(List_T* p_List, Generic_T data)
 {
+  Require(p_List);
+
   node_t* p_node;
   List_allocate_node(&p_node, data);
 
@@ -72,8 +74,6 @@ List_append(List_T* p_List, Generic_T data)
 status
 List_delete_node(List_T* p_List, node_t* p_node)
 {
-  Require(*p_List);
-
   if (*p_List == p_node) {
     *p_List = NEXT(*p_List);  /* Continue with the next. */
 
@@ -100,15 +100,21 @@ List_delete_node(List_T* p_List, node_t* p_node)
 status
 List_delete_head(List_T* p_List, Generic_T* p_data__)
 {
-  Require(*p_List);
+  if (List_is_empty(*p_List)) {
+    Log_debug("Can't delete from empty list");
+    return FAIL;
+  }
 
   *p_data__ = DATA(*p_List);
   return List_delete_node(p_List, *p_List /* fist node in practice */);
 }
 
+/* Iterate tail recursively. */
 status
 List_traverse(List_T list, status (*apply_fn)(Generic_T))
 {
+  Require(apply_fn);
+
   if (List_is_empty(list))
   { return SUCC; }
 
@@ -142,6 +148,10 @@ List_length(List_T list)
 status
 List_find_key(List_T list, compare_data_FN comp_data_fn, Generic_T key, node_t** pp_keynode__)
 {
+  Require(list);
+  Require(comp_data_fn);
+  Require(key);
+
   node_t* p_curr = NULL;
   while ((p_curr = List_iterator(list, p_curr)) != NULL) {
 
@@ -166,6 +176,9 @@ List_print(const List_T list, print_data_FN print_data_fn)
 void
 List_destroy(List_T* p_List, free_data_FN free_data_fn)
 {
+  Require(p_List);
+  Require(free_data_fn);
+
   if (List_is_empty(*p_List) == false) {
     List_destroy(&NEXT(*p_List), free_data_fn);
 

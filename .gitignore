@@ -5,6 +5,11 @@
 \#*\#
 .\#*
 
+## Eclipse
+.cproject
+.project
+.settings/
+
 # Autotools
 
 ## Project specific
