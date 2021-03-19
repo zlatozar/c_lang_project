@@ -4,6 +4,7 @@
 
 #include <stdlib.h>       /* malloc, calloc, realloc, free */
 #include "lang/assert.h"
+#include "lang/macros.h"
 
 /* Initialize GLOBAL. Could be thrown from anywhere. */
 const Except_T Memory_Failed = { "Memory allocation failed" };
@@ -19,7 +20,7 @@ Memory_alloc(size_t nbytes, const char* file, int line)
     if (file == NULL)
     { THROW(Memory_Failed); }
     else
-    { Except_raise(&Memory_Failed, file, line); }
+    { Except_throw(&Memory_Failed, file, line); }
   }
 
   return ptr;
@@ -37,7 +38,7 @@ Memory_calloc(size_t count, size_t nbytes, const char* file, int line)
     if (file == NULL)
     { THROW(Memory_Failed); }
     else
-    { Except_raise(&Memory_Failed, file, line); }
+    { Except_throw(&Memory_Failed, file, line); }
   }
   return ptr;
 }
@@ -66,7 +67,7 @@ Memory_resize(void* ptr, size_t nbytes, const char* file, int line)
     if (file == NULL)
     { THROW(Memory_Failed); }
     else
-    { Except_raise(&Memory_Failed, file, line); }
+    { Except_throw(&Memory_Failed, file, line); }
   }
 
   return ptr;

@@ -22,8 +22,8 @@ except_backtrace()
   { return; }
 
   /*
-   * NOTE: In stack trace number of function's end brace
-   *       is returned instead of return statement.
+   * NOTE: In the stack trace number of next after the problem
+   *       is returned.
    */
   for (int i = 0; i < size; i++) {
     char* line = names_str[i];
