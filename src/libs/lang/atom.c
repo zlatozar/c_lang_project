@@ -1,7 +1,7 @@
 #include "lang/atom.h"
 
 #include <string.h>      /* memcpy, strlen */
-#include "lang/mem.h"
+#include "lang/memory.h"
 #include "lang/macros.h"
 #include "lang/assert.h"
 

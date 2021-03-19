@@ -1,6 +1,6 @@
 #if !defined(NDEBUG)     /* Memory checked version */
 
-#include "lang/mem.h"
+#include "lang/memory.h"
 
 #include <stdlib.h>      /* malloc, calloc, realloc, free */
 #include <string.h>      /* memset                        */

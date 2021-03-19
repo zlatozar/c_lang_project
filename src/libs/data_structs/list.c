@@ -1,7 +1,7 @@
 #include "data_structs/list.h"
 
 #include "lang/assert.h"
-#include "lang/mem.h"
+#include "lang/memory.h"
 #include "logger/log.h"
 
 /* __________________________________________________________________________ */

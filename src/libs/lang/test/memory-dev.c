@@ -1,5 +1,5 @@
 #include <greatest.h>
-#include "lang/mem.h"
+#include "lang/memory.h"
 
 typedef struct {
   int a;

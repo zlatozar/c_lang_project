@@ -10,12 +10,12 @@ noinst_LTLIBRARIES = liblang.la
 # The files to add to the library and to the source distribution
 liblang_la_SOURCES = assert.c  \
 										 \
-										 except.c  \
+										 except.c     \
 										 \
-										 mem-dev.c \
-										 mem.c     \
+										 memory-dev.c \
+										 memory.c     \
 										 \
-										 atom.c    \
+										 atom.c       \
 										 arena.c
 
 liblang_la_CFLAGS = $(LIB_HEADER)
@@ -39,14 +39,14 @@ endif
 if HAVE_CHECK
 
 TESTS = $(check_PROGRAMS)
-check_PROGRAMS = test/except_h.run \
-								 test/except.run   \
-								 test/assert_h.run \
-								 test/assert.run   \
-								 test/macros_h.run \
+check_PROGRAMS = test/except_h.run   \
+								 test/except.run     \
+								 test/assert_h.run   \
+								 test/assert.run     \
+								 test/macros_h.run   \
 								 \
-								 test/mem_h.run    \
-								 test/mem_dev.run
+								 test/memory_h.run   \
+								 test/memory_dev.run
 
 test_except_h_run_SOURCES = test/except_h.c
 test_except_h_run_CFLAGS = $(LIB_HEADER)
@@ -64,12 +64,12 @@ test_assert_run_CFLAGS = $(LIB_HEADER) $(GREATEST)
 test_macros_h_run_SOURCES = test/macros_h.c
 test_macros_h_run_CFLAGS = $(LIB_HEADER) $(GREATEST)
 
-test_mem_h_run_SOURCES = test/mem_h.c
-test_mem_h_run_CFLAGS = $(LIB_HEADER)
+test_memory_h_run_SOURCES = test/memory_h.c
+test_memory_h_run_CFLAGS = $(LIB_HEADER)
 
-test_mem_dev_run_SOURCES = test/mem-dev.c
-test_mem_dev_run_CFLAGS = $(LIB_HEADER) $(GREATEST)
-test_mem_dev_run_LDADD = $(CHECK_LDADD)
+test_memory_dev_run_SOURCES = test/memory-dev.c
+test_memory_dev_run_CFLAGS = $(LIB_HEADER) $(GREATEST)
+test_memory_dev_run_LDADD = $(CHECK_LDADD)
 
 # 'test/<test name>.run.debug' target
 include $(top_srcdir)/m4/gdb.mk

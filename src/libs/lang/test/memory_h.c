@@ -1,2 +1,2 @@
-#include "lang/mem.h"
+#include "lang/memory.h"
 int main () { return 0; }

@@ -1,7 +1,7 @@
 #include "data_structs/try.h"
 
 #include <stdio.h>
-#include "lang/mem.h"
+#include "lang/memory.h"
 
 struct try1 {
   int a;
