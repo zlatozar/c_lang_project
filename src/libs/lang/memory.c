@@ -6,10 +6,10 @@
 #include "lang/assert.h"
 
 /* Initialize GLOBAL. Could be thrown from anywhere. */
-const Except_T Mem_Failed = { "Memory allocation failed" };
+const Except_T Memory_Failed = { "Memory allocation failed" };
 
 void*
-Mem_alloc(size_t nbytes, const char* file, int line)
+Memory_alloc(size_t nbytes, const char* file, int line)
 {
   Require(nbytes > 0);
 
@@ -17,16 +17,16 @@ Mem_alloc(size_t nbytes, const char* file, int line)
 
   if (ptr == NULL) {
     if (file == NULL)
-    { THROW(Mem_Failed); }
+    { THROW(Memory_Failed); }
     else
-    { Except_raise(&Mem_Failed, file, line); }
+    { Except_raise(&Memory_Failed, file, line); }
   }
 
   return ptr;
 }
 
 void*
-Mem_calloc(size_t count, size_t nbytes, const char* file, int line)
+Memory_calloc(size_t count, size_t nbytes, const char* file, int line)
 {
   Require(count > 0);
   Require(nbytes > 0);
@@ -35,15 +35,15 @@ Mem_calloc(size_t count, size_t nbytes, const char* file, int line)
 
   if (ptr == NULL) {
     if (file == NULL)
-    { THROW(Mem_Failed); }
+    { THROW(Memory_Failed); }
     else
-    { Except_raise(&Mem_Failed, file, line); }
+    { Except_raise(&Memory_Failed, file, line); }
   }
   return ptr;
 }
 
 void
-Mem_free(void* ptr, const char* file, int line)
+Memory_free(void* ptr, const char* file, int line)
 {
   /* Used only in the dev version */
   UNUSED(file);
@@ -55,7 +55,7 @@ Mem_free(void* ptr, const char* file, int line)
 }
 
 void*
-Mem_resize(void* ptr, size_t nbytes, const char* file, int line)
+Memory_resize(void* ptr, size_t nbytes, const char* file, int line)
 {
   Require(ptr);
   Require(nbytes > 0);
@@ -64,9 +64,9 @@ Mem_resize(void* ptr, size_t nbytes, const char* file, int line)
 
   if (ptr == NULL) {
     if (file == NULL)
-    { THROW(Mem_Failed); }
+    { THROW(Memory_Failed); }
     else
-    { Except_raise(&Mem_Failed, file, line); }
+    { Except_raise(&Memory_Failed, file, line); }
   }
 
   return ptr;

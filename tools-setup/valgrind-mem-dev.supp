@@ -6,7 +6,7 @@
    match-leak-kinds: possible
    fun:malloc
    ...
-   fun:Mem_alloc
+   fun:Memory_alloc
    ...
    fun:main
 }

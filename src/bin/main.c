@@ -9,7 +9,7 @@
 
 #include "logger/log.h"
 #include "lang/assert.h"
-#include "lang/mem.h"
+#include "lang/memory.h"
 #include "data_structs/list.h"
 #include "algorithms/array.h"
 

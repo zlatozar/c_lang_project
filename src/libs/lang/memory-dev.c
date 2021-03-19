@@ -26,7 +26,7 @@ union align {
   * (sizeof (union align))
 
 /* Initialize GLOBAL. Could be thrown from anywhere. */
-const Except_T Mem_Failed = { "Allocation failed" };
+const Except_T Memory_Failed = { "Allocation failed" };
 
 /* __________________________________________________________________________ */
 /*                                                                     Local  */
@@ -58,7 +58,7 @@ __find(const void* ptr)
 /* __________________________________________________________________________ */
 
 void
-Mem_free(void* ptr, const char* file, int line)
+Memory_free(void* ptr, const char* file, int line)
 {
   if (ptr) {
     struct descriptor* bp = NULL;
@@ -77,7 +77,7 @@ Mem_free(void* ptr, const char* file, int line)
 }
 
 void*
-Mem_resize(void* ptr, size_t nbytes, const char* file, int line)
+Memory_resize(void* ptr, size_t nbytes, const char* file, int line)
 {
   Require(ptr);
   Require(nbytes > 0);
@@ -92,21 +92,21 @@ Mem_resize(void* ptr, size_t nbytes, const char* file, int line)
 
   Ensure(bp);
 
-  void* newptr = Mem_alloc(nbytes, file, line);
+  void* newptr = Memory_alloc(nbytes, file, line);
   memcpy(newptr, ptr, nbytes < bp->size ? nbytes : bp->size);
 
-  Mem_free(ptr, file, line);
+  Memory_free(ptr, file, line);
 
   return newptr;
 }
 
 void*
-Mem_calloc(size_t count, size_t nbytes, const char* file, int line)
+Memory_calloc(size_t count, size_t nbytes, const char* file, int line)
 {
   Require(count > 0);
   Require(nbytes > 0);
 
-  void* ptr = Mem_alloc(count * nbytes, file, line);
+  void* ptr = Memory_alloc(count * nbytes, file, line);
   memset(ptr, '\0', count * nbytes);
 
   return ptr;
@@ -141,7 +141,7 @@ __dalloc(void* ptr, size_t size, const char* file, int line)
 }
 
 void*
-Mem_alloc(size_t nbytes, const char* file, int line)
+Memory_alloc(size_t nbytes, const char* file, int line)
 {
   Require(nbytes > 0);
 
@@ -168,9 +168,9 @@ Mem_alloc(size_t nbytes, const char* file, int line)
       } else {
 
         if (file == NULL)
-        { THROW(Mem_Failed); }
+        { THROW(Memory_Failed); }
         else
-        { Except_throw(&Mem_Failed, file, line); }
+        { Except_throw(&Memory_Failed, file, line); }
       }
     }
 
@@ -187,9 +187,9 @@ Mem_alloc(size_t nbytes, const char* file, int line)
         }
 
         if (file == NULL)
-        { THROW(Mem_Failed); }
+        { THROW(Memory_Failed); }
         else
-        { Except_throw(&Mem_Failed, file, line); }
+        { Except_throw(&Memory_Failed, file, line); }
       }
 
       Ensure(newptr);
