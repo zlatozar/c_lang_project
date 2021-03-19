@@ -10,8 +10,9 @@
 
 #define NO_LOG         0x00
 #define ERROR_LEVEL    0x01
-#define INFO_LEVEL     0x02
-#define DEBUG_LEVEL    0x03
+#define WARN_LEVEL     0x02
+#define INFO_LEVEL     0x03
+#define DEBUG_LEVEL    0x04
 
 #if !defined(DEBUG)
 #  define LOG_COLOR    0
@@ -23,13 +24,15 @@
 
 #if LOG_COLOR
 #  define COLOR_BLACK  "\033[0;30m"
-#  define COLOR_BLUE   "\033[1;34m"
 #  define COLOR_RED    "\033[0;31m"
+#  define COLOR_BLUE   "\033[1;34m"
+#  define COLOR_GREEN  "\033[0;32m"
 #  define COLOR_RESET  "\033[0m"
 #else
 #  define COLOR_BLACK
-#  define COLOR_BLUE
 #  define COLOR_RED
+#  define COLOR_BLUE
+#  define COLOR_GREEN
 #  define COLOR_RESET
 #endif
 
@@ -41,13 +44,15 @@ char* time_now(void);
 #ifdef LOG_COLOR
 #  define LOG_FMT     "%s | %-16s | %-15s | %s:%d | "
 #  define DEBUG_TAG   COLOR_BLACK "DEBUG" COLOR_RESET
-#  define INFO_TAG    COLOR_BLUE "INFO" COLOR_RESET
 #  define ERROR_TAG   COLOR_RED "ERROR" COLOR_RESET
+#  define WARN_TAG    COLOR_BLUE "WARN" COLOR_RESET
+#  define INFO_TAG    COLOR_GREEN "INFO" COLOR_RESET
 #else
 #  define LOG_FMT    "%s | %-5s | %-15s | %s:%d | "
 #  define DEBUG_TAG   "DEBUG"
-#  define INFO_TAG    "INFO"
 #  define ERROR_TAG   "ERROR"
+#  define WARN_TAG    "WARN"
+#  define INFO_TAG    "INFO"
 #endif  /* LOG_COLOR */
 
 /* __________________________________________________________________________ */
@@ -63,17 +68,6 @@ char* time_now(void);
     if (LOG_LEVEL >= DEBUG_LEVEL)                \
       _log_debug(__VA_ARGS__, "\n"); } while (0)
 
-#define _log_info(msg, ...) do {                                    \
-    if (LOG_LEVEL >= INFO_LEVEL)                                    \
-      fprintf(stdout, LOG_FMT msg "%s",                             \
-              time_now(), INFO_TAG,                                 \
-              __FILE, __func__, __LINE__, __VA_ARGS__); } while (0)
-
-#define Log_info(...) do {                      \
-    if (LOG_LEVEL >= INFO_LEVEL)                \
-      _log_info(__VA_ARGS__, "\n"); } while (0)
-
-
 #define _log_error(msg, ...) do {                                   \
     if (LOG_LEVEL >= ERROR_LEVEL)                                   \
       fprintf(stderr, LOG_FMT msg "%s",                             \
@@ -84,10 +78,32 @@ char* time_now(void);
     if (LOG_LEVEL >= ERROR_LEVEL)                 \
       _log_error(__VA_ARGS__, "\n"); } while (0)
 
+
 #define Log_error_if(condition, ...) do {          \
     if (condition)                                 \
       if (LOG_LEVEL >= ERROR_LEVEL)                \
         _log_error(__VA_ARGS__, "\n"); } while (0)
+
+
+#define _log_warn(msg, ...) do {                                    \
+    if (LOG_LEVEL >= WARN_LEVEL)                                    \
+      fprintf(stdout, LOG_FMT msg "%s",                             \
+              time_now(), WARN_TAG,                                 \
+              __FILE, __func__, __LINE__, __VA_ARGS__); } while (0)
+
+#define Log_warn(...) do {                      \
+    if (LOG_LEVEL >= WARN_LEVEL)                \
+      _log_warn(__VA_ARGS__, "\n"); } while (0)
+
+#define _log_info(msg, ...) do {                                    \
+    if (LOG_LEVEL >= INFO_LEVEL)                                    \
+      fprintf(stdout, LOG_FMT msg "%s",                             \
+              time_now(), INFO_TAG,                                 \
+              __FILE, __func__, __LINE__, __VA_ARGS__); } while (0)
+
+#define Log_info(...) do {                      \
+    if (LOG_LEVEL >= INFO_LEVEL)                \
+      _log_info(__VA_ARGS__, "\n"); } while (0)
 
 /* __________________________________________________________________________ */
 /*                                                             Debug session  */

@@ -2,6 +2,7 @@
  * @file    except.h
  * @brief   Exceptions definition.
  *
+ * NOTE: TRY/CATCH clauses could be nested.
  * ATTENTION: Not thread safe.
  *
  * If the exception is not caught the behavior is as `assertion` failure - logs
@@ -76,11 +77,17 @@ void Except_throw(const Except_T* e, const char* file, int line);
     } else if (Except_frame.exception == &(e)) {                            \
       Except_flag = Except_handled;
 
+/*
+ * Catch all kind of exceptions if needed and try something else.
+ * Code in ELSE will be executed whether an exception was raised or not.
+ * NOTE: ELSE could be followed by other ELSE sections.
+ */
 #define ELSE                                                                \
       if (Except_flag == Except_entered) Except_stack = Except_stack->prev; \
     } else {                                                                \
       Except_flag = Except_handled;
 
+/* Do not catch exceptions. Use it after proper exception processing. */
 #define FINALLY                                                             \
       if (Except_flag == Except_entered) Except_stack = Except_stack->prev; \
     } {                                                                     \

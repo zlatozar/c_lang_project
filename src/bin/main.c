@@ -9,6 +9,7 @@
 
 #include "logger/log.h"
 #include "lang/assert.h"
+#include "lang/mem.h"
 #include "data_structs/list.h"
 #include "algorithms/array.h"
 
@@ -21,8 +22,20 @@ main(void)
   Log_debug("Log_debug message");
   Log_debug("Log_debug message with %s", "parameter");
   Log_info("Log_info message");
+  Log_warn("Log_warn message");
   Log_error("Log_error message");
-  Log_error_if(1, "Condition is %d", 1);
+  Log_error_if(1, "Error condition is %d", 1);
+
+  TRY
+      Log_error("Assert will fail...");
+      Assert(0);
+  ELSE
+      Log_info(
+          "but exception is caught and application was shutdown gracefully!");
+  FINALLY
+      printf("Bye!\n");
+
+  END_TRY;
 
   return EXIT_SUCCESS;
 }
