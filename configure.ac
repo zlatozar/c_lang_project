@@ -29,7 +29,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 
 AM_INIT_AUTOMAKE([1.9 foreign subdir-objects])
-AM_SILENT_RULES([yes])
+AM_SILENT_RULES([no])
 
 AC_CONFIG_SRCDIR([src/bin/main.c])
 AC_CONFIG_HEADERS([config.h])
@@ -223,6 +223,10 @@ AC_CONFIG_FILES([src/libs/logger/Makefile])
 AC_CONFIG_FILES([src/libs/data_structs/Makefile])
 AC_CONFIG_FILES([src/libs/algorithms/Makefile])
 AC_CONFIG_FILES([src/libs/Makefile])
+
+dnl Programming paradigms through examples
+AC_CONFIG_FILES([src/bin/paradigms/Makefile])
+AC_CONFIG_FILES([src/bin/paradigms/polymorphic/Makefile])
 
 dnl API documentation
 AC_CONFIG_FILES([tools-setup/Doxyfile])

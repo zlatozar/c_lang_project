@@ -1,0 +1,6 @@
+#if !defined(POLYMORPHIC_INTERFACE_IMPL_ONE_H)
+#define POLYMORPHIC_INTERFACE_IMPL_ONE_H
+
+extern interface_t impl_one;
+
+#endif  /* POLYMORPHIC_INTERFACE_IMPL_ONE_H */

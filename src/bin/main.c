@@ -26,14 +26,16 @@ main(void)
   Log_error("Log_error message");
   Log_error_if(1, "Error condition is %d", 1);
 
+  /* Emacs and `astyle` have problems with indentation. */
   TRY
-      Log_error("Assert will fail...");
-      Assert(0);
+    Log_error("Assert will fail...");
+    Assert(0);
+
   ELSE
-      Log_info(
-          "but exception is caught and application was shutdown gracefully!");
+    Log_info("but exception is caught and application was shutdown gracefully!");
+
   FINALLY
-      printf("Bye!\n");
+    printf("Bye!\n");
 
   END_TRY;
 
