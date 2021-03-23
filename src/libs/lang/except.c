@@ -8,7 +8,7 @@
 #define STACK_BUFF 64
 
 static void
-except_backtrace()
+except_backtrace(void)
 {
   void* buffer[STACK_BUFF];
 

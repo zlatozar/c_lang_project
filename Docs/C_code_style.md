@@ -368,8 +368,12 @@ trie_add( *child, word + 1 );   /* OK    */
 ## Comments
 
 - Comments should provide something extra - not just paraphrase the code
-- Comments starting with `//` are not allowed. Always use `/* comment */`, even for single-line comment
+- Comments starting with `//` are not allowed except for `Astyle` on/off formatting.<br/>
+  Always use `/* comment */`, even for single-line comment
 ```c
+// *INDENT-OFF*
+// *INDENT-ON*
+
 // This is comment (wrong)
 /* This is comment (ok) */
 ```

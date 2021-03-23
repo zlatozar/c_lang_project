@@ -9,17 +9,17 @@ const Except_T Unknown_Exception = { "Unknown exception." };
 /*                                                          Helper functions  */
 
 static void
-inner_inner_fn() {
+inner_inner_fn(void) {
   THROW(UnitTest_Exception);
 }
 
 static void
-inner_fn() {
+inner_fn(void) {
   inner_inner_fn();
 }
 
 static void
-throw_excpetion() {
+throw_excpetion(void) {
   inner_fn();
 }
 
@@ -28,14 +28,14 @@ throw_excpetion() {
 TEST throw_catch(void)
 {
   TRY
-      throw_excpetion();
+    throw_excpetion();
 
   CATCH(Unknown_Exception)
-      ASSERT(0);
-      printf("Un-expected exception.\n");
+    ASSERT(0);
+    printf("Un-expected exception.\n");
   CATCH(UnitTest_Exception)
-      ASSERT(1);
-      printf("-> Expected exception.\n");
+    ASSERT(1);
+    printf("-> Expected exception.\n");
   END_TRY;
 
   PASS();

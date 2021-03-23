@@ -26,7 +26,11 @@ main(void)
   Log_error("Log_error message");
   Log_error_if(1, "Error condition is %d", 1);
 
-  /* Emacs and `astyle` have problems with indentation. */
+  DEBUG_ONLY printf("%s\n", "If DEBUG is defined execute this code.");
+
+  /* Manual indention for TRY/CATCH clauses is needed. */
+
+  // *INDENT-OFF*
   TRY
     Log_error("Assert will fail...");
     Assert(0);
@@ -38,6 +42,7 @@ main(void)
     printf("Bye!\n");
 
   END_TRY;
+  // *INDENT-ON*
 
   return EXIT_SUCCESS;
 }

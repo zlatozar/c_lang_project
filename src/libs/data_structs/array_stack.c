@@ -86,7 +86,7 @@ Stack_peel(Stack_T stack, Generic_T* p_data__)
   { return FAIL; }
 
   Stack_push(stack, *p_data__);
-  return OK;
+  return SUCC;
 }
 
 void

@@ -1205,5 +1205,16 @@
           *ptr = example_DEFAULT;
           return ptr;
         }
-        struct example *on_heap = example_new();
+        struct example* on_heap = example_new();
+%
+[LANG] If the operand of the unary & operator is the result of a [] operator,
+       the result is as if the & operator were removed and the [] operator were
+       changed to a + operator. For example, &str[5] is the same as str + 5.
+       Which means that &str[5] points to array as a whole and in pointer
+       arithmetic this size will be used.
+%
+[LANG] Strict aliasing is an assumption, made by the C (or C++) compiler, that
+       dereferencing pointers to objects of different types will never refer to
+       the same memory location (i.e. alias each other.). If not strict - more
+       than one pointer refers to the same object.
 %
