@@ -178,10 +178,11 @@ AX_TRY_CFLAGS([-Wlogical-op], [AX_CFLAGS([-Wlogical-op])])
 AX_TRY_CFLAGS([-Wjump-misses-init], [AX_CFLAGS([-Wjump-misses-init])])
 AX_TRY_CFLAGS([-Wmissing-include-dirs], [AX_CFLAGS([-Wmissing-include-dirs])])
 AX_TRY_CFLAGS([-Wconversion], [AX_CFLAGS([-Wconversion])])
-dnl Warns for performance problems
+AX_TRY_CFLAGS([-Wparentheses], [AX_CFLAGS([-Wparentheses])])
+# Warns for performance problems: -Wcast-align=strict
 AX_TRY_CFLAGS([-Wcast-align], [AX_CFLAGS([-Wcast-align])])
 
-AX_TRY_LDFLAGS([-Wl,--no-undefined], [AX_LDFLAGS([-Wl,--no-undefined])])
+AX_TRY_LDFLAGS([-Wl,-undefined,error], [AX_LDFLAGS([-Wl,-undefined,error])])
 
 ##################################
 ####    Add debug support.    ####
@@ -197,14 +198,13 @@ AC_MSG_RESULT([$debugit])
 
 if test x"$debugit" = x"yes"; then
     AC_DEFINE([DEBUG],[],[Debug Mode])
-    dnl Add `-fsanitize=address`, ensure that proper libraries are installed.
-    dnl ASAN_OPTIONS=symbolize=1
-    dnl ASAN_SYMBOLIZER_PATH=/path/to/llvm_build/bin/llvm-symbolizer
-    CFLAGS="$CFLAGS -std=c11 -Og -ggdb -DDEBUG -fno-omit-frame-pointer -fmax-errors=5"
+    # Add `-fsanitize=address`. Ensure that proper libraries are installed.
+    # ASAN_OPTIONS=symbolize=1
+    # ASAN_SYMBOLIZER_PATH=/path/to/llvm_build/bin/llvm-symbolizer
+    CFLAGS="-std=c11 -Og -ggdb -fno-omit-frame-pointer -D_FORTIFY_SOURCE=2 -DDEBUG -fmax-errors=5 $CFLAGS"
 else
     AC_DEFINE([NDEBUG],[],[No-debug Mode])
-    CFLAGS=
-    CFLAGS="$CFLAGS -std=c11 -Ofast -fomit-frame-pointer -DNDEBUG"
+    CFLAGS="-std=c11 -Ofast -fomit-frame-pointer -D_FORTIFY_SOURCE=2 -DNDEBUG"
 fi
 
 ##################################

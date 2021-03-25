@@ -1218,3 +1218,12 @@
        the same memory location (i.e. alias each other.). If not strict - more
        than one pointer refers to the same object.
 %
+[LANG] If `p` is a pointer, then `*p++` is equivalent to `*(p++)`, and `++*p` is
+       equivalent to `++(*p)`, because both the prefix `++` operator and the unary `*`
+       operator are right-associative. If two operators have the same precedence and
+       association, they are evaluated from left to right.
+%
+[TIP] As a general policy and to avoid surprises such as this, all bitwise
+      manipulations should involve a single, sufficiently wide unsigned integer
+      type.
+%

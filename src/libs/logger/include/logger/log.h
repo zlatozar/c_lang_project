@@ -108,17 +108,6 @@ char* time_now(void);
 /* __________________________________________________________________________ */
 /*                                                             Debug session  */
 
-#define COMMENT SLASH(/)
-#define SLASH(s) /##s
-
-#if DEBUG
-#define DEBUG_ONLY
-#else
-#define DEBUG_ONLY COMMENT
-#endif
-
-#define ASTYLE COMMENT
-
 #define LOG_ENTER do {                                      \
     if (DEBUG)                                              \
       fprintf(stderr,                                       \

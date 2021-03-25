@@ -26,8 +26,6 @@ main(void)
   Log_error("Log_error message");
   Log_error_if(1, "Error condition is %d", 1);
 
-  DEBUG_ONLY printf("%s\n", "If DEBUG is defined execute this code.");
-
   /* Manual indention for TRY/CATCH clauses is needed. */
 
   // *INDENT-OFF*
