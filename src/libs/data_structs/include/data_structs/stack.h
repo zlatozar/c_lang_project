@@ -47,9 +47,18 @@ extern status Stack_peel(Stack_T stack, Generic_T* p_data__);
 /**
  * @brief    Destroy stack as free all left data.
  *
- * It is good practice to destroy empty stack. If `stack` has left
- * elements info message will be logged.
+ * Use it if data stored in stack needs special way of freeing
+ * otherwise use `Stack_free`.
  */
 extern void Stack_destroy(Stack_T stack, free_data_FN free_data_fn);
+
+/**
+ * @brief    Free resources.
+ *
+ * It is good practice to destroy empty stack. If `stack` has left
+ * elements warn message will be logged.
+ */
+extern void Stack_free(Stack_T stack);
+
 
 #endif  /* DATA_STRUCTS_STACK_H */

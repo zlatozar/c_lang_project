@@ -1,5 +1,6 @@
-#include <greatest.h>
 #include "lang/except.h"
+
+#include <greatest.h>
 
 const Except_T UnitTest_Exception = { "Exception in unit test." };
 
@@ -33,9 +34,11 @@ TEST throw_catch(void)
   CATCH(Unknown_Exception)
     ASSERT(0);
     printf("Un-expected exception.\n");
+
   CATCH(UnitTest_Exception)
     ASSERT(1);
     printf("-> Expected exception.\n");
+
   END_TRY;
 
   PASS();

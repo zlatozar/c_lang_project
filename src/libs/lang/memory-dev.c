@@ -1,4 +1,11 @@
-#if !defined(NDEBUG)     /* Memory checked version */
+/**
+ * @file     memory-dev.c
+ * @brief    Memory checked version. Use only during development.
+ *
+ * Memory allocated through NEW etc. should be freed using FREE macro
+ * otherwise strange error message will be raised.
+ */
+#if !defined(NDEBUG)
 
 #include "lang/memory.h"
 

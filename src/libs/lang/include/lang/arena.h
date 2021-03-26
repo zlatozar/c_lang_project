@@ -31,7 +31,7 @@ extern Arena_T  Arena_new(void);
  *
  * @throw  `Arena_Failed` if can't allocates memory.
  */
-extern void*  Arena_alloc (Arena_T self, size_t nbytes, const char* file, int line);
+extern void*  Arena_alloc (Arena_T arena, size_t nbytes, const char* file, int line);
 
 /**
  * Allocates space in arena for an array of count elements, each occupying
@@ -42,18 +42,18 @@ extern void*  Arena_alloc (Arena_T self, size_t nbytes, const char* file, int li
  *
  * @throw  `Arena_Failed` if can't allocates memory.
  */
-extern void*  Arena_calloc(Arena_T self, size_t count, size_t nbytes, const char* file, int line);
+extern void*  Arena_calloc(Arena_T arena, size_t count, size_t nbytes, const char* file, int line);
 
 /**
  * Deallocates all of the space in *ap, deallocates the arena itself, and clears
- * `*p_self`. It is a checked runtime error for `p_self` or `*p_self` to be null.
+ * `*p_arena`. It is a checked runtime error for `p_arena` or `*p_arena` to be null.
  */
-extern void   Arena_dispose(Arena_T* p_self);
+extern void   Arena_dispose(Arena_T* p_arena);
 
 /**
  * Deallocates all of the space in arena — all of the space allocated since
  * the last call to `Arena_free`.
  */
-extern void   Arena_free(Arena_T self);
+extern void   Arena_free(Arena_T arena);
 
 #endif  /* LANG_ARENA_H */

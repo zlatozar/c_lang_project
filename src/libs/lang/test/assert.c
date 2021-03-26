@@ -1,5 +1,6 @@
-#include <greatest.h>
 #include "lang/assert.h"
+
+#include <greatest.h>
 
 TEST x_should_equal_1(void)
 {

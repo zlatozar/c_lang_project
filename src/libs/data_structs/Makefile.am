@@ -8,8 +8,9 @@ LIB_HEADER = -I$(top_srcdir)/src/libs/data_structs/include
 noinst_LTLIBRARIES = libdatastructs.la
 
 # The files to add to the library and to the source distribution
-libdatastructs_la_SOURCES = list.c      \
-														array_stack.c
+libdatastructs_la_SOURCES = list.c        \
+														array_stack.c \
+														queue.c
 
 libdatastructs_la_CFLAGS = $(LIB_HEADER)                           \
 													 -I$(top_srcdir)/src/libs/lang/include   \
@@ -23,9 +24,11 @@ libdatastructs_la_LIBADD = $(top_srcdir)/src/libs/lang/liblang.la   \
 
 CHECK_CFLAGS = -I$(top_srcdir)/src/ext-libs/greatest/include \
 							 -I$(top_srcdir)/src/libs/lang/include         \
+							 -I$(top_srcdir)/src/libs/logger/include       \
 							 $(LIB_HEADER)
 
-CHECK_LDADD = $(top_srcdir)/src/libs/lang/liblang.la  \
+CHECK_LDADD = $(top_srcdir)/src/libs/lang/liblang.la     \
+							$(top_srcdir)/src/libs/logger/liblogger.la \
 							libdatastructs.la
 
 if MEMDEV_MODE
@@ -36,7 +39,8 @@ if HAVE_CHECK
 
 TESTS = $(check_PROGRAMS)
 check_PROGRAMS = test/list.run        \
-								 test/array_stack.run
+								 test/array_stack.run \
+								 test/queue.run
 
 test_list_run_SOURCES = test/list.c
 test_list_run_CFLAGS = $(CHECK_CFLAGS)
@@ -45,6 +49,10 @@ test_list_run_LDADD = $(CHECK_LDADD)
 test_array_stack_run_SOURCES = test/array_stack.c
 test_array_stack_run_CFLAGS = $(CHECK_CFLAGS)
 test_array_stack_run_LDADD = $(CHECK_LDADD)
+
+test_queue_run_SOURCES = test/queue.c
+test_queue_run_CFLAGS = $(CHECK_CFLAGS)
+test_queue_run_LDADD = $(CHECK_LDADD)
 
 # 'test/<test name>.run.debug' target
 include $(top_srcdir)/m4/gdb.mk

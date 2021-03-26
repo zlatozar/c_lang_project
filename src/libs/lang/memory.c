@@ -1,4 +1,11 @@
-#if defined(NDEBUG)       /* Production version */
+/**
+ * @file     memory-dev.c
+ * @brief    Production version.
+ *
+ * Nothing special just good practices and an exception
+ * `Memory_Failed` is thrown if problem occurs.
+ */
+#if defined(NDEBUG)
 
 #include "lang/memory.h"
 

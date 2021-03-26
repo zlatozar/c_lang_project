@@ -1,44 +1,7 @@
-#include <greatest.h>
 #include "data_structs/list.h"
 
-/* __________________________________________________________________________ */
-/*                                                          Helper functions  */
-
-typedef struct {
-  int x;
-} data_t;
-
-typedef data_t* Data_T;
-
-static Generic_T
-get_next_elm(int elm)
-{
-  Data_T data = malloc(sizeof(*data));
-  data->x = elm;
-
-  return (Generic_T)data;
-}
-
-static void
-print_data_fn(Generic_T data)
-{
-  printf("%d ", ((Data_T)data)->x);
-}
-
-static status
-apply_fn(Generic_T data)
-{
-  print_data_fn(data);
-  return SUCC;
-}
-
-static bool
-comp_data_fn(Generic_T a_data, Generic_T b_data)
-{
-  return ((Data_T)a_data)->x == ((Data_T)b_data)->x;
-}
-
-/* __________________________________________________________________________ */
+#include <greatest.h>
+#include "test_data.h"
 
 TEST insert(void)
 {
@@ -51,7 +14,7 @@ TEST insert(void)
 
   ASSERT_EQ(3, List_length(list));
 
-  List_destroy(&list, free);
+  List_destroy(&list, free_elm);
   PASS();
 }
 
@@ -65,7 +28,7 @@ TEST print(void)
 
   List_print(list, print_data_fn);
 
-  List_destroy(&list, free);
+  List_destroy(&list, free_elm);
   PASS();
 }
 
@@ -80,11 +43,11 @@ TEST delete_head(void)
   /* Common pattern when work with pointer to pointer. */
   Data_T deleted;
   List_delete_head(&list, (Generic_T*) &deleted);
-  free(deleted);
+  FREE(deleted);
 
   ASSERT_EQ(2, List_length(list));
 
-  List_destroy(&list, free);
+  List_destroy(&list, free_elm);
   PASS();
 }
 
@@ -98,7 +61,7 @@ TEST append(void)
   List_append(&list, get_next_elm(42));
   ASSERT_EQ(3, List_length(list));
 
-  List_destroy(&list, free);
+  List_destroy(&list, free_elm);
   PASS();
 }
 
@@ -114,7 +77,7 @@ TEST traverse(void)
   status traversed = List_traverse(list, apply_fn);
   ASSERT(traversed == SUCC);
 
-  List_destroy(&list, free);
+  List_destroy(&list, free_elm);
   PASS();
 }
 
@@ -127,8 +90,10 @@ TEST find_key(void)
   List_append(&list, get_next_elm(3));
   List_append(&list, get_next_elm(42));
 
+  /* Use malloc/free and NEW etc/FREE consistently. */
+
   Data_T key = malloc(sizeof(data_t));
-  key->x = 42;
+  key->value = 42;
 
   /* Contains found node. */
   node_t* match_node;
@@ -137,10 +102,11 @@ TEST find_key(void)
   ASSERT(found == SUCC);
 
   Data_T match_node_data = (Data_T)DATA(match_node);
-  ASSERT(match_node_data->x == 42);
+  ASSERT(match_node_data->value == 42);
 
-  List_destroy(&list, free);
+  List_destroy(&list, free_elm);
   free(key);
+
   PASS();
 }
 
@@ -150,7 +116,18 @@ TEST length(void)
 
   ASSERT_EQ(0, List_length(list));
 
-  List_destroy(&list, free);
+  List_destroy(&list, free_elm);
+  PASS();
+}
+
+TEST free_non_empty(void)
+{
+  List_T list = List_new();
+
+  List_insert(&list, get_next_elm(2));
+  List_insert(&list, get_next_elm(1));
+
+  List_free(&list);
   PASS();
 }
 
@@ -165,5 +142,6 @@ int main(int argc, char** argv)
   RUN_TEST(traverse);
   RUN_TEST(find_key);
   RUN_TEST(length);
+  RUN_TEST(free_non_empty);
   GREATEST_MAIN_END();
 }

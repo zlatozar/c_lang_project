@@ -1,6 +1,6 @@
 /**
  * @file    extend.h
- * @brief   Kind of <stdlib.h> extensions
+ * @brief   What we miss from <stdlib.h>.
  */
 #if !defined(LANG_EXTEND_H)
 #define LANG_EXTEND_H
@@ -53,7 +53,7 @@ typedef void (*free_data_FN)(void*);
  * without type information that's why additional functions with this knowledge
  * should be passed.
  */
-typedef void print_data_FN(Generic_T);
+typedef void (*print_data_FN)(Generic_T);
 
 /**
  * @brief    Used to indicate if allocation de-allocation succeed.

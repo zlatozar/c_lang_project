@@ -95,11 +95,16 @@ Stack_destroy(Stack_T stack, free_data_FN free_data_fn)
   Require(stack);
 
   if (!Stack_is_empty(stack)) {
-    Log_info("Stack is not empty.");
+    Log_warn("Stack is not empty.");
 
     Generic_T stale_out;
     while (Stack_pop(stack, &stale_out) == SUCC) {
-      free_data_fn(stale_out);
+      if (free_data_fn == NULL) {
+        FREE(stale_out);
+
+      } else {
+        free_data_fn(stale_out);
+      }
     }
   }
 
@@ -108,4 +113,10 @@ Stack_destroy(Stack_T stack, free_data_FN free_data_fn)
 
   FREE(stack);
   stack = NULL;
+}
+
+void
+Stack_free(Stack_T stack)
+{
+  Stack_destroy(stack, NULL);
 }

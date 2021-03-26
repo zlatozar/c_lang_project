@@ -2,6 +2,8 @@
  * @file    mem.h
  * @brief   Less prone memory management.
  *
+ * ATTENTION: Use NEW etc. FREE consistently.
+ *
  * Provides a set of macros and routines that are less prone to error and that
  * provide a few additional capabilities.
  *
@@ -16,7 +18,7 @@
  * Usually pre-conditions are `assert` is used to avoid undifined behavior.
  *   2b. The unchecked errors can't be handled by `assert` checks to avoid them we
  * use external tools, tests and smart program design.
- *    3. An exception is an error that may be rare and perhaps unexpected, but from
+ *   3. An exception is an error that may be rare and perhaps unexpected, but from
  * which recovery may be possible.
  */
 #if !defined(LANG_MEM_H)

@@ -1,32 +1,7 @@
-#include <greatest.h>
 #include "data_structs/stack.h"
 
-typedef struct {
-  int x;
-} data_t;
-
-typedef data_t* Data_T;
-
-/* __________________________________________________________________________ */
-/*                                                          Helper functions  */
-
-static Generic_T
-get_next_elm(int elm)
-{
-  Data_T data = malloc(sizeof(*data));
-  data->x = elm;
-
-  return (Generic_T)data;
-}
-
-static void
-free_elm(void* elm)
-{
-  printf("Free %d\n", ((Data_T)elm)->x);
-  free(elm);
-}
-
-/* __________________________________________________________________________ */
+#include <greatest.h>
+#include "test_data.h"
 
 TEST free_empty(void)
 {
@@ -38,7 +13,7 @@ TEST free_empty(void)
 
   Data_T elm;
   Stack_pop(stack, (Generic_T*) &elm);
-  free(elm);
+  FREE(elm);
 
   ASSERT(Stack_is_empty(stack));
 

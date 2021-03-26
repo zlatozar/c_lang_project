@@ -74,7 +74,7 @@ Stack_destroy(Stack_T stack, free_data_FN free_data_fn)
   Require(stack);
 
   if (!Stack_is_empty(stack)) {
-    Log_info("Stack is not empty.");
+    Log_warn("Stack is not empty.");
 
     List_destroy(&stack->storage, free_data_fn);
     stack->count = 0;

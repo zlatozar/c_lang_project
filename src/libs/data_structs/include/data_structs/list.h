@@ -9,7 +9,6 @@
 #include <stddef.h>     /* size_t */
 #include "lang/extend.h"
 
-
 struct node {
   Generic_T datapointer;
   struct node* next;
@@ -99,8 +98,14 @@ extern void List_print(const List_T list, print_data_FN print_data_fn);
 /**
  * @brief    Delete every node in the given list.
  *
- * If list is non null, call it with the data stored in each node.
+ * Use it if data stored in list needs special way of freeing
+ * otherwise use `List_free`.
  */
 extern void List_destroy(List_T* p_List, free_data_FN free_data_fn);
+
+/**
+ * @brief    Frees occupied memory.
+ */
+extern void List_free(List_T* p_List);
 
 #endif  /* DATA_STRUCTS_LIST_H */

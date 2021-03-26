@@ -8,7 +8,7 @@
 /*                                                                     Local  */
 
 static void
-List_allocate_node(node_t** pp_node, Generic_T data)
+allocate_node(node_t** pp_node, Generic_T data)
 {
   node_t* p_node;
   NEW(p_node);
@@ -20,7 +20,7 @@ List_allocate_node(node_t** pp_node, Generic_T data)
 }
 
 static void
-List_free_node(node_t** pp_node)
+free_node(node_t** pp_node)
 {
   FREE(*pp_node);
 }
@@ -37,7 +37,7 @@ List_new(void)
 bool
 List_is_empty(List_T list)
 {
-  return (list == NULL) ? true : false;
+  return list == NULL;
 }
 
 void
@@ -46,7 +46,7 @@ List_insert(List_T* p_List, Generic_T data)
   Require(p_List);
 
   node_t* p_node;
-  List_allocate_node(&p_node, data);
+  allocate_node(&p_node, data);
 
   NEXT(p_node) = *p_List;
   *p_List = p_node;
@@ -56,7 +56,7 @@ void
 List_append(List_T* p_List, Generic_T data)
 {
   node_t* p_node;
-  List_allocate_node(&p_node, data);
+  allocate_node(&p_node, data);
 
   if (List_is_empty(*p_List)) {
     *p_List = p_node;
@@ -92,7 +92,7 @@ List_delete_node(List_T* p_List, node_t* p_node)
     }
   }
 
-  List_free_node(&p_node);
+  free_node(&p_node);
   return SUCC;
 }
 
@@ -172,19 +172,30 @@ List_print(const List_T list, print_data_FN print_data_fn)
   }
 }
 
-/* Recursively delete all connections then free each node's data */
+/*
+ * Recursively delete all connections then free each node's data if free
+ * function is passed.
+ */
 void
 List_destroy(List_T* p_List, free_data_FN free_data_fn)
 {
   Require(p_List);
-  Require(free_data_fn);
 
-  if (List_is_empty(*p_List) == false) {
-    List_destroy(&NEXT(*p_List), free_data_fn);
-
-    if (free_data_fn != NULL)
-    { free_data_fn(DATA(*p_List)); }
-
-    List_free_node(p_List);
+  if (List_is_empty(*p_List)) {
+    return;
   }
+
+  List_destroy(&NEXT(*p_List), free_data_fn);
+
+  if (free_data_fn != NULL) {
+    free_data_fn(DATA(*p_List));
+  }
+
+  free_node(p_List);
+}
+
+void
+List_free(List_T* p_List)
+{
+  List_destroy(p_List, NULL);
 }

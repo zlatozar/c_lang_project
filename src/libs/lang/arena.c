@@ -56,16 +56,16 @@ Arena_new(void)
 }
 
 void*
-Arena_alloc(Arena_T self, size_t nbytes, const char* file, int line)
+Arena_alloc(Arena_T arena, size_t nbytes, const char* file, int line)
 {
-  Require(self);
+  Require(arena);
   Require(nbytes > 0);
 
   nbytes = ((nbytes + sizeof (union align) - 1) /
             (sizeof (union align))) * (sizeof (union align));
 
   /* Current initial state. */
-  long space_left = self->limit - self->avail;
+  long space_left = arena->limit - arena->avail;
 
   while (space_left > 0 && nbytes > (unsigned long)space_left) {
     Arena_T ptr;
@@ -89,63 +89,63 @@ Arena_alloc(Arena_T self, size_t nbytes, const char* file, int line)
 
       limit = (char*)ptr + m;
     }
-    *ptr = *self;
+    *ptr = *arena;
 
-    self->avail = (char*)((union header*)ptr + 1);
-    self->limit = limit;
-    self->prev  = ptr;
+    arena->avail = (char*)((union header*)ptr + 1);
+    arena->limit = limit;
+    arena->prev  = ptr;
 
-    space_left = self->limit - self->avail;
+    space_left = arena->limit - arena->avail;
   }
 
-  self->avail += nbytes;
+  arena->avail += nbytes;
 
-  return self->avail - nbytes;
+  return arena->avail - nbytes;
 }
 
 void*
-Arena_calloc(Arena_T self, size_t count, size_t nbytes,
+Arena_calloc(Arena_T arena, size_t count, size_t nbytes,
              const char* file, int line)
 {
   Require(count > 0);
 
-  void* ptr = Arena_alloc(self, count * nbytes, file, line);
+  void* ptr = Arena_alloc(arena, count * nbytes, file, line);
   memset(ptr, '\0', count * nbytes);
 
   return ptr;
 }
 
 void
-Arena_dispose(Arena_T* p_self)
+Arena_dispose(Arena_T* p_arena)
 {
-  Require(p_self && *p_self);
+  Require(p_arena && *p_arena);
 
-  Arena_free(*p_self);
-  free(*p_self);
-  *p_self = NULL;
+  Arena_free(*p_arena);
+  free(*p_arena);
+  *p_arena = NULL;
 }
 
 void
-Arena_free(Arena_T self)
+Arena_free(Arena_T arena)
 {
-  Require(self);
+  Require(arena);
 
-  while (self->prev) {
-    struct arena tmp = *self->prev;
+  while (arena->prev) {
+    struct arena tmp = *arena->prev;
 
     if (nfree < THRESHOLD) {
-      self->prev->prev = freechunks;
-      freechunks = self->prev;
+      arena->prev->prev = freechunks;
+      freechunks = arena->prev;
       nfree++;
-      freechunks->limit = self->limit;
+      freechunks->limit = arena->limit;
 
     } else {
-      free(self->prev);
+      free(arena->prev);
     }
 
-    *self = tmp;
+    *arena = tmp;
   }
 
-  Ensure(self->limit == NULL);
-  Ensure(self->avail == NULL);
+  Ensure(arena->limit == NULL);
+  Ensure(arena->avail == NULL);
 }
