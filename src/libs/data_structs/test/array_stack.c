@@ -12,7 +12,8 @@ TEST destroy_empty(void)
   ASSERT_FALSE(Stack_is_empty(stack));
 
   Data_T elm;
-  Stack_pop(stack, (Generic_T*) &elm);
+  ASSERT(Stack_pop(stack, (Generic_T*) &elm));
+  ASSERT(elm);
   FREE(elm);
 
   ASSERT(Stack_is_empty(stack));

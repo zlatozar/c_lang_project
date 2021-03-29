@@ -74,8 +74,7 @@ TEST traverse(void)
   List_insert(&list, get_next_elm(10));
   ASSERT_EQ(3, List_length(list));
 
-  status traversed = List_traverse(list, apply_fn);
-  ASSERT(traversed == SUCC);
+  ASSERT(List_traverse(list, apply_fn));
 
   List_destroy(&list, free_elm);
   PASS();
@@ -98,8 +97,7 @@ TEST find_key(void)
   /* Contains found node. */
   node_t* match_node;
 
-  status found = List_find_key(list, comp_data_fn, (Generic_T)key, &match_node);
-  ASSERT(found == SUCC);
+  ASSERT(List_find_key(list, comp_data_fn, (Generic_T)key, &match_node));
 
   Data_T match_node_data = (Data_T)DATA(match_node);
   ASSERT(match_node_data->value == 42);

@@ -71,7 +71,7 @@ List_append(List_T* p_List, Generic_T data)
   }
 }
 
-status
+bool
 List_delete_node(List_T* p_List, node_t* p_node)
 {
   if (*p_List == p_node) {
@@ -85,7 +85,7 @@ List_delete_node(List_T* p_List, node_t* p_node)
 
     if (iter_node == NULL) {
       /* Delete from empty list. */
-      return FAIL;
+      return false;
 
     } else {
       NEXT(iter_node) = NEXT(p_node);
@@ -93,16 +93,16 @@ List_delete_node(List_T* p_List, node_t* p_node)
   }
 
   free_node(&p_node);
-  return SUCC;
+  return true;
 }
 
 /* Instead return pointer to pointer it is more convenient to pass out param. */
-status
+bool
 List_delete_head(List_T* p_List, Generic_T* p_data__)
 {
   if (List_is_empty(*p_List)) {
     Log_debug("Can't delete from empty list");
-    return FAIL;
+    return false;
   }
 
   *p_data__ = DATA(*p_List);
@@ -110,16 +110,16 @@ List_delete_head(List_T* p_List, Generic_T* p_data__)
 }
 
 /* Iterate tail recursively. */
-status
-List_traverse(List_T list, status (*apply_fn)(Generic_T))
+bool
+List_traverse(List_T list, bool (*apply_fn)(Generic_T))
 {
   Require(apply_fn);
 
   if (List_is_empty(list))
-  { return SUCC; }
+  { return true; }
 
-  if ((*apply_fn)(DATA(list)) == FAIL) {
-    return FAIL;
+  if (!(*apply_fn)(DATA(list))) {
+    return false;
 
   } else {
     return List_traverse(NEXT(list), apply_fn);
@@ -127,7 +127,7 @@ List_traverse(List_T list, status (*apply_fn)(Generic_T))
 }
 
 List_T
-List_iterator(List_T list, List_T last_return)
+List_iterator(List_T list, node_t* last_return)
 {
   return (last_return == NULL) ? list : NEXT(last_return);
 }
@@ -145,7 +145,7 @@ List_length(List_T list)
 }
 
 /* Searching same as `key` and if found, `pp_keynode__` is instance of it in the list. */
-status
+bool
 List_find_key(List_T list, compare_data_FN comp_data_fn, Generic_T key, node_t** pp_keynode__)
 {
   Require(list);
@@ -157,10 +157,10 @@ List_find_key(List_T list, compare_data_FN comp_data_fn, Generic_T key, node_t**
 
     if (comp_data_fn(key, DATA(p_curr))) {
       *pp_keynode__ = p_curr;
-      return SUCC;
+      return true;
     }
   }
-  return FAIL;
+  return false;
 }
 
 void
@@ -179,8 +179,6 @@ List_print(const List_T list, print_data_FN print_data_fn)
 void
 List_destroy(List_T* p_List, free_data_FN free_data_fn)
 {
-  Require(p_List);
-
   if (List_is_empty(*p_List)) {
     return;
   }

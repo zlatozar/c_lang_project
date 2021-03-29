@@ -64,41 +64,40 @@ Stack_push(Stack_T stack, Generic_T data)
   stack->top++;
 }
 
-status
+bool
 Stack_pop(Stack_T stack, Generic_T* p_data__)
 {
   Require(stack);
 
   if (Stack_is_empty(stack)) {
-    return FAIL;
+    return false;
   }
 
   /* Next push will override poped data. */
   stack->top--;
   *p_data__ = *stack->top;
-  return SUCC;
+  return true;
 }
 
-status
+/* Note: It is `pop` then `push` operation. */
+bool
 Stack_peel(Stack_T stack, Generic_T* p_data__)
 {
-  if (Stack_pop(stack, p_data__) == FAIL)
-  { return FAIL; }
+  if (!Stack_pop(stack, p_data__))
+  { return false; }
 
   Stack_push(stack, *p_data__);
-  return SUCC;
+  return true;
 }
 
 void
 Stack_destroy(Stack_T stack, free_data_FN free_data_fn)
 {
-  Require(stack);
-
   if (!Stack_is_empty(stack)) {
     Log_warn("Stack is not empty.");
 
     Generic_T stale_out;
-    while (Stack_pop(stack, &stale_out) == SUCC) {
+    while (Stack_pop(stack, &stale_out)) {
       if (free_data_fn == NULL) {
         FREE(stale_out);
 

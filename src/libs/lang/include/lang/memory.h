@@ -52,14 +52,6 @@ extern void* Memory_alloc(size_t nbytes, const char* file, int line);
 extern void* Memory_calloc(size_t count, size_t nbytes, const char* file, int line);
 
 /**
- * De-allocates `ptr`, if `ptr` is non NULL. It is a unchecked run-time error
- * for `ptr` to be a pointer that was not returned by a previous call to a
- * `Memory_alloc` function. Implementations may use file and line to report
- * memory-usage errors.
- */
-extern void  Memory_free(void* ptr, const char* file, int line);
-
-/**
  * Changes the size of the block at `ptr` to hold `nbytes` bytes, and returns a
  * pointer to the first byte of the new block. If `nbytes` exceeds the size of
  * the original block, the excess bytes are uninitialized. If `nbytes` is less
@@ -73,13 +65,21 @@ extern void  Memory_free(void* ptr, const char* file, int line);
  */
 extern void* Memory_resize(void* ptr, size_t nbytes, const char* file, int line);
 
+/**
+ * De-allocates `ptr`, if `ptr` is non NULL. It is a unchecked run-time error
+ * for `ptr` to be a pointer that was not returned by a previous call to a
+ * `Memory_alloc` function. Implementations may use file and line to report
+ * memory-usage errors.
+ */
+extern void  Memory_free(void* ptr, const char* file, int line);
+
 #define ALLOC(nbytes)          Memory_alloc((nbytes), __FILE__, __LINE__)
 #define CALLOC(count, nbytes)  Memory_calloc((count), (nbytes), __FILE__, __LINE__)
 
 #define NEW(ptr)    ( (ptr) = ALLOC(    (long)sizeof(*(ptr))) )
 #define NEW_0(ptr)  ( (ptr) = CALLOC(1, (long)sizeof(*(ptr))) )
 
-#define FREE(ptr)            ( (void)(Memory_free((ptr), __FILE__, __LINE__), (ptr) = NULL) )
 #define RESIZE(ptr, nbytes)  ( (ptr) = Memory_resize((ptr), (nbytes), __FILE__, __LINE__)   )
+#define FREE(ptr)            ( (void)(Memory_free((ptr), __FILE__, __LINE__), (ptr) = NULL) )
 
 #endif  /* LANG_MEM_H */

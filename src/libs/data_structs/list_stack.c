@@ -1,6 +1,7 @@
 #include "data_structs/stack.h"
 
 #include "data_structs/list.h"
+#include "lang/memory.h"
 #include "lang/assert.h"
 #include "logger/log.h"
 
@@ -44,35 +45,33 @@ Stack_push(Stack_T stack, Generic_T data)
   stack->count++;
 }
 
-status
+bool
 Stack_pop(Stack_T stack, Generic_T* p_data__)
 {
   Require(stack);
 
   if (stack->count == 0) {
-    return FAIL;
+    return false;
   }
 
   List_delete_head(&stack->storage, p_data__);
-
-  return SUCC;
+  stack->count--;
+  return true;
 }
 
-status
+bool
 Stack_peel(Stack_T stack, Generic_T* p_data__)
 {
-  if (Stack_pop(stack, p_data__) == FAIL)
-  { return FAIL; }
+  if (!Stack_pop(stack, p_data__))
+  { return false; }
 
   Stack_push(stack, *p_data__);
-  return SUCC;
+  return true;
 }
 
 void
 Stack_destroy(Stack_T stack, free_data_FN free_data_fn)
 {
-  Require(stack);
-
   if (!Stack_is_empty(stack)) {
     Log_warn("Stack is not empty.");
 
@@ -84,4 +83,10 @@ Stack_destroy(Stack_T stack, free_data_FN free_data_fn)
 
   FREE(stack);
   stack = NULL;
+}
+
+void
+Stack_free(Stack_T stack)
+{
+  Stack_destroy(stack, NULL);
 }

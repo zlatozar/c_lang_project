@@ -1,5 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = polymorphic
+SUBDIRS = polymorphic \
+					flex_array
 
 MAINTAINERCLEANFILES = Makefile.in

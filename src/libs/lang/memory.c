@@ -50,6 +50,29 @@ Memory_calloc(size_t count, size_t nbytes, const char* file, int line)
   return ptr;
 }
 
+void*
+Memory_resize(void* ptr, size_t nbytes, const char* file, int line)
+{
+  Require(ptr);
+  Require(nbytes > 0);
+
+  void* tmp;
+  tmp = realloc(ptr, nbytes);
+
+  if (tmp == NULL) {
+    free(ptr);
+    ptr = NULL;
+
+    if (file == NULL)
+    { THROW(Memory_Failed); }
+    else
+    { Except_throw(&Memory_Failed, file, line); }
+  }
+
+  ptr = tmp;
+  return ptr;
+}
+
 void
 Memory_free(void* ptr, const char* file, int line)
 {
@@ -60,24 +83,6 @@ Memory_free(void* ptr, const char* file, int line)
   if (ptr) {
     free(ptr);
   }
-}
-
-void*
-Memory_resize(void* ptr, size_t nbytes, const char* file, int line)
-{
-  Require(ptr);
-  Require(nbytes > 0);
-
-  ptr = realloc(ptr, nbytes);
-
-  if (ptr == NULL) {
-    if (file == NULL)
-    { THROW(Memory_Failed); }
-    else
-    { Except_throw(&Memory_Failed, file, line); }
-  }
-
-  return ptr;
 }
 
 #else

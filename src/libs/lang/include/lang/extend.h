@@ -72,18 +72,6 @@ typedef void (*print_data_FN)(Generic_T);
  */
 typedef enum { OK, ERROR } mem_status;
 
-/**
- * @brief    Indicate if function finished without something unusual.
- *
- * Sometimes we need to be sure if function finished successfully and if not
- * there is no need to continue we can't recover at this level. What was left
- * is to mark as FAIL and pass error to the next level. Another case is when
- * out parameters are passed - we have to know if they contain correct data.
- *
- * By analogy with EXIT_SUCCESS, EXIT_FAILURE.
- */
-typedef enum { SUCC = 200, FAIL = 400 } status;
-
 #define bitsizeof(type)  ((CHAR_BIT) * sizeof(type))
 
 #endif  /* LANG_EXTEND_H */

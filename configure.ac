@@ -17,7 +17,7 @@ AC_PREREQ([2.69])
 # If functions have been added or backward-compatibility has been broken:
 #     interface_age = 0
 m4_define([major_version], [0])
-m4_define([minor_version], [2])
+m4_define([minor_version], [3])
 m4_define([micro_version], [0])
 
 m4_define([interface_age], [0])
@@ -179,6 +179,8 @@ AX_TRY_CFLAGS([-Wjump-misses-init], [AX_CFLAGS([-Wjump-misses-init])])
 AX_TRY_CFLAGS([-Wmissing-include-dirs], [AX_CFLAGS([-Wmissing-include-dirs])])
 AX_TRY_CFLAGS([-Wconversion], [AX_CFLAGS([-Wconversion])])
 AX_TRY_CFLAGS([-Wparentheses], [AX_CFLAGS([-Wparentheses])])
+AX_TRY_CFLAGS([-Wswitch-enum], [AX_CFLAGS([-Wswitch-enum])])
+AX_TRY_CFLAGS([-Wswitch-default], [AX_CFLAGS([-Wswitch-default])])
 # Warns for performance problems: -Wcast-align=strict
 AX_TRY_CFLAGS([-Wcast-align], [AX_CFLAGS([-Wcast-align])])
 
@@ -227,6 +229,7 @@ AC_CONFIG_FILES([src/libs/Makefile])
 dnl Programming paradigms through examples
 AC_CONFIG_FILES([src/bin/paradigms/Makefile])
 AC_CONFIG_FILES([src/bin/paradigms/polymorphic/Makefile])
+AC_CONFIG_FILES([src/bin/paradigms/flex_array/Makefile])
 
 dnl API documentation
 AC_CONFIG_FILES([tools-setup/Doxyfile])
@@ -239,9 +242,9 @@ AC_OUTPUT
 AC_MSG_RESULT([
 'c_lang_project' configuration
 --------------------
-version                 : ${PACKAGE_VERSION}
-source code location    : ${srcdir}
-compiler                : ${CC}
-compiler flags          : ${CFLAGS}
-linker flags            : ${LDFLAGS} ${LIBS}
+Version               : ${PACKAGE_VERSION}
+Source code location  : ${srcdir}
+Compiler              : ${CC}
+Compiler flags        : ${CFLAGS}
+Linker flags          : ${LDFLAGS} ${LIBS}
 ])

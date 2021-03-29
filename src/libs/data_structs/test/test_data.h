@@ -30,11 +30,11 @@ print_data_fn(Generic_T data)
   printf("%d ", ((Data_T)data)->value);
 }
 
-status
+bool
 apply_fn(Generic_T data)
 {
   print_data_fn(data);
-  return SUCC;
+  return true;
 }
 
 bool
