@@ -8,8 +8,10 @@ LIB_HEADER = -I$(top_srcdir)/src/libs/data_structs/include
 noinst_LTLIBRARIES = libdatastructs.la
 
 # The files to add to the library and to the source distribution
-libdatastructs_la_SOURCES = list.c        \
+libdatastructs_la_SOURCES = list_rep.c    \
+														list.c        \
 														circ_list.c   \
+														list_stack.c  \
 														array_stack.c \
 														queue.c
 
@@ -40,7 +42,8 @@ if HAVE_CHECK
 
 TESTS = $(check_PROGRAMS)
 check_PROGRAMS = test/list.run        \
-								 test.circ_list.run   \
+								 test/circ_list.run   \
+								 test/list_stack.run  \
 								 test/array_stack.run \
 								 test/queue.run
 
@@ -51,6 +54,10 @@ test_list_run_LDADD = $(CHECK_LDADD)
 test_circ_list_run_SOURCES = test/circ_list.c
 test_circ_list_run_CFLAGS = $(CHECK_CFLAGS)
 test_circ_list_run_LDADD = $(CHECK_LDADD)
+
+test_list_stack_run_SOURCES = test/list_stack.c
+test_list_stack_run_CFLAGS = $(CHECK_CFLAGS)
+test_list_stack_run_LDADD = $(CHECK_LDADD)
 
 test_array_stack_run_SOURCES = test/array_stack.c
 test_array_stack_run_CFLAGS = $(CHECK_CFLAGS)

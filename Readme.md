@@ -1,6 +1,6 @@
-# C project template
+## C project template
 
-## Needed tools
+### Needed tools
 
 - git
 - gcc
@@ -12,7 +12,7 @@
 - astyle _(manual build)_
 - fortune
 
-## Build
+### Build
 
 ```text
 $ ./bootstrap.sh
@@ -20,15 +20,18 @@ $ make
 $ make check cppcheck
 $ make help
 ```
-## Dependencies
+### Dependencies
 
-### Unit Testing
+#### Unit Testing
+
 [greatest](https://github.com/silentbicycle/greatest)
 
-### Protothreads (co-routines)
+#### Protothreads (co-routines)
+
 [pt.h](http://dunkels.com/adam/pt/)
 
-## Tools
+### Tools
+
 1. [Doxygen](https://www.doxygen.nl/index.html) <br/>
 2. [Valgrind](https://valgrind.org/)            <br/>
 3. Cppcheck _(use linux package)_               <br/>

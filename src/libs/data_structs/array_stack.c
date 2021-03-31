@@ -14,10 +14,7 @@ struct stack {
   Generic_T* storage;
   Generic_T* top;      /* Points to next available for push. */
   unsigned size;
-} empty_stack = { .storage = NULL,
-                  .top = NULL,
-                  .size = 0
-                };
+};
 
 #define CURRENT_SIZE(stack) ((stack)->top - (stack)->storage)
 #define STORAGE(stack) (stack->storage)
@@ -108,7 +105,6 @@ Stack_destroy(Stack_T stack, free_data_FN free_data_fn)
   }
 
   FREE(stack->storage);
-  *stack = empty_stack;
 
   FREE(stack);
   stack = NULL;

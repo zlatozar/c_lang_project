@@ -26,4 +26,11 @@ typedef node_t* CircList_T;
 #define DATA(p_node) ((p_node)->datapointer)
 #define NEXT(p_node) ((p_node)->next)
 
+/* __________________________________________________________________________ */
+/*                                                          Helper functions  */
+
+extern void List__allocate_node(node_t** pp_node, Generic_T data);
+
+extern void List__free_node(node_t** PP_nod);
+
 #endif  /* DATA_STRUCTS_LIST_REP_H */

@@ -1,6 +1,6 @@
-#include "data_structs/stack.h"
-
+#include "data_structs/lstack.h"
 #include "data_structs/list.h"
+
 #include "lang/memory.h"
 #include "lang/assert.h"
 #include "logger/log.h"
@@ -17,10 +17,10 @@ struct stack {
 
 /* __________________________________________________________________________ */
 
-Stack_T
-Stack_new(void)
+LStack_T
+LStack_new(void)
 {
-  Stack_T stack;
+  LStack_T stack;
   NEW(stack);
 
   stack->count = 0;
@@ -30,14 +30,14 @@ Stack_new(void)
 }
 
 bool
-Stack_is_empty(Stack_T stack)
+LStack_is_empty(LStack_T stack)
 {
   Require(stack);
   return stack->count == 0;
 }
 
 void
-Stack_push(Stack_T stack, Generic_T data)
+LStack_push(LStack_T stack, Generic_T data)
 {
   Require(stack);
 
@@ -46,7 +46,7 @@ Stack_push(Stack_T stack, Generic_T data)
 }
 
 bool
-Stack_pop(Stack_T stack, Generic_T* p_data__)
+LStack_pop(LStack_T stack, Generic_T* p_data__)
 {
   Require(stack);
 
@@ -60,20 +60,20 @@ Stack_pop(Stack_T stack, Generic_T* p_data__)
 }
 
 bool
-Stack_peel(Stack_T stack, Generic_T* p_data__)
+LStack_peel(LStack_T stack, Generic_T* p_data__)
 {
-  if (!Stack_pop(stack, p_data__))
+  if (!LStack_pop(stack, p_data__))
   { return false; }
 
-  Stack_push(stack, *p_data__);
+  LStack_push(stack, *p_data__);
   return true;
 }
 
 void
-Stack_destroy(Stack_T stack, free_data_FN free_data_fn)
+LStack_destroy(LStack_T stack, free_data_FN free_data_fn)
 {
-  if (!Stack_is_empty(stack)) {
-    Log_warn("Stack is not empty.");
+  if (!LStack_is_empty(stack)) {
+    Log_warn("LStack is not empty.");
 
     List_destroy(&stack->storage, free_data_fn);
     stack->count = 0;
@@ -86,7 +86,7 @@ Stack_destroy(Stack_T stack, free_data_FN free_data_fn)
 }
 
 void
-Stack_free(Stack_T stack)
+LStack_free(LStack_T stack)
 {
-  Stack_destroy(stack, NULL);
+  LStack_destroy(stack, NULL);
 }

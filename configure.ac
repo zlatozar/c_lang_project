@@ -8,6 +8,7 @@ dnl This program is distributed in the hope that it will be useful, but
 dnl WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 dnl implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
+AC_COPYRIGHT([(c) 2021 Zlatozar Zhelyazkov])
 AC_PREREQ([2.69])
 
 # Library versioning
@@ -25,6 +26,7 @@ m4_define([interface_age], [0])
 # Initialize autoconf & automake
 AC_INIT([C_lang_project], [major_version.minor_version.micro_version],
         [https://github.com/zlatozar/c_lang_project/issues], [c_lang_project])
+
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 

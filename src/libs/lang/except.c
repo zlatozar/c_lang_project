@@ -51,7 +51,7 @@ Except_throw(const Except_T* e, const char* file, int line)
     fprintf(stderr, "\n\nUncaught exception!");
 
     if (e->message)
-    { fprintf(stderr, "  Message: '%s'", e->message); }
+    { fprintf(stderr, "  Message: '%s'.", e->message); }
     else
     { fprintf(stderr, "  at 0x%p", (void*)e); }
 

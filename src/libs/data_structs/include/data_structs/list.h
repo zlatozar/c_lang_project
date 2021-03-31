@@ -30,12 +30,6 @@ extern void List_insert(List_T* p_List, Generic_T p_data);
 extern void List_append(List_T* p_List, Generic_T p_data);
 
 /**
- * Delete given `p_node` from *p_List. It is checked runtime error
- * if `p_List` is empty.
- */
-extern bool List_delete_node(List_T* p_List, node_t* p_node);
-
-/**
  * Delete the first node in `*p_List` and return pointer to deleted DATA in
  * `pp_data__` if operation succeed otherwise `false`. It is checked runtime error
  * if given list is empty. Client should take care to free memory of the

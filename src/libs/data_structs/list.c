@@ -7,22 +7,25 @@
 /* __________________________________________________________________________ */
 /*                                                                     Local  */
 
+/* Delete given `p_node` from `p_List`. */
 static void
-allocate_node(node_t** pp_node, Generic_T data)
+__delete_node(List_T* p_List, node_t* p_node)
 {
-  node_t* p_node;
-  NEW(p_node);
+  if (*p_List == p_node) {
+    *p_List = NEXT(*p_List);  /* Continue with the next. */
 
-  *pp_node = p_node;
+  } else {
+    node_t* iter_node;
+    for (iter_node = *p_List; iter_node != NULL && NEXT(iter_node) != p_node; ) {
+      iter_node = NEXT(iter_node);
+    }
 
-  DATA(p_node) = data;
-  NEXT(p_node) = NULL;
-}
+    Ensure(iter_node);
 
-static void
-free_node(node_t** pp_node)
-{
-  FREE(*pp_node);
+    NEXT(iter_node) = NEXT(p_node);
+  }
+
+  List__free_node(&p_node);
 }
 
 /* __________________________________________________________________________ */
@@ -46,7 +49,7 @@ List_insert(List_T* p_List, Generic_T data)
   Require(p_List);
 
   node_t* p_node;
-  allocate_node(&p_node, data);
+  List__allocate_node(&p_node, data);
 
   NEXT(p_node) = *p_List;
   *p_List = p_node;
@@ -56,7 +59,7 @@ void
 List_append(List_T* p_List, Generic_T data)
 {
   node_t* p_node;
-  allocate_node(&p_node, data);
+  List__allocate_node(&p_node, data);
 
   if (List_is_empty(*p_List)) {
     *p_List = p_node;
@@ -71,42 +74,19 @@ List_append(List_T* p_List, Generic_T data)
   }
 }
 
-bool
-List_delete_node(List_T* p_List, node_t* p_node)
-{
-  if (*p_List == p_node) {
-    *p_List = NEXT(*p_List);  /* Continue with the next. */
-
-  } else {
-    node_t* iter_node;
-    for (iter_node = *p_List; iter_node != NULL && NEXT(iter_node) != p_node; ) {
-      iter_node = NEXT(iter_node);
-    }
-
-    if (iter_node == NULL) {
-      /* Delete from empty list. */
-      return false;
-
-    } else {
-      NEXT(iter_node) = NEXT(p_node);
-    }
-  }
-
-  free_node(&p_node);
-  return true;
-}
-
 /* Instead return pointer to pointer it is more convenient to pass out param. */
 bool
 List_delete_head(List_T* p_List, Generic_T* p_data__)
 {
   if (List_is_empty(*p_List)) {
-    Log_debug("Can't delete from empty list");
+    Log_debug("Can't delete from empty list.");
     return false;
   }
 
   *p_data__ = DATA(*p_List);
-  return List_delete_node(p_List, *p_List /* fist node in practice */);
+  __delete_node(p_List, *p_List /* Fist node in practice. */);
+
+  return true;
 }
 
 /* Iterate tail recursively. */
@@ -189,7 +169,7 @@ List_destroy(List_T* p_List, free_data_FN free_data_fn)
     free_data_fn(DATA(*p_List));
   }
 
-  free_node(p_List);
+  List__free_node(p_List);
 }
 
 void

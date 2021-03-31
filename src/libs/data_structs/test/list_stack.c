@@ -1,23 +1,23 @@
-#include "data_structs/stack.h"
+#include "data_structs/lstack.h"
 
 #include <greatest.h>
 #include "test_data.h"
 
 TEST free_empty(void)
 {
-  Stack_T stack = Stack_new();
-  ASSERT(Stack_is_empty(stack));
+  LStack_T stack = LStack_new();
+  ASSERT(LStack_is_empty(stack));
 
-  Stack_push(stack, get_next_elm(1));
-  ASSERT_FALSE(Stack_is_empty(stack));
+  LStack_push(stack, get_next_elm(1));
+  ASSERT_FALSE(LStack_is_empty(stack));
 
   Data_T elm;
-  Stack_pop(stack, (Generic_T*) &elm);
+  LStack_pop(stack, (Generic_T*) &elm);
   FREE(elm);
 
-  ASSERT(Stack_is_empty(stack));
+  ASSERT(LStack_is_empty(stack));
 
-  Stack_destroy(stack, free_elm);
+  LStack_destroy(stack, free_elm);
   PASS();
 }
 
