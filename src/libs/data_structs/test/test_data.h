@@ -38,6 +38,13 @@ apply_fn(Generic_T data)
 }
 
 bool
+increment_fn(Generic_T data)
+{
+  ((Data_T)data)->value++;
+  return true;
+}
+
+bool
 comp_data_fn(Generic_T a_data, Generic_T b_data)
 {
   return ((Data_T)a_data)->value == ((Data_T)b_data)->value;

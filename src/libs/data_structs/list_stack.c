@@ -11,9 +11,7 @@
 struct stack {
   int count;
   List_T storage;
-} empty_stack = { .count = 0,
-                  .storage = NULL
-                };
+};
 
 /* __________________________________________________________________________ */
 
@@ -78,8 +76,6 @@ LStack_destroy(LStack_T stack, free_data_FN free_data_fn)
     List_destroy(&stack->storage, free_data_fn);
     stack->count = 0;
   }
-
-  *stack = empty_stack;
 
   FREE(stack);
   stack = NULL;

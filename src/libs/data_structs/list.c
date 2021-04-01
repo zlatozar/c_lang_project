@@ -7,16 +7,16 @@
 /* __________________________________________________________________________ */
 /*                                                                     Local  */
 
-/* Delete given `p_node` from `p_List`. */
+/* Delete given `p_node` from `p_list`. */
 static void
-__delete_node(List_T* p_List, node_t* p_node)
+__delete_node(List_T* p_list, node_t* p_node)
 {
-  if (*p_List == p_node) {
-    *p_List = NEXT(*p_List);  /* Continue with the next. */
+  if (*p_list == p_node) {
+    *p_list = NEXT(*p_list);  /* Continue with the next. */
 
   } else {
     node_t* iter_node;
-    for (iter_node = *p_List; iter_node != NULL && NEXT(iter_node) != p_node; ) {
+    for (iter_node = *p_list; iter_node != NULL && NEXT(iter_node) != p_node; ) {
       iter_node = NEXT(iter_node);
     }
 
@@ -44,29 +44,29 @@ List_is_empty(List_T list)
 }
 
 void
-List_insert(List_T* p_List, Generic_T data)
+List_insert(List_T* p_list, Generic_T data)
 {
-  Require(p_List);
+  Require(p_list);
 
   node_t* p_node;
   List__allocate_node(&p_node, data);
 
-  NEXT(p_node) = *p_List;
-  *p_List = p_node;
+  NEXT(p_node) = *p_list;
+  *p_list = p_node;
 }
 
 void
-List_append(List_T* p_List, Generic_T data)
+List_append(List_T* p_list, Generic_T data)
 {
   node_t* p_node;
   List__allocate_node(&p_node, data);
 
-  if (List_is_empty(*p_List)) {
-    *p_List = p_node;
+  if (List_is_empty(*p_list)) {
+    *p_list = p_node;
 
   } else {
     node_t* iter_node;
-    for (iter_node = *p_List; NEXT(iter_node) != NULL; ) {
+    for (iter_node = *p_list; NEXT(iter_node) != NULL; ) {
       iter_node = NEXT(iter_node);
     }
 
@@ -76,15 +76,15 @@ List_append(List_T* p_List, Generic_T data)
 
 /* Instead return pointer to pointer it is more convenient to pass out param. */
 bool
-List_delete_head(List_T* p_List, Generic_T* p_data__)
+List_delete_head(List_T* p_list, Generic_T* p_data__)
 {
-  if (List_is_empty(*p_List)) {
+  if (List_is_empty(*p_list)) {
     Log_debug("Can't delete from empty list.");
     return false;
   }
 
-  *p_data__ = DATA(*p_List);
-  __delete_node(p_List, *p_List /* Fist node in practice. */);
+  *p_data__ = DATA(*p_list);
+  __delete_node(p_list, *p_list /* Fist node in practice. */);
 
   return true;
 }
@@ -99,6 +99,7 @@ List_traverse(List_T list, bool (*apply_fn)(Generic_T))
   { return true; }
 
   if (!(*apply_fn)(DATA(list))) {
+    Log_error("Can't apply function.");
     return false;
 
   } else {
@@ -115,13 +116,11 @@ List_iterator(List_T list, node_t* last_return)
 size_t
 List_length(List_T list)
 {
-  size_t accum = 0;
-  node_t* curr_node = NULL;
+  size_t n;
+  for (n = 0; list != NULL; list = NEXT(list))
+  { n++; }
 
-  while ((curr_node = List_iterator(list, curr_node)) != NULL)
-  { ++accum; }
-
-  return accum;
+  return n;
 }
 
 /* Searching same as `key` and if found, `pp_keynode__` is instance of it in the list. */
@@ -152,28 +151,26 @@ List_print(const List_T list, print_data_FN print_data_fn)
   }
 }
 
-/*
- * Recursively delete all connections then free each node's data if free
- * function is passed.
- */
 void
-List_destroy(List_T* p_List, free_data_FN free_data_fn)
+List_destroy(List_T* p_list, free_data_FN free_data_fn)
 {
-  if (List_is_empty(*p_List)) {
-    return;
+  Require(p_list);
+
+  /* First iteration will initialize it. */
+  List_T next_tmp;
+  for ( ; *p_list != NULL; *p_list = next_tmp) {
+    next_tmp = NEXT(*p_list);
+
+    if (free_data_fn != NULL) {
+      free_data_fn(DATA(*p_list));
+    }
+
+    FREE(*p_list);
   }
-
-  List_destroy(&NEXT(*p_List), free_data_fn);
-
-  if (free_data_fn != NULL) {
-    free_data_fn(DATA(*p_List));
-  }
-
-  List__free_node(p_List);
 }
 
 void
-List_free(List_T* p_List)
+List_free(List_T* p_list)
 {
-  List_destroy(p_List, NULL);
+  List_destroy(p_list, NULL);
 }
