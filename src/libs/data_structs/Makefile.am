@@ -11,6 +11,7 @@ noinst_LTLIBRARIES = libdatastructs.la
 libdatastructs_la_SOURCES = list_rep.c    \
 														list.c        \
 														circ_list.c   \
+														double_list.c \
 														list_stack.c  \
 														array_stack.c \
 														queue.c
@@ -43,6 +44,7 @@ if HAVE_CHECK
 TESTS = $(check_PROGRAMS)
 check_PROGRAMS = test/list.run        \
 								 test/circ_list.run   \
+								 test/double_list.run \
 								 test/list_stack.run  \
 								 test/array_stack.run \
 								 test/queue.run
@@ -54,6 +56,10 @@ test_list_run_LDADD = $(CHECK_LDADD)
 test_circ_list_run_SOURCES = test/circ_list.c
 test_circ_list_run_CFLAGS = $(CHECK_CFLAGS)
 test_circ_list_run_LDADD = $(CHECK_LDADD)
+
+test_double_list_run_SOURCES = test/double_list.c
+test_double_list_run_CFLAGS = $(CHECK_CFLAGS)
+test_double_list_run_LDADD = $(CHECK_LDADD)
 
 test_list_stack_run_SOURCES = test/list_stack.c
 test_list_stack_run_CFLAGS = $(CHECK_CFLAGS)

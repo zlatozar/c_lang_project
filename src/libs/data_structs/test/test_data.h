@@ -24,10 +24,18 @@ get_next_elm(int elm)
   return (Generic_T)Data_new(elm);
 }
 
+/* Any kind of stored data. */
+int
+get_node_data_value(void* p_node)
+{
+  Generic_T* node = (Generic_T*)p_node;
+  return ((Data_T)*node)->value;
+}
+
 void
 print_data_fn(Generic_T data)
 {
-  printf("%d ", ((Data_T)data)->value);
+  printf("-> %d ", ((Data_T)data)->value);
 }
 
 bool

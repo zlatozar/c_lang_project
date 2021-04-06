@@ -18,7 +18,8 @@ typedef struct node node_t;
 /*
  * For readability both `List_T` and `node_t*` could be used. Use `List_T` when
  * you mean list as a whole and `note_t*` respectively when you deal with a
- * pointer to a node.
+ * pointer to a node. `node_t` also represents some part of the list - from it to
+ * the end.
  */
 typedef node_t* List_T;
 typedef node_t* CircList_T;

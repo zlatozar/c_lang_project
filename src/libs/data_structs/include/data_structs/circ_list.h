@@ -20,13 +20,14 @@ extern CircList_T CircList_new(void);
 extern bool CircList_is_empty(CircList_T circlist);
 
 /**
- * Insert a new node containing data as first node.
+ * Insert a new node containing data as first node after the given `p_circlist`
+ * pointer. Expand in clockwise direction.
  */
 extern void CircList_insert(CircList_T* p_circlist, Generic_T data);
 
 /**
  * Append a new node containing data, as the last item in `p_circlist`
- * Update `p_circlist` to point to the new last node.
+ * Update `p_circlist` to point to the new last node. Expand counter clockwise.
  */
 extern void CircList_append(CircList_T* p_circlist, Generic_T data);
 
@@ -38,7 +39,7 @@ extern bool CircList_delete(CircList_T* p_circlist, Generic_T* p_data__);
 /**
  * Call `apply_fn` with the DATA field of each node in `CircList_T`.
  * If `apply_fn` ever returns `false`, this function also returns `false`.
- * NOTE:
+ * NOTE: Traverse circular list in clockwise direction.
  *   If you always `CircList_append` - traverse will do FIFO,
  *   if `CircList_insert` - LIFO.
  */

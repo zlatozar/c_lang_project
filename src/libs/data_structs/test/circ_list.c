@@ -3,15 +3,6 @@
 #include <greatest.h>
 #include "test_data.h"
 
-static int
-node_data_fn(node_t* p_node)
-{
-  Generic_T node = (Generic_T)p_node->datapointer;
-  return ((Data_T)node)->value;
-}
-
-/* __________________________________________________________________________ */
-
 TEST insert(void)
 {
   CircList_T circlist = CircList_new();
@@ -102,7 +93,7 @@ TEST insert_nth(void)
 
   /* Count backward, because of `CircList_insert`. */
   node_t* second = CircList_nth(circlist, 2);
-  ASSERT_EQ(3, node_data_fn(second));
+  ASSERT_EQ(3, get_node_data_value(second));
 
   CircList_destroy(&circlist, free_elm);
   PASS();
@@ -122,7 +113,7 @@ TEST append_nth(void)
 
   /* Count forward, because of `CircList_append`. */
   node_t* second = CircList_nth(circlist, 2);
-  ASSERT_EQ(2, node_data_fn(second));
+  ASSERT_EQ(2, get_node_data_value(second));
 
   CircList_destroy(&circlist, free_elm);
   PASS();

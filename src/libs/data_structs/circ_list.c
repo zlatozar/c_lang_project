@@ -1,6 +1,5 @@
 #include "data_structs/circ_list.h"
-/* To reuse functions. Transitional dependencies form `list_rep.h`. */
-#include "data_structs/list.h"
+#include "data_structs/list_rep.h"
 
 #include "lang/assert.h"
 #include "lang/memory.h"
@@ -42,13 +41,14 @@ __delete_node(CircList_T* p_circlist, node_t* p_node)
 CircList_T
 CircList_new(void)
 {
-  return List_new();
+  CircList_T circlist = NULL;
+  return circlist;
 }
 
 bool
 CircList_is_empty(CircList_T circlist)
 {
-  return List_is_empty(circlist);
+  return circlist == NULL;
 }
 
 /* Every time insert after current first element. First element remains fist. */

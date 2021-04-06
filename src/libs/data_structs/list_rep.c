@@ -2,6 +2,7 @@
 
 #include "lang/memory.h"
 
+/* `pp_node` points position where node should be situated. */
 void
 List__allocate_node(node_t** pp_node, Generic_T data)
 {

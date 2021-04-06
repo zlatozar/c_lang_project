@@ -1227,3 +1227,11 @@
       manipulations should involve a single, sufficiently wide unsigned integer
       type.
 %
+[LANG]      error: dereferencing pointer to incomplete type
+       An incomplete structure definition is one where you do not provide the
+       list of members for the implementation. Such a definition allows you to
+       manipulate pointers to such structures, but not access any members since
+       they are not explicitly defined and the compiler needs to know their type
+       and offset from the beginning of the structure to generate the
+       corresponding code. Most probably your data structure is hidden
+       in the .c file.

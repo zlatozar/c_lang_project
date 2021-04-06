@@ -17,25 +17,25 @@ extern List_T List_new(void);
 /**
  * Return `true` if given list is an empty list, `false` otherwise.
  */
-extern bool List_is_empty(List_T List);
+extern bool List_is_empty(List_T list);
 
 /**
- * Insert a new node containing data as the first item in *p_List.
+ * Insert a new node containing data as the first item in *p_list.
  */
-extern void List_insert(List_T* p_List, Generic_T p_data);
+extern void List_insert(List_T* p_list, Generic_T data);
 
 /**
- * Append a new node containing data as the last item in *p_List.
+ * Append a new node containing data as the last item in *p_list.
  */
-extern void List_append(List_T* p_List, Generic_T p_data);
+extern void List_append(List_T* p_list, Generic_T data);
 
 /**
- * Delete the first node in `*p_List` and return pointer to deleted DATA in
- * `pp_data__` if operation succeed otherwise `false`. It is checked runtime error
+ * Delete the first node in `*p_list` and return pointer to deleted DATA in
+ * `p_data__` if operation succeed otherwise `false`. It is checked runtime error
  * if given list is empty. Client should take care to free memory of the
  * returned data.
  */
-extern bool List_delete_head(List_T* p_List, Generic_T* pp_data__);
+extern bool List_delete_head(List_T* p_list, Generic_T* p_data__);
 
 /**
  * Call `apply_fn` with the DATA field of each node in `List_T`.
@@ -77,11 +77,11 @@ extern void List_print(const List_T list, print_data_FN print_data_fn);
  * Use it if data stored in list needs special way of freeing
  * otherwise use `List_free`.
  */
-extern void List_destroy(List_T* p_List, free_data_FN free_data_fn);
+extern void List_destroy(List_T* p_list, free_data_FN free_data_fn);
 
 /**
  * @brief    Free occupied memory.
  */
-extern void List_free(List_T* p_List);
+extern void List_free(List_T* p_list);
 
 #endif  /* DATA_STRUCTS_LIST_H */
