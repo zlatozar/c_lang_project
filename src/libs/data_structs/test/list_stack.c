@@ -1,4 +1,4 @@
-#include "data_structs/lstack.h"
+#include "data_structs/list_stack.h"
 
 #include <greatest.h>
 #include "test_data.h"

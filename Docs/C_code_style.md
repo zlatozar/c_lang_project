@@ -416,7 +416,8 @@ List_insert(List_T* p_List, Generic_T data)
   NEXT(p_node) = *p_List;
   *p_List = p_node;
 }
-/* Mater of style */
+
+/* Prefer side-effects. */
 List_T list = List_new();
 List_insert(&list, data1);
 List_insert(&list, data2);
@@ -434,6 +435,8 @@ List_insert(List_T list, Generic_T data)
 
   return list;
 }
+
+/* This is the style of the C starndard library. Allow nesting. */
 List_T list = List_new();
 list = List_insert(list, data1);
 list = List_insert(List_insert(list, data2), data3);
@@ -661,6 +664,30 @@ typedef enum {
   MY_ENUM_TESTA,
   my_enum_testb,
 } my_tests_e;
+```
+- For every structure define macros for access and `typedefs` that hind the context of usage.
+Example:
+```c
+struct node {
+  Generic_T datapointer;
+  struct node* next;
+};
+
+/* Particular node from the list. */
+typedef struct node node_t;
+/* List as a whole (points to the first node). */
+typedef node_t* List_T;
+
+/* Kind of getters/setters. */
+#define DATA(p_node) ((p_node)->datapointer)
+#define NEXT(p_node) ((p_node)->next)
+
+/* Define in any case. */
+extern List_T List_new(void);
+extern void List_free(List_T* p_list);
+
+/* If needed only. */
+#define EMPTY_LIST_NODE { .datapointer = NULL, .next = NULL }
 ```
 
 - Enums name should have suffix `_e` and `typedef` declarations ends `_et`.

@@ -199,37 +199,40 @@ DoubleList_traverse(DoubleList_T list, bool (*apply_fn)(Generic_T))
   }
 }
 
-/* `p_start` could be used as beginning of double linked list. */
+/* `pp_start` could be used as beginning of double linked list. */
 void
-DoubleList_cut(DoubleList_T* p_list, doublenode_t** p_start, doublenode_t** p_end)
+DoubleList_cut(DoubleList_T* p_list, doublenode_t** pp_start, doublenode_t** pp_end)
 {
   Require(p_list);
 
-  DoubleList_T start, end;
+  doublenode_t* p_start;
+  doublenode_t* p_end;
 
   /* Keep the "original" pointers. */
-  start = *p_start;
-  end = *p_end;
+  p_start = *pp_start;
+  p_end = *pp_end;
 
-  if (PREV(start))
-  { NEXT(PREV(start)) = NEXT(end); }
+  if (PREV(p_start))
+  { NEXT(PREV(p_start)) = NEXT(p_end); }
 
-  if (NEXT(end))
-  { PREV(NEXT(end)) = PREV(start); }
+  if (NEXT(p_end))
+  { PREV(NEXT(p_end)) = PREV(p_start); }
 
-  if (*p_list == start)
-  { *p_list = NEXT(end); }
+  if (*p_list == p_start)
+  { *p_list = NEXT(p_end); }
 
-  PREV(start) = NEXT(end) = NULL;
+  PREV(p_start) = NEXT(p_end) = NULL;
 }
 
+/* If `p_target` is the last node in a list then we splay two lists. */
 void
 DoubleList_paste(DoubleList_T* p_target, DoubleList_T* p_source)
 {
   DoubleList_T target, source, lastnode;
 
-  if (DoubleList_is_empty(*p_source))
-  { return; }
+  if (DoubleList_is_empty(*p_source)) {
+    return;
+  }
 
   if (DoubleList_is_empty(*p_target)) {
     *p_target = *p_source;

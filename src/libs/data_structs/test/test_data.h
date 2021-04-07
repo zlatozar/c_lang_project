@@ -7,6 +7,8 @@ typedef struct {
 
 typedef data_t* Data_T;
 
+#define VALUE(data)  (((Data_T)data)->value)
+
 Data_T
 Data_new(int initial_value)
 {
@@ -29,13 +31,13 @@ int
 get_node_data_value(void* p_node)
 {
   Generic_T* node = (Generic_T*)p_node;
-  return ((Data_T)*node)->value;
+  return VALUE(*node);
 }
 
 void
 print_data_fn(Generic_T data)
 {
-  printf("-> %d ", ((Data_T)data)->value);
+  printf("-> %d ", VALUE(data));
 }
 
 bool
@@ -55,7 +57,7 @@ increment_fn(Generic_T data)
 bool
 comp_data_fn(Generic_T a_data, Generic_T b_data)
 {
-  return ((Data_T)a_data)->value == ((Data_T)b_data)->value;
+  return VALUE(a_data) == VALUE(b_data);
 }
 
 void
@@ -67,6 +69,6 @@ free_elm(void* elm)
 void
 extra_free_elm(void* elm)
 {
-  Log_debug(" Extra work before FREE(%d);", ((Data_T)elm)->value);
+  Log_debug(" Extra work before FREE(%d);", VALUE(elm));
   FREE(elm);
 }

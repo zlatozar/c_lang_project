@@ -1,4 +1,4 @@
-#include "data_structs/lstack.h"
+#include "data_structs/list_stack.h"
 #include "data_structs/list.h"
 
 #include "lang/memory.h"
