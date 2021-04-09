@@ -342,7 +342,7 @@ if (length > 0)     /* OK, length is treated as counter variable containing mult
 if (length == 0)    /* OK, length is treated as counter variable containing multi values, not only 0 or 1 */
 
 if (is_ok)          /* OK, variable is treated as boolean */
-if (!is_ok)         /* OK, -||- */
+if (!is_ok)         /* OK, --||-- */
 if (is_ok == 1)     /* Wrong, never compare boolean variable against 1! */
 if (is_ok == 0)     /* Wrong, use ! for negative check */
 ```
@@ -665,6 +665,27 @@ typedef enum {
   my_enum_testb,
 } my_tests_e;
 ```
+- All words should mean something in a given domain - DDD rules. Example:
+```c
+#define RANK_NUM 13
+#define DECK_NUM 52
+
+typedef struct {
+  int s_val;
+  int r_val;
+} card;
+
+typedef struct name6 { char str[6]; } name6;
+typedef struct rank { int v[RANK_NUM + 1]; } rank;
+typedef struct deck { card v[DECK_NUM]; } deck;
+...
+void
+print_card (deck d)
+{
+  name6 name_str;
+  ...
+}
+```
 - For every structure define macros for access and `typedefs` that hind the context of usage.
 Example:
 ```c
@@ -690,8 +711,8 @@ extern void List_free(List_T* p_list);
 #define EMPTY_LIST_NODE { .datapointer = NULL, .next = NULL }
 ```
 
-- Enums name should have suffix `_e` and `typedef` declarations ends `_et`.
-- Unions name should have suffix `_u` and `typedef` declarations ends `_ut`.
+- Enums `typedef` declarations ends with `_et`.
+- Unions name `typedef` declarations ends `_ut`.
 
 - When initializing structure on declaration, use `C99` initialization style
 ```c

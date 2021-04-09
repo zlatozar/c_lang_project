@@ -8,13 +8,14 @@ LIB_HEADER = -I$(top_srcdir)/src/libs/data_structs/include
 noinst_LTLIBRARIES = libdatastructs.la
 
 # The files to add to the library and to the source distribution
-libdatastructs_la_SOURCES = list_rep.c    \
-														list.c        \
-														circ_list.c   \
-														double_list.c \
-														list_stack.c  \
-														array_stack.c \
-														queue.c
+libdatastructs_la_SOURCES = list_rep.c       \
+														list.c           \
+														circ_list.c      \
+														double_list.c    \
+														list_stack.c     \
+														array_stack.c    \
+														queue.c          \
+														sparse_matrix.c
 
 libdatastructs_la_CFLAGS = $(LIB_HEADER)                           \
 													 -I$(top_srcdir)/src/libs/lang/include   \
@@ -42,12 +43,13 @@ endif
 if HAVE_CHECK
 
 TESTS = $(check_PROGRAMS)
-check_PROGRAMS = test/list.run        \
-								 test/circ_list.run   \
-								 test/double_list.run \
-								 test/list_stack.run  \
-								 test/array_stack.run \
-								 test/queue.run
+check_PROGRAMS = test/list.run           \
+								 test/circ_list.run      \
+								 test/double_list.run    \
+								 test/list_stack.run     \
+								 test/array_stack.run    \
+								 test/queue.run          \
+								 test/sparse_matrix.run
 
 test_list_run_SOURCES = test/list.c
 test_list_run_CFLAGS = $(CHECK_CFLAGS)
@@ -72,6 +74,10 @@ test_array_stack_run_LDADD = $(CHECK_LDADD)
 test_queue_run_SOURCES = test/queue.c
 test_queue_run_CFLAGS = $(CHECK_CFLAGS)
 test_queue_run_LDADD = $(CHECK_LDADD)
+
+test_sparse_matrix_run_SOURCES = test/sparse_matrix.c
+test_sparse_matrix_run_CFLAGS = $(CHECK_CFLAGS)
+test_sparse_matrix_run_LDADD = $(CHECK_LDADD)
 
 # 'test/<test name>.run.debug' target
 include $(top_srcdir)/m4/gdb.mk
