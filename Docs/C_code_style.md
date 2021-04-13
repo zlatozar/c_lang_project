@@ -665,7 +665,8 @@ typedef enum {
   my_enum_testb,
 } my_tests_e;
 ```
-- All words should mean something in a given domain - DDD rules. Example:
+- If appropriate all words should mean something in a given domain - DDD rules.
+Example:
 ```c
 #define RANK_NUM 13
 #define DECK_NUM 52

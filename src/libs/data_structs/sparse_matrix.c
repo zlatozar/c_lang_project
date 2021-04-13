@@ -8,8 +8,8 @@
 struct matrix_node {
   int row, column;
   Generic_T datapointer;
-  struct matrix_node* nextrow, *prevrow;
-  struct matrix_node* nextcol, *prevcol;
+  Matrix_T nextrow, prevrow;
+  Matrix_T nextcol, prevcol;
 };
 
 #define ROW(p_matrix)     ((p_matrix)->row)
@@ -94,7 +94,7 @@ __find_col_head(oper_type_et header_oper, Matrix_T* p_matrix, int col, mnode_t**
     *pp_headernode__ = NULL;
     return false;
 
-  } else /* Create header. */ {
+  } else { /* Create header. */
     Matrix_T newhead;
     __allocate_matrix_node(&newhead, -1, col, NULL);
 
@@ -135,13 +135,13 @@ __find_row_head(oper_type_et header_oper, Matrix_T* p_matrix, int row, mnode_t**
     *pp_headernode__ = NULL;
     return ERROR;
 
-  } else /* Create header. */ {
+  } else { /* Create header. */
     Matrix_T newhead;
     __allocate_matrix_node(&newhead, row, -1, NULL);
 
     NEXTROW(newhead) = NEXTROW(header);
     if (NEXTROW(header) != NULL)
-      PREVROW(NEXTROW(header)) = newhead;
+    { PREVROW(NEXTROW(header)) = newhead; }
 
     PREVROW(newhead) = header;
     NEXTROW(header) = newhead;
@@ -219,7 +219,7 @@ Matrix_put(Matrix_T* p_matrix, int row, int col, Generic_T value)
 }
 
 bool
-matrix_get(Matrix_T* p_matrix, int row, int col, Generic_T* p_value__)
+Matrix_get(Matrix_T* p_matrix, int row, int col, Generic_T* p_value__)
 {
   Require(row >= 0);
   Require(col >= 0);
@@ -227,7 +227,7 @@ matrix_get(Matrix_T* p_matrix, int row, int col, Generic_T* p_value__)
   Matrix_T colheader;
   Matrix_T rowprev;
 
-  if (__find_col_head(FIND_HEADER, p_matrix, col, &colheader)) {
+  if (!__find_col_head(FIND_HEADER, p_matrix, col, &colheader)) {
     return false;
   }
 
