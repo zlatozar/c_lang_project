@@ -1237,7 +1237,9 @@
        in the .c file.
 %
 [LANG] When you know that a pointer A is the only pointer to some region of
-       memory, that is, it doesn't have aliases (that is, any other pointer B will
-       necessarily be unequal to A, B != A), you can tell this fact to the optimizer by
-       qualifying the type of A with the `restrict` keyword.
+       memory, that is, it doesn't have aliases (that is, any other pointer B
+       will necessarily be unequal to A, B != A), you can tell this fact to the
+       optimizer by qualifying the type of A with the `restrict` keyword.
 %
+[TIP] Log massages should create a log that is highly informative but also like
+      a novel.
