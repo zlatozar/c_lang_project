@@ -38,7 +38,12 @@ typedef byte* Generic_T;
  * When working with `void*` data compare function should be passed in
  * some operations.
  */
-typedef bool compare_data_FN(Generic_T, Generic_T);
+typedef bool equal_data_FN(Generic_T, Generic_T);
+
+/**
+ * 1 if is bigger, 0 for equality and -1 if first argument is less.
+ */
+typedef int cmp_data_FN(Generic_T, Generic_T);
 
 /**
  * Proper deallocation depends on the precise interface provided by functions.

@@ -21,21 +21,21 @@ Data_new(int initial_value)
 }
 
 Generic_T
-get_next_elm(int elm)
+Test_elm(int elm)
 {
   return (Generic_T)Data_new(elm);
 }
 
 /* Any kind of stored data. */
 int
-get_node_data_value(void* p_node)
+Test_value(void* p_node)
 {
   Generic_T* node = (Generic_T*)p_node;
   return VALUE(*node);
 }
 
 void
-print_data_fn(Generic_T data)
+print_fn(Generic_T data)
 {
   printf("-> %d ", VALUE(data));
 }
@@ -43,31 +43,41 @@ print_data_fn(Generic_T data)
 bool
 apply_fn(Generic_T data)
 {
-  print_data_fn(data);
+  print_fn(data);
   return true;
 }
 
 bool
-increment_fn(Generic_T data)
+inc_value_fn(Generic_T data)
 {
   ((Data_T)data)->value++;
   return true;
 }
 
 bool
-comp_data_fn(Generic_T a_data, Generic_T b_data)
+equal_fn(Generic_T a_data, Generic_T b_data)
 {
   return VALUE(a_data) == VALUE(b_data);
 }
 
+int
+cmp_fn(Generic_T a_data, Generic_T b_data)
+{
+  int a = VALUE(a_data);
+  int b = VALUE(b_data);
+
+  /* Effective way to compare two integers. */
+  return (a > b) - (a < b);
+}
+
 void
-free_elm(void* elm)
+free_elm_fn(void* elm)
 {
   FREE(elm);
 }
 
 void
-extra_free_elm(void* elm)
+extra_free_elm_fn(void* elm)
 {
   Log_debug(" Extra work before FREE(%d);", VALUE(elm));
   FREE(elm);

@@ -21,9 +21,9 @@ TEST length(void)
 {
   Queue_T queue = Queue_new();
 
-  Queue_add(queue, get_next_elm(1));
-  Queue_add(queue, get_next_elm(2));
-  Queue_add(queue, get_next_elm(3));
+  Queue_add(queue, Test_elm(1));
+  Queue_add(queue, Test_elm(2));
+  Queue_add(queue, Test_elm(3));
 
   ASSERT_FALSE(Queue_is_empty(queue));
   ASSERT(3 == Queue_length(queue));

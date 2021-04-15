@@ -10,9 +10,14 @@
 typedef struct stack* Stack_T;
 
 /**
- * @brief    Allocating space for the stack and initialize it to empty.
+ * @brief    Allocating the stack with given size and initialize it to empty.
  */
-extern Stack_T Stack_new(void);
+extern Stack_T Stack_new(unsigned initial_size);
+
+/**
+ * @brief    Allocating empty stack with default initial size.
+ */
+extern Stack_T Stack_new_def(void);
 
 /**
  * @brief    Return `true` if empty otherwise `false`.

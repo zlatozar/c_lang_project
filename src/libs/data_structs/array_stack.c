@@ -7,8 +7,9 @@
 /* __________________________________________________________________________ */
 /*                                                                     Local  */
 
-#define INITIAL_SIZE 50
 #define RESIZE_STEP 100
+
+const unsigned int k_initial_size = 50;
 
 struct stack {
   Generic_T* storage;
@@ -22,18 +23,26 @@ struct stack {
 /* __________________________________________________________________________ */
 
 Stack_T
-Stack_new(void)
+Stack_new(unsigned initial_size)
 {
+  Require(initial_size > 0);
+
   Stack_T stack;
   NEW(stack);
 
-  stack->storage = ALLOC(INITIAL_SIZE * sizeof(Generic_T));
+  stack->storage = ALLOC(initial_size * sizeof(Generic_T));
 
   /* 'sp' points to storage[0] so stack is empty. */
   stack->top = stack->storage;
-  stack->size = INITIAL_SIZE;
+  stack->size = initial_size;
 
   return stack;
+}
+
+Stack_T
+Stack_new_def(void)
+{
+  return Stack_new(k_initial_size);
 }
 
 bool

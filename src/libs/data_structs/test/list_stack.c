@@ -8,7 +8,7 @@ TEST free_empty(void)
   LStack_T stack = LStack_new();
   ASSERT(LStack_is_empty(stack));
 
-  LStack_push(stack, get_next_elm(1));
+  LStack_push(stack, Test_elm(1));
   ASSERT_FALSE(LStack_is_empty(stack));
 
   Data_T elm;
@@ -17,7 +17,7 @@ TEST free_empty(void)
 
   ASSERT(LStack_is_empty(stack));
 
-  LStack_destroy(stack, free_elm);
+  LStack_destroy(stack, free_elm_fn);
   PASS();
 }
 

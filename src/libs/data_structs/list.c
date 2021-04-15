@@ -125,16 +125,16 @@ List_length(List_T list)
 
 /* Searching same as `key` and if found, `pp_keynode__` is instance of it in the list. */
 bool
-List_find_key(List_T list, compare_data_FN comp_data_fn, Generic_T key, node_t** pp_keynode__)
+List_find_key(List_T list, equal_data_FN equal_fn, Generic_T key, node_t** pp_keynode__)
 {
   Require(list);
-  Require(comp_data_fn);
+  Require(equal_fn);
   Require(key);
 
   node_t* p_curr = NULL;
   while ((p_curr = List_iterator(list, p_curr)) != NULL) {
 
-    if (comp_data_fn(key, DATA(p_curr))) {
+    if (equal_fn(key, DATA(p_curr))) {
       *pp_keynode__ = p_curr;
       return true;
     }

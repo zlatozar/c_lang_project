@@ -5,10 +5,10 @@
 
 TEST destroy_empty(void)
 {
-  Stack_T stack = Stack_new();
+  Stack_T stack = Stack_new(1);
   ASSERT(Stack_is_empty(stack));
 
-  Stack_push(stack, get_next_elm(1));
+  Stack_push(stack, Test_elm(1));
   ASSERT_FALSE(Stack_is_empty(stack));
 
   Data_T elm;
@@ -24,26 +24,26 @@ TEST destroy_empty(void)
 
 TEST destroy_non_empty(void)
 {
-  Stack_T stack = Stack_new();
+  Stack_T stack = Stack_new_def();
   ASSERT(Stack_is_empty(stack));
 
-  Stack_push(stack, get_next_elm(3));
-  Stack_push(stack, get_next_elm(2));
-  Stack_push(stack, get_next_elm(1));
+  Stack_push(stack, Test_elm(3));
+  Stack_push(stack, Test_elm(2));
+  Stack_push(stack, Test_elm(1));
   ASSERT_FALSE(Stack_is_empty(stack));
 
-  Stack_destroy(stack, free_elm);
+  Stack_destroy(stack, free_elm_fn);
   PASS();
 }
 
 TEST free_non_empty(void)
 {
-  Stack_T stack = Stack_new();
+  Stack_T stack = Stack_new(3);
   ASSERT(Stack_is_empty(stack));
 
-  Stack_push(stack, get_next_elm(3));
-  Stack_push(stack, get_next_elm(2));
-  Stack_push(stack, get_next_elm(1));
+  Stack_push(stack, Test_elm(3));
+  Stack_push(stack, Test_elm(2));
+  Stack_push(stack, Test_elm(1));
   ASSERT_FALSE(Stack_is_empty(stack));
 
   Stack_free(stack);

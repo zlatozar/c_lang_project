@@ -8,13 +8,13 @@ TEST insert(void)
   List_T list = List_new();
   ASSERT(List_is_empty(list));
 
-  List_insert(&list, get_next_elm(1));
-  List_insert(&list, get_next_elm(2));
-  List_insert(&list, get_next_elm(3));
+  List_insert(&list, Test_elm(1));
+  List_insert(&list, Test_elm(2));
+  List_insert(&list, Test_elm(3));
 
   ASSERT_EQ(3, List_length(list));
 
-  List_destroy(&list, free_elm);
+  List_destroy(&list, free_elm_fn);
   PASS();
 }
 
@@ -22,13 +22,13 @@ TEST print(void)
 {
   List_T list = List_new();
 
-  List_insert(&list, get_next_elm(3));
-  List_insert(&list, get_next_elm(2));
-  List_insert(&list, get_next_elm(1));
+  List_insert(&list, Test_elm(3));
+  List_insert(&list, Test_elm(2));
+  List_insert(&list, Test_elm(1));
 
-  List_print(list, print_data_fn);
+  List_print(list, print_fn);
 
-  List_destroy(&list, free_elm);
+  List_destroy(&list, free_elm_fn);
   PASS();
 }
 
@@ -36,9 +36,9 @@ TEST delete_head(void)
 {
   List_T list = List_new();
 
-  List_insert(&list, get_next_elm(3));
-  List_insert(&list, get_next_elm(2));
-  List_insert(&list, get_next_elm(1));
+  List_insert(&list, Test_elm(3));
+  List_insert(&list, Test_elm(2));
+  List_insert(&list, Test_elm(1));
 
   /* Common pattern when work with pointer to pointer. */
   Data_T deleted;
@@ -47,7 +47,7 @@ TEST delete_head(void)
 
   ASSERT_EQ(2, List_length(list));
 
-  List_destroy(&list, free_elm);
+  List_destroy(&list, free_elm_fn);
   PASS();
 }
 
@@ -55,13 +55,13 @@ TEST append(void)
 {
   List_T list = List_new();
 
-  List_insert(&list, get_next_elm(2));
-  List_insert(&list, get_next_elm(1));
+  List_insert(&list, Test_elm(2));
+  List_insert(&list, Test_elm(1));
 
-  List_append(&list, get_next_elm(42));
+  List_append(&list, Test_elm(42));
   ASSERT_EQ(3, List_length(list));
 
-  List_destroy(&list, free_elm);
+  List_destroy(&list, free_elm_fn);
   PASS();
 }
 
@@ -69,14 +69,14 @@ TEST traverse(void)
 {
   List_T list = List_new();
 
-  List_insert(&list, get_next_elm(30));
-  List_insert(&list, get_next_elm(20));
-  List_insert(&list, get_next_elm(10));
+  List_insert(&list, Test_elm(30));
+  List_insert(&list, Test_elm(20));
+  List_insert(&list, Test_elm(10));
   ASSERT_EQ(3, List_length(list));
 
   ASSERT(List_traverse(list, apply_fn));
 
-  List_destroy(&list, free_elm);
+  List_destroy(&list, free_elm_fn);
   PASS();
 }
 
@@ -84,10 +84,10 @@ TEST find_key(void)
 {
   List_T list = List_new();
 
-  List_append(&list, get_next_elm(1));
-  List_append(&list, get_next_elm(2));
-  List_append(&list, get_next_elm(3));
-  List_append(&list, get_next_elm(42));
+  List_append(&list, Test_elm(1));
+  List_append(&list, Test_elm(2));
+  List_append(&list, Test_elm(3));
+  List_append(&list, Test_elm(42));
 
   /* Use malloc/free and NEW etc/FREE consistently. */
 
@@ -97,12 +97,12 @@ TEST find_key(void)
   /* Contains found node. */
   node_t* match_node;
 
-  ASSERT(List_find_key(list, comp_data_fn, (Generic_T)key, &match_node));
+  ASSERT(List_find_key(list, equal_fn, (Generic_T)key, &match_node));
 
   Data_T match_node_data = (Data_T)DATA(match_node);
   ASSERT(match_node_data->value == 42);
 
-  List_destroy(&list, free_elm);
+  List_destroy(&list, free_elm_fn);
   free(key);
 
   PASS();
@@ -114,7 +114,7 @@ TEST length(void)
 
   ASSERT_EQ(0, List_length(list));
 
-  List_destroy(&list, free_elm);
+  List_destroy(&list, free_elm_fn);
   PASS();
 }
 
@@ -122,8 +122,8 @@ TEST free_non_empty(void)
 {
   List_T list = List_new();
 
-  List_insert(&list, get_next_elm(2));
-  List_insert(&list, get_next_elm(1));
+  List_insert(&list, Test_elm(2));
+  List_insert(&list, Test_elm(1));
 
   List_free(&list);
   PASS();

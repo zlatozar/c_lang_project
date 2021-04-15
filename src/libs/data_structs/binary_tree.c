@@ -159,6 +159,7 @@ BinTree_traverse(BinTree_T btree, bool (*apply_fn)(Generic_T), order_et order)
   return false;
 }
 
+/* Not tail recursive. */
 void
 BinTree_destroy(BinTree_T* p_btree, free_data_FN free_data_fn)
 {

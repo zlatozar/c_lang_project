@@ -63,7 +63,7 @@ extern size_t List_length(List_T list);
  * If the node is found, it is passed back in `*pp_keynode__` - `true` is returned.
  * `comp_data_fn` is a comparison function that returns `true` when there is a match.
  */
-extern bool List_find_key(List_T list, compare_data_FN comp_data_fn, Generic_T key,
+extern bool List_find_key(List_T list, equal_data_FN comp_data_fn, Generic_T key,
                           node_t** pp_keynode__);
 
 /**

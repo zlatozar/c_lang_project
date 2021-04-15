@@ -16,7 +16,8 @@ libdatastructs_la_SOURCES = list_rep.c       \
 														array_stack.c    \
 														queue.c          \
 														sparse_matrix.c  \
-														binary_tree.c
+														binary_tree.c    \
+														heap.c
 
 libdatastructs_la_CFLAGS = $(LIB_HEADER)                           \
 													 -I$(top_srcdir)/src/libs/lang/include   \
@@ -51,7 +52,8 @@ check_PROGRAMS = test/list.run           \
 								 test/array_stack.run    \
 								 test/queue.run          \
 								 test/sparse_matrix.run  \
-								 test/binary_tree.run
+								 test/binary_tree.run    \
+								 test/heap.run
 
 test_list_run_SOURCES = test/list.c
 test_list_run_CFLAGS = $(CHECK_CFLAGS)
@@ -84,6 +86,10 @@ test_sparse_matrix_run_LDADD = $(CHECK_LDADD)
 test_binary_tree_run_SOURCES = test/binary_tree.c
 test_binary_tree_run_CFLAGS = $(CHECK_CFLAGS)
 test_binary_tree_run_LDADD = $(CHECK_LDADD)
+
+test_heap_run_SOURCES = test/heap.c
+test_heap_run_CFLAGS = $(CHECK_CFLAGS)
+test_heap_run_LDADD = $(CHECK_LDADD)
 
 # 'test/<test name>.run.debug' target
 include $(top_srcdir)/m4/gdb.mk
