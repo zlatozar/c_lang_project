@@ -61,7 +61,7 @@ __siftdown(Heap_T heap, size_t parent_idx, cmp_data_FN cmp_fn)
 
   /* No children. */
   if (leftchild >= heap->nextelement_idx)
-    return;
+  { return; }
 
   Generic_T tmpvalue;
 
@@ -71,11 +71,11 @@ __siftdown(Heap_T heap, size_t parent_idx, cmp_data_FN cmp_fn)
   if (rightchild >= heap->nextelement_idx) {
 
     if (left_cmp > 0) {
-       tmpvalue = heap->storage[parent_idx];
-       heap->storage[parent_idx] = heap->storage[leftchild];
-       heap->storage[leftchild] = tmpvalue;
-     }
-     return;
+      tmpvalue = heap->storage[parent_idx];
+      heap->storage[parent_idx] = heap->storage[leftchild];
+      heap->storage[leftchild] = tmpvalue;
+    }
+    return;
   }
 
   /* Two children. Swap with the smaller child. */
@@ -126,11 +126,11 @@ void
 Heap_insert(Heap_T heap, Generic_T data, cmp_data_FN cmp_fn)
 {
   /* Not enough space in the array, so more must be allocated. */
-  if(heap->nextelement_idx == heap->size) {
+  if (heap->nextelement_idx == heap->size) {
 
     Generic_T* newstorage =
-        RESIZE(heap->storage,
-               (heap->size + k_resize_step) * sizeof(*newstorage));
+      RESIZE(heap->storage,
+             (heap->size + k_resize_step) * sizeof(*newstorage));
 
     heap->storage = newstorage;
     heap->size += k_resize_step;

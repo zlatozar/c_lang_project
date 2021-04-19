@@ -17,7 +17,8 @@ libdatastructs_la_SOURCES = list_rep.c       \
 														queue.c          \
 														sparse_matrix.c  \
 														binary_tree.c    \
-														heap.c
+														heap.c           \
+														graph_adj_list.c
 
 libdatastructs_la_CFLAGS = $(LIB_HEADER)                           \
 													 -I$(top_srcdir)/src/libs/lang/include   \

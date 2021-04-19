@@ -36,6 +36,8 @@ except_backtrace(void)
   free(names_str);
 }
 
+/* ______________________________________________________________________________ */
+
 /* Initialize exception stack before usage. */
 Except_Frame* Except_stack = NULL;
 

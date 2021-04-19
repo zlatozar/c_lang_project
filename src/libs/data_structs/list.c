@@ -4,32 +4,6 @@
 #include "lang/memory.h"
 #include "logger/log.h"
 
-/* __________________________________________________________________________ */
-/*                                                                     Local  */
-
-/* Delete given `p_node` from `p_list`. */
-static void
-__delete_node(List_T* p_list, node_t* p_node)
-{
-  if (*p_list == p_node) {
-    *p_list = NEXT(*p_list);  /* Continue with the next. */
-
-  } else {
-    node_t* iter_node;
-    for (iter_node = *p_list; iter_node != NULL && NEXT(iter_node) != p_node; ) {
-      iter_node = NEXT(iter_node);
-    }
-
-    Ensure(iter_node);
-
-    NEXT(iter_node) = NEXT(p_node);
-  }
-
-  List__free_node(&p_node);
-}
-
-/* __________________________________________________________________________ */
-
 List_T
 List_new(void)
 {
@@ -74,6 +48,27 @@ List_append(List_T* p_list, Generic_T data)
   }
 }
 
+/* Delete given `p_node` from `p_list`. */
+void
+List_delete_node(List_T* p_list, node_t* p_node)
+{
+  if (*p_list == p_node) {
+    *p_list = NEXT(*p_list);  /* Continue with the next. */
+
+  } else {
+    node_t* iter_node;
+    for (iter_node = *p_list; iter_node != NULL && NEXT(iter_node) != p_node; ) {
+      iter_node = NEXT(iter_node);
+    }
+
+    Ensure(iter_node);
+
+    NEXT(iter_node) = NEXT(p_node);
+  }
+
+  List__free_node(&p_node);
+}
+
 /* Instead return pointer to pointer it is more convenient to pass out param. */
 bool
 List_delete_head(List_T* p_list, Generic_T* p_data__)
@@ -84,7 +79,7 @@ List_delete_head(List_T* p_list, Generic_T* p_data__)
   }
 
   *p_data__ = DATA(*p_list);
-  __delete_node(p_list, *p_list /* Fist node in practice. */);
+  List_delete_node(p_list, *p_list /* Fist node in practice. */);
 
   return true;
 }

@@ -30,6 +30,14 @@ extern void List_insert(List_T* p_list, Generic_T data);
 extern void List_append(List_T* p_list, Generic_T data);
 
 /**
+ * @brief    Delete given `p_node` from `p_list`.
+ *
+ * @see Graph_delete_edge
+ */
+void
+List_delete_node(List_T* p_list, node_t* p_node);
+
+/**
  * Delete the first node in `*p_list` and return pointer to deleted DATA in
  * `p_data__` if operation succeed otherwise `false`. It is checked runtime error
  * if given list is empty. Client should take care to free memory of the
