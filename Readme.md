@@ -4,7 +4,8 @@
 
 - git
 - gcc
-- autotools
+- autotools (automake and autoconf)
+- libtool
 - make
 - lex/yacc
 - valgrind
@@ -13,6 +14,11 @@
 - fortune
 
 ### Build
+
+Require `autotools` and `libtools`.
+```text
+$sudo dnf install autoconf automake libtool
+```
 
 ```text
 $ ./bootstrap.sh
