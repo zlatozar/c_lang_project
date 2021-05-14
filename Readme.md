@@ -26,6 +26,15 @@ $ make
 $ make check cppcheck
 $ make help
 ```
+Optional you can use `bear` to make [compilation database](https://sarcasm.github.io/notes/dev/compilation-database.html).
+`bear` will create the `compile_commands.json`.
+
+```text
+# From project root
+$ make clean
+$ bear -- make
+```
+
 ### Dependencies
 
 #### Unit Testing
