@@ -1,14 +1,14 @@
 ## Used Literature
 
 ### Basics
-- _"From Hardware to Software: an introduction to computers"_ by Graham Lee
+- _"From Hardware to Software: an introduction to computers"_ by Graham Lee <br/>
 - _"Fundamentals of Operating Systems"_ by Eager
 
 ### C Language
 
 #### Basics
-- (video) [Introduction to C](http://ix.cs.uoregon.edu/~norris/cis330books/ThinkingInC/Index.html)
-- _"The C Programming Language"_ by Kernighan, Ritchie
+- (video) [Introduction to C](http://ix.cs.uoregon.edu/~norris/cis330books/ThinkingInC/Index.html) <br/>
+- _"The C Programming Language"_ by Kernighan, Ritchie <br/>
 - (video) [Programming Paradigms lectures from Stanford](https://www.youtube.com/watch?v=Ps8jOj7diA0&list=PL5BD86273FEF4DB0B)
 
 ### Standard Library Reference
@@ -17,18 +17,22 @@
 
 #### C Philosophy
 - [C exercism](https://exercism.io/tracks/c)
+- _"C Interfaces and Implementations: Techniques for Creating Reusable Software"_ by David Hanson <br/>
 - _"Data Structures: An Advanced Approach Using C"_ by Jeffry Esakov <br/>
-- _"C Interfaces and Implementations: Techniques for Creating Reusable Software"_ by David Hanson
 - _"Functional C"_ by Hartel  <br/>
   [book and source](https://research.utwente.nl/en/publications/functional-c)
 
 ### Multi-threading
-- (pdf)[An Introduction to Programming with Threads](https://www.hpl.hp.com/techreports/Compaq-DEC/SRC-RR-35.pdf)
+- (pdf)["An Introduction to Programming with Threads"](https://www.hpl.hp.com/techreports/Compaq-DEC/SRC-RR-35.pdf) by Andrew Birrell <br/>
 - [PThreads tutorial](https://computing.llnl.gov/tutorials/pthreads/)
 
 ### Building Tools
-- _"AUTOTOOLS. A Practitioner’s Guide to GNU Autoconf, Automake, and Libtool"_ by John Calcote
-- [Autotools example](http://www.bioinf.uni-freiburg.de/~mmann/HowTo/automake.html)
+- _"AUTOTOOLS. A Practitioner’s Guide to GNU Autoconf, Automake, and Libtool"_ by John Calcote <br/>
+- _"Professional CMake: A Practical Guid"_ by Craig Scott <br/>
+  NOTE: `CMake` could generate [Ninja](https://ninja-build.org/) build files.
+
+### Compiling
+- _"Advanced C and C++ Compiling"_ by Milan Stevanovic
 
 ### Shell
 - _"Shell Scripting: Expert Recipes for Linux, Bash, and More"_ by Steve Parker
@@ -47,9 +51,9 @@
 - _"Patterns, Principles, and Practices of Domain-Driven Design"_ by Scott Millett and Nick Tune
 
 ### OS
+- _"Understanding UNIX/LINUX Programming: A Guide to Theory and Practice"_ by Bruce Molay <br/>
 - _"The Logical Design of Operating Systems"_ by Alan C. Shaw
-- _"Understanding UNIX/LINUX Programming: A Guide to Theory and Practice"_ by Bruce Molay
 
 ### OS Advanced Level
-- _"Operating Systems: A Design Oriented Approach"_ by Crowley
+- _"Operating Systems: A Design Oriented Approach"_ by Crowley <br/>
 - _"The Linux Programming Interface: A Linux and UNIX System Programming"_ by Michael Kerrisk

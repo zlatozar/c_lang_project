@@ -1,0 +1,304 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+typedef int key_t;
+
+typedef int object_t;
+
+typedef struct hp_n_t {
+  key_t            key;
+  object_t*     object;
+  struct hp_n_t*  left;
+  struct hp_n_t* right;
+} heap_node_t;
+
+typedef heap_node_t node_t;
+
+// _____________________________________________________________________________
+
+#define BLOCKSIZE 256
+
+node_t* currentblock = NULL;
+int size_left;
+node_t* free_list = NULL;
+
+node_t*
+get_node()
+{
+  node_t* tmp;
+
+  if ( free_list != NULL ) {
+    tmp = free_list;
+    free_list = free_list -> left;
+
+  } else {
+
+    if ( currentblock == NULL || size_left == 0) {
+      currentblock =
+        (node_t*) malloc( BLOCKSIZE * sizeof(node_t) );
+      size_left = BLOCKSIZE;
+    }
+
+    tmp = currentblock++;
+    size_left -= 1;
+  }
+  return ( tmp );
+}
+
+void
+return_node(node_t* node)
+{
+  node->left = free_list;
+  free_list = node;
+}
+
+heap_node_t*
+create_heap(void)
+{
+  heap_node_t* tmp_node;
+  tmp_node = get_node();
+  tmp_node->object = NULL;
+  return ( tmp_node );
+}
+
+int
+heap_empty(heap_node_t* hp)
+{
+  return ( hp->object == NULL );
+}
+
+key_t
+find_min_key(heap_node_t* hp)
+{
+  return ( hp->key );
+}
+
+object_t*
+find_min_object(heap_node_t* hp)
+{
+  return ( hp->object );
+}
+
+void
+remove_heap(heap_node_t* hp)
+{
+  heap_node_t* current_node, *tmp;
+
+  if ( hp->object == NULL)
+  { return_node( hp ); }
+
+  else {
+    current_node = hp;
+
+    while (current_node != NULL ) {
+
+      if ( current_node->left == NULL ) {
+        tmp = current_node->right;
+        return_node( current_node );
+        current_node = tmp;
+
+      } else {
+        tmp = current_node;
+        current_node = current_node->left;
+        tmp->left = current_node->right;
+        current_node->right = tmp;
+      }
+    }
+  }
+}
+
+int
+insert( key_t new_key, object_t* new_obj, heap_node_t* hp)
+{
+  if (hp->object == NULL) { /* insert in empty heap */
+    hp->object = new_obj;
+    hp->key  = new_key;
+    hp->left = hp->right = NULL;
+
+  } else if ( new_key < hp->key ) { /* new minimum, replace root */
+
+    heap_node_t* tmp;
+    tmp = get_node();
+    tmp->left   = hp->left;
+    tmp->right  = hp->right;
+    tmp->key    = hp->key;
+    tmp->object = hp->object;
+    hp->left   = tmp;
+    hp->right  = NULL;
+    hp->key    = new_key;
+    hp->object = new_obj;
+
+  } else { /* normal insert */
+    heap_node_t* current, *tmp, *new_node;
+    current = hp;
+
+    /* go down right path to the insertion point */
+    while ( current->right != NULL && current->right->key < new_key) {
+      tmp = current->right;  /* exchange */
+      current->right = current->left;
+      current->left = tmp;
+      current = tmp;         /* and go down */
+    }
+
+    /* now create new node */
+    new_node = get_node();
+    new_node->key = new_key;
+    new_node->object = new_obj;
+
+    /* insert new node in path, everything below goes left */
+    new_node->left  = current->right;
+    new_node->right = NULL;
+    current->right = new_node;
+  }
+
+  return (0);
+}
+
+heap_node_t*
+merge(heap_node_t* hp1, heap_node_t* hp2)
+{
+  heap_node_t* root, *tmp1, *tmp2, *tmp3;
+
+  if ( hp1->object == NULL ) { /* heap 1 empty */
+    return_node(  hp1 );
+    return ( hp2 );
+  }
+
+  if ( hp2->object == NULL ) { /* heap 2 empty */
+    return_node(  hp2 );
+    return ( hp1 );
+  } /* select new root, setup merging */
+
+  if ( hp1->key < hp2->key ) {
+    tmp1 = root = hp1;
+    tmp3 = hp2;
+
+  } else {
+    tmp1 = root = hp2;
+    tmp3 = hp1;
+  }
+
+  tmp2 = tmp1->right;
+
+  /* tmp1 is end of already merged right path */
+  /* tmp2 and tmp3 are next nodes in remaining right paths */
+  while ( tmp2 != NULL && tmp3 != NULL ) {
+    tmp1->right = tmp1->left; /* exchange on the merged path*/
+
+    if ( tmp2->key < tmp3->key ) {
+      /* attach tmp2 next, move down */
+      tmp1->left  = tmp2;
+      tmp1 = tmp2;
+      tmp2 = tmp2->right;
+
+    } else {
+      /* attach tmp3 next, move down */
+      tmp1->left  = tmp3;
+      tmp1 = tmp3;
+      tmp3 = tmp3->right;
+    }
+  } /* now one of the paths empty, attach the other */
+
+  if ( tmp2 == NULL)
+  { tmp1->right = tmp3; }
+
+  else
+  { tmp1->right = tmp2; }
+  return ( root );
+}
+
+object_t*
+delete_min(heap_node_t* hp)
+{
+  object_t* del_obj;
+  heap_node_t* heap1, *heap2, *tmp;
+  del_obj = hp->object;
+  heap1 = hp->left;
+  heap2 = hp->right;
+
+  if ( heap1 == NULL && heap2 == NULL )
+  { hp->object = NULL; }
+
+  else {
+    if ( heap2 == NULL )
+    { tmp = heap1; }
+
+    else if (heap1 == NULL )
+    { tmp = heap2; }
+
+    else
+    { tmp = merge( heap1, heap2); }
+
+    /* now they are merged, need to copy root to correct place*/
+    hp->key    = tmp->key;
+    hp->object = tmp->object;
+    hp->left   = tmp->left;
+    hp->right  = tmp->right;
+    return_node( tmp );
+  }
+
+  return ( del_obj );
+}
+
+// _____________________________________________________________________________
+//                                                                 Sample test
+
+int
+main()
+{
+  heap_node_t* heap;
+  char nextop;
+  heap = create_heap();
+  printf("Made Heap\n");
+
+  while ( (nextop = getchar()) != 'q' ) {
+
+    if ( nextop == 'i' ) {
+      int inskey,  *insobj, success;
+      insobj = (object_t*) malloc(sizeof(object_t));
+      scanf(" %d,%d", &inskey, insobj);
+      success = insert( inskey, insobj, heap );
+
+      if ( success == 0 )
+        printf("  insert successful, key = %d, object value = %d\n",
+               inskey, *insobj);
+
+      else
+      { printf("  insert failed, success = %d\n", success); }
+    }
+
+    if ( nextop == 'd' ) {
+      object_t* delobj;
+      getchar();
+      delobj = delete_min( heap);
+
+      if ( delobj == NULL )
+      { printf("  delete failed\n"); }
+
+      else
+        printf("  delete successful, deleted object %d\n",
+               *delobj);
+    }
+
+    if ( nextop == '?' ) {
+      heap_node_t* tmp;
+      getchar();
+      tmp = heap;
+      printf(" left path: key values ");
+
+      while ( tmp != NULL )
+      { printf(" %d,", tmp->key); tmp = tmp->left; }
+
+      printf("\n");
+      tmp = heap;
+      printf(" right path: key values ");
+
+      while ( tmp != NULL )
+      { printf(" %d,", tmp->key); tmp = tmp->right; }
+
+      printf("\n");
+
+    }
+  }
+  return (0);
+}

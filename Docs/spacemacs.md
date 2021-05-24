@@ -9,6 +9,7 @@ Key&nbsp;Binding   | Description
 `M-m F1`    | Search command definitions
 `M-m h d`   | _(meta)_ Descriptions
 `M-m h d m` | Describe current mode
+`M-m f e R` | Reload `.spacemacs`
 
 ### Emacs
 
@@ -80,7 +81,7 @@ Key&nbsp;Binding   | Description
 `C-c`       | _(meta)_ Various options
 `M-m c`     | _(meta)_ Compilation
 `M-m c c`   | Compile project
-`M-m g`     | _(meta) Git commands
+`M-m g`     | _(meta)_ Git commands
 `M-m g s`   | Git status
 `M-m a u`   | Visual undo tree
 `M-m e`     | _(meta)_ Errors
@@ -98,6 +99,11 @@ Key&nbsp;Binding   | Description
 `M-m j j`   | `avy-timer` (type and go)
 `M-m x w d` | Meaning of the word at point
 `M-m ;`     | Comment region
+`C-c C-r`   | Find referenced (my)
+`C-c C-d`   | Find definition (my)
+`C-c i`     | Find implementation (my)
+`C-c m`     | Show methods (my)
+`C-c r`     | Rename
 
 ### Misc
 

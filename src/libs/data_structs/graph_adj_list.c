@@ -151,11 +151,11 @@ Graph_size(Graph_T graph, size_t* p_vertex_cnt__, size_t* p_edge_cnt__)
 
   size_t edges = 0;
   for (size_t i = 0; i < graph->number_of_vertices; ++i) {
-   edges += List_length(graph->edge_list[i] );
+    edges += List_length(graph->edge_list[i] );
   }
 
   if (graph->type == UNDIRECTED) {
-   edges /= 2;
+    edges /= 2;
   }
 
   *p_edge_cnt__ = edges;
