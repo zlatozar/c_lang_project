@@ -61,24 +61,24 @@
 
 /* The structure of YAMS IO descriptor. */
 typedef struct {
-    /* Type of the device */
-    uint32_t type          __attribute__ ((packed)); 
+  /* Type of the device */
+  uint32_t type          __attribute__ ((packed));
 
-    /* Start address of the device io base */
-    uint32_t io_area_base  __attribute__ ((packed));     
+  /* Start address of the device io base */
+  uint32_t io_area_base  __attribute__ ((packed));
 
-    /* Length of the device io base */
-    uint32_t io_area_len   __attribute__ ((packed));
+  /* Length of the device io base */
+  uint32_t io_area_len   __attribute__ ((packed));
 
-    /* The interrupt line used by the device */
-    uint32_t irq           __attribute__ ((packed));
+  /* The interrupt line used by the device */
+  uint32_t irq           __attribute__ ((packed));
 
-     /* Vendor string of the device (Note: This 
-        is NOT null terminated! */
-    char vendor_string[8];
+  /* Vendor string of the device (Note: This
+     is NOT null terminated! */
+  char vendor_string[8];
 
-    /* Reserved area (unused). */
-    uint32_t resv[2]       __attribute__ ((packed));
+  /* Reserved area (unused). */
+  uint32_t resv[2]       __attribute__ ((packed));
 } io_descriptor_t;
 
 

@@ -42,25 +42,25 @@
 
 #define CPU_IRQ_DEFAULT 4
 
-int cpuinfo_io_read(device_t *dev, uint32_t addr, uint32_t *data);
-int cpuinfo_io_write(device_t *dev, uint32_t addr, uint32_t data);
-int meminfo_io_read(device_t *dev, uint32_t addr, uint32_t *data);
-int rtc_io_read(device_t *dev, uint32_t addr, uint32_t *data);
-int shutdown_io_write(device_t *dev, uint32_t addr, uint32_t data);
+int cpuinfo_io_read(device_t* dev, uint32_t addr, uint32_t* data);
+int cpuinfo_io_write(device_t* dev, uint32_t addr, uint32_t data);
+int meminfo_io_read(device_t* dev, uint32_t addr, uint32_t* data);
+int rtc_io_read(device_t* dev, uint32_t addr, uint32_t* data);
+int shutdown_io_write(device_t* dev, uint32_t addr, uint32_t data);
 
-device_t *rtc_create();
-device_t *shutdown_create();
-device_t *cpuinfo_create(int cpunum);
-void cpuinfo_destroy(device_t *cpu);
-device_t *meminfo_create();
+device_t* rtc_create();
+device_t* shutdown_create();
+device_t* cpuinfo_create(int cpunum);
+void cpuinfo_destroy(device_t* cpu);
+device_t* meminfo_create();
 
 void set_cpu_irq(int irq);
-int cpuinfo_update(device_t *dev);
+int cpuinfo_update(device_t* dev);
 
 /* The CPU-info real device */
 typedef struct {
-    int error;
-    int irq_pending;
+  int error;
+  int irq_pending;
 } cpuinfo_t;
 
 #endif /* YAMS_TRIVIAL_IO_H */

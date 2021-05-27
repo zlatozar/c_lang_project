@@ -174,7 +174,7 @@
 #include "gdb.h"
 
 static volatile int sigint_caught = 0;
-hardware_t *hardware = NULL;
+hardware_t* hardware = NULL;
 
 /* Whether to simulate a big-endian or a little-endian machine: */
 int simulator_bigendian = 1;
@@ -186,259 +186,275 @@ int simulator_bigendian = 1;
    - cpu info device(s)
    - memory info device
  */
-static void simulator_add_metadevices(int cpu_irq) {
-    int i;
+static void
+simulator_add_metadevices(int cpu_irq)
+{
+  int i;
 
-    simulator_add_device(shutdown_create());
-    simulator_add_device(rtc_create());
-    simulator_add_device(meminfo_create());
+  simulator_add_device(shutdown_create());
+  simulator_add_device(rtc_create());
+  simulator_add_device(meminfo_create());
 
-    /* one device for each processor */
-    for(i=0;i<hardware->num_cpus;i++) {
-	simulator_add_device(cpuinfo_create(i));
-    }
-    set_cpu_irq(cpu_irq);
+  /* one device for each processor */
+  for (i = 0; i < hardware->num_cpus; i++) {
+    simulator_add_device(cpuinfo_create(i));
+  }
+  set_cpu_irq(cpu_irq);
 }
 
-void simulator_create(int mem_pages, int num_cpus, int clock_speed,
-                      int cpu_irq) {
-    int i;
+void
+simulator_create(int mem_pages, int num_cpus, int clock_speed,
+                 int cpu_irq)
+{
+  int i;
 
-    hardware_t *hw;
+  hardware_t* hw;
 
-    hw = (hardware_t *) smalloc(sizeof(hardware_t));
-    hw->memory      = memory_create(SIMULATOR_PAGESIZE, mem_pages);
+  hw = (hardware_t*) smalloc(sizeof(hardware_t));
+  hw->memory      = memory_create(SIMULATOR_PAGESIZE, mem_pages);
 
-    /* cpus */
-    hw->num_cpus    = num_cpus;
-    hw->cpus        = (cpu_t **) smalloc(sizeof(cpu_t *) * num_cpus);
-    for (i=0;i<num_cpus;i++) {
-	hw->cpus[i] = cpu_init(i);
-    }
-    hw->clockspeed  = clock_speed;
+  /* cpus */
+  hw->num_cpus    = num_cpus;
+  hw->cpus        = (cpu_t**) smalloc(sizeof(cpu_t*) * num_cpus);
+  for (i = 0; i < num_cpus; i++) {
+    hw->cpus[i] = cpu_init(i);
+  }
+  hw->clockspeed  = clock_speed;
 
-    /* Devices are created later by configuration system. 
-       See simulator_add_device. */
-    hw->devices     = NULL;
-    hw->num_devices = 0;
+  /* Devices are created later by configuration system.
+     See simulator_add_device. */
+  hw->devices     = NULL;
+  hw->num_devices = 0;
 
-    hw->cycle_count   = 0;
-    hw->running       = 0;
+  hw->cycle_count   = 0;
+  hw->running       = 0;
 
-    /* non-reachable PC address */
-    hw->breakpoint    = 0xffffffff;
+  /* non-reachable PC address */
+  hw->breakpoint    = 0xffffffff;
 
-    hardware = hw;
+  hardware = hw;
 
-    /* add metadevices */
-    simulator_add_metadevices(cpu_irq);
+  /* add metadevices */
+  simulator_add_metadevices(cpu_irq);
 }
 
-void simulator_add_device(device_t *dev) {
-    uint32_t iobase = IO_AREA_BASE_ADDRESS;
+void
+simulator_add_device(device_t* dev)
+{
+  uint32_t iobase = IO_AREA_BASE_ADDRESS;
 
-    assert(dev != NULL);
-    assert(dev->io_length % 4 == 0);
+  assert(dev != NULL);
+  assert(dev->io_length % 4 == 0);
 
-   /* Add dev to hw descriptor list*/
+  /* Add dev to hw descriptor list*/
 
-    if(hardware->devices != NULL) {
-	iobase = hardware->devices->io_base + 
-	    hardware->devices->io_length;
-    }
-    dev->next = hardware->devices;
-    hardware->devices = dev;
-    hardware->num_devices++;
+  if (hardware->devices != NULL) {
+    iobase = hardware->devices->io_base +
+             hardware->devices->io_length;
+  }
+  dev->next = hardware->devices;
+  hardware->devices = dev;
+  hardware->num_devices++;
 
-    /* Allocate memory mapped IO-region */
+  /* Allocate memory mapped IO-region */
 
-    dev->io_base = iobase;
+  dev->io_base = iobase;
 }
 
-void simulator_add_mmap(pluggable_device_t *dev) {
-    assert(dev != NULL);
+void
+simulator_add_mmap(pluggable_device_t* dev)
+{
+  assert(dev != NULL);
 
-    dev->mmap_next = hardware->memory->mmap;
-    hardware->memory->mmap = dev;
-    hardware->memory->num_mmap++;
+  dev->mmap_next = hardware->memory->mmap;
+  hardware->memory->mmap = dev;
+  hardware->memory->num_mmap++;
 }
 
-static void simulator_print_hw_info() {
-    device_t *dev;
-    pluggable_device_t *pdev;
+static void
+simulator_print_hw_info()
+{
+  device_t* dev;
+  pluggable_device_t* pdev;
 
-    printf("Simulated hardware:\n");
-    printf(" %d CPU(s) with virtual clock rate %" PRId32 " Hz\n", 
-	   hardware->num_cpus,
-	   hardware->clockspeed);
-    printf(" %u kilobytes of main memory (%u x %u)\n",
-	   hardware->memory->pagesize * hardware->memory->num_pages / 1024,
-	   hardware->memory->num_pages,
-	   hardware->memory->pagesize);
+  printf("Simulated hardware:\n");
+  printf(" %d CPU(s) with virtual clock rate %" PRId32 " Hz\n",
+         hardware->num_cpus,
+         hardware->clockspeed);
+  printf(" %u kilobytes of main memory (%u x %u)\n",
+         hardware->memory->pagesize * hardware->memory->num_pages / 1024,
+         hardware->memory->num_pages,
+         hardware->memory->pagesize);
 
-    printf(" %d other virtual device(s): \n", hardware->num_devices);
+  printf(" %d other virtual device(s): \n", hardware->num_devices);
 
-    for(dev=hardware->devices; dev != NULL; dev = dev->next) {
-	printf("   - '%c%c%c%c%c%c%c%c' Type: #%.8" PRIx32
-	       " IOBASE: #%.8" PRIx32 " IRQ: ",
-	       dev->vendor_string[0], dev->vendor_string[1],
-	       dev->vendor_string[2], dev->vendor_string[3],
-	       dev->vendor_string[4], dev->vendor_string[5],
-	       dev->vendor_string[6], dev->vendor_string[7],
-	       dev->typecode, dev->io_base);
+  for (dev = hardware->devices; dev != NULL; dev = dev->next) {
+    printf("   - '%c%c%c%c%c%c%c%c' Type: #%.8" PRIx32
+           " IOBASE: #%.8" PRIx32 " IRQ: ",
+           dev->vendor_string[0], dev->vendor_string[1],
+           dev->vendor_string[2], dev->vendor_string[3],
+           dev->vendor_string[4], dev->vendor_string[5],
+           dev->vendor_string[6], dev->vendor_string[7],
+           dev->typecode, dev->io_base);
 
-	if(dev->irq < 0 || dev->irq > 5)
-	    printf("NONE\n");
-	else
-	    printf("%" PRId32 "\n", dev->irq);
-    }
+    if (dev->irq < 0 || dev->irq > 5)
+    { printf("NONE\n"); }
+    else
+    { printf("%" PRId32 "\n", dev->irq); }
+  }
 
-    if (hardware->memory->num_mmap > 0)
-	printf(" %d additional memory mapped I/O area(s):\n",
-	       hardware->memory->num_mmap);
+  if (hardware->memory->num_mmap > 0)
+    printf(" %d additional memory mapped I/O area(s):\n",
+           hardware->memory->num_mmap);
 
-    for (pdev=hardware->memory->mmap; pdev != NULL; pdev = pdev->mmap_next) {
-	printf("   - Base: #%.8" PRIx32 " Size: #%.8" PRIx32 "\n",
-	       pdev->mmap_base, pdev->mmap_size);
-    }
+  for (pdev = hardware->memory->mmap; pdev != NULL; pdev = pdev->mmap_next) {
+    printf("   - Base: #%.8" PRIx32 " Size: #%.8" PRIx32 "\n",
+           pdev->mmap_base, pdev->mmap_size);
+  }
 
 
-    printf("\n");
+  printf("\n");
 }
 
-void simulator_init() {
-    device_t *dev;
-    pluggable_device_t *pdev;
-    int io_length=0;
-    int i, offset=0;
-    uint32_t base;
+void
+simulator_init()
+{
+  device_t* dev;
+  pluggable_device_t* pdev;
+  int io_length = 0;
+  int i, offset = 0;
+  uint32_t base;
 
-    if(hardware->devices != NULL) {
-	io_length = hardware->devices->io_base -
-	    IO_AREA_BASE_ADDRESS +
-	    hardware->devices->io_length;
+  if (hardware->devices != NULL) {
+    io_length = hardware->devices->io_base -
+                IO_AREA_BASE_ADDRESS +
+                hardware->devices->io_length;
+  }
+
+  hardware->memory->io_area_base   = IO_AREA_BASE_ADDRESS;
+  hardware->memory->io_area_length = io_length;
+
+  /* Allocate lookup vectors for memory mapped devices */
+  hardware->memory->io_devices =
+    (device_t**) smalloc(sizeof(device_t*) * (io_length / 4));
+  hardware->memory->io_device_write =
+    (int (**)(device_t* dev, uint32_t addr, uint32_t data))
+    smalloc(sizeof(int (*)()) * (io_length / 4));
+  hardware->memory->io_device_read =
+    (int (**)(device_t* dev, uint32_t addr, uint32_t* data))
+    smalloc(sizeof(int (*)()) * (io_length / 4));
+
+  /* Set up just allocated device lookup vectors for MMU */
+  offset = io_length / 4 - 1;
+  for (dev = hardware->devices; dev != NULL; dev = dev->next) {
+    for (i = 0; i < dev->io_length; i += 4) {
+      hardware->memory->io_devices[offset]         = dev;
+      hardware->memory->io_device_write[offset]    = dev->io_write;
+      hardware->memory->io_device_read[offset]     = dev->io_read;
+      offset -= 1;
     }
-    
-    hardware->memory->io_area_base   = IO_AREA_BASE_ADDRESS;
-    hardware->memory->io_area_length = io_length;
+  }
 
-    /* Allocate lookup vectors for memory mapped devices */
-    hardware->memory->io_devices =
-	(device_t **) smalloc(sizeof(device_t *) * (io_length/4));
-    hardware->memory->io_device_write =
-	(int (**)(device_t *dev, uint32_t addr, uint32_t data))
-	smalloc(sizeof(int (*)()) * (io_length/4));
-    hardware->memory->io_device_read =
-	(int (**)(device_t *dev, uint32_t addr, uint32_t *data))
-	smalloc(sizeof(int (*)()) * (io_length/4));
+  /* Allocate the MMAP areas: */
+  base = IO_AREA_BASE_ADDRESS + io_length;
+  for (pdev = hardware->memory->mmap; pdev != NULL; pdev = pdev->next) {
+    /* page align: */
+    base = (base + SIMULATOR_PAGESIZE - 1) & ~(SIMULATOR_PAGESIZE - 1);
 
-    /* Set up just allocated device lookup vectors for MMU */
-    offset = io_length/4 - 1;
-    for(dev=hardware->devices; dev != NULL; dev = dev->next) {
-	for(i=0; i<dev->io_length; i+=4) {
-	    hardware->memory->io_devices[offset]         = dev;
-	    hardware->memory->io_device_write[offset]    = dev->io_write;
-	    hardware->memory->io_device_read[offset]     = dev->io_read;
-	    offset -= 1;
-	}
-    }
-
-    /* Allocate the MMAP areas: */
-    base = IO_AREA_BASE_ADDRESS + io_length;
-    for (pdev=hardware->memory->mmap; pdev != NULL; pdev = pdev->next) {
-	/* page align: */
-	base = (base + SIMULATOR_PAGESIZE - 1) & ~(SIMULATOR_PAGESIZE - 1);
-
-	if (base + pdev->mmap_size >= 0xc0000000) {
-	    printf("Not enough I/O memory left for memory mapped I/O area\n");
-	    exit(1);
-	}
-
-	if (pdev->mmap_size > 0)
-	    plugio_mmap(pdev, base);
-	base += pdev->mmap_size;
-    }
-    
-    /* Set up device descriptor vector at 0xB0000000 */
-    offset = 0;
-    for(dev=hardware->devices; dev != NULL; dev = dev->next) {
-	uint32_t temp;
-
-	temp = htosim32(dev->typecode);
-	memcpy((uint8_t *)hardware->memory->io_descrarea + offset + 0x00,
-               &temp, 4);
-
-	temp = htosim32(dev->io_base);
-	memcpy((uint8_t *)hardware->memory->io_descrarea + offset + 0x04,
-               &temp, 4);
-
-	temp = htosim32(dev->io_length);
-	memcpy((uint8_t *)hardware->memory->io_descrarea + offset + 0x08,
-               &temp, 4);
-
-	temp = htosim32(dev->irq);
-	memcpy((uint8_t *)hardware->memory->io_descrarea + offset + 0x0c,
-               &temp, 4);
-
-	memcpy((uint8_t *)hardware->memory->io_descrarea + offset + 0x10,
-	       dev->vendor_string, 8);
-
-	/* last two words are left unassigned by specification */
-
-	offset += 32; /* descriptors are 32 bytes long */
+    if (base + pdev->mmap_size >= 0xc0000000) {
+      printf("Not enough I/O memory left for memory mapped I/O area\n");
+      exit(1);
     }
 
-    /* start the input poller */
-    if (async_input_start())
-	exit(1);
+    if (pdev->mmap_size > 0)
+    { plugio_mmap(pdev, base); }
+    base += pdev->mmap_size;
+  }
 
-    simulator_print_hw_info();
+  /* Set up device descriptor vector at 0xB0000000 */
+  offset = 0;
+  for (dev = hardware->devices; dev != NULL; dev = dev->next) {
+    uint32_t temp;
+
+    temp = htosim32(dev->typecode);
+    memcpy((uint8_t*)hardware->memory->io_descrarea + offset + 0x00,
+           &temp, 4);
+
+    temp = htosim32(dev->io_base);
+    memcpy((uint8_t*)hardware->memory->io_descrarea + offset + 0x04,
+           &temp, 4);
+
+    temp = htosim32(dev->io_length);
+    memcpy((uint8_t*)hardware->memory->io_descrarea + offset + 0x08,
+           &temp, 4);
+
+    temp = htosim32(dev->irq);
+    memcpy((uint8_t*)hardware->memory->io_descrarea + offset + 0x0c,
+           &temp, 4);
+
+    memcpy((uint8_t*)hardware->memory->io_descrarea + offset + 0x10,
+           dev->vendor_string, 8);
+
+    /* last two words are left unassigned by specification */
+
+    offset += 32; /* descriptors are 32 bytes long */
+  }
+
+  /* start the input poller */
+  if (async_input_start())
+  { exit(1); }
+
+  simulator_print_hw_info();
 }
 
 /* Used to break out of simulation loop in simulator_run and re-enter
-   to hwconsole. 
+   to hwconsole.
 */
 
-static void sigint_handler(int signum) {
-    signum = signum;
-    sigint_caught = 1;
+static void
+sigint_handler(int signum)
+{
+  signum = signum;
+  sigint_caught = 1;
 }
 
 
-void simulator_run(uint64_t stop_at_cycle) {
-    int i;
-    device_t *dev;
-    void *old_sigint;
+void
+simulator_run(uint64_t stop_at_cycle)
+{
+  int i;
+  device_t* dev;
+  void* old_sigint;
 
-    sigint_caught = 0;
-    hardware->running = 1;
-    
-    old_sigint = signal(SIGINT, sigint_handler);
-    while(hardware->running == 1 && stop_at_cycle != hardware->cycle_count &&
-	  !sigint_caught) {
+  sigint_caught = 0;
+  hardware->running = 1;
 
-	/* advance one cycle for each cpu */
-	for(i=0;i<hardware->num_cpus;i++) {
-	    cpu_update(hardware->cpus[i]);
-	}
+  old_sigint = signal(SIGINT, sigint_handler);
+  while (hardware->running == 1 && stop_at_cycle != hardware->cycle_count &&
+         !sigint_caught) {
 
-	async_input_lock();
-
-        if (gdb_interface_check_and_run() == 0)
-            /* we halt the simulation if the gdb interface indicated so */
-            hardware->running = -1;
-
-	/* update all hardware */
-	for(dev=hardware->devices; dev != NULL; dev = dev->next) {
-	    if(dev->update != NULL)
-		(*(dev->update))(dev);
-	}
-
-	async_input_unlock();
-
-	/* All done */
-	hardware->cycle_count++;
+    /* advance one cycle for each cpu */
+    for (i = 0; i < hardware->num_cpus; i++) {
+      cpu_update(hardware->cpus[i]);
     }
 
-    signal(SIGINT, old_sigint);
+    async_input_lock();
+
+    if (gdb_interface_check_and_run() == 0)
+      /* we halt the simulation if the gdb interface indicated so */
+    { hardware->running = -1; }
+
+    /* update all hardware */
+    for (dev = hardware->devices; dev != NULL; dev = dev->next) {
+      if (dev->update != NULL)
+      { (*(dev->update))(dev); }
+    }
+
+    async_input_unlock();
+
+    /* All done */
+    hardware->cycle_count++;
+  }
+
+  signal(SIGINT, old_sigint);
 }

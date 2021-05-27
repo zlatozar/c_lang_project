@@ -42,6 +42,6 @@
 
 /* Causes kernel panic. Prints filename, line and description before
    dropping the system into YAMS hardware console. */
-void _kernel_panic(char *file, int line, char *description);
+void _kernel_panic(char* file, int line, char* description);
 
 #endif

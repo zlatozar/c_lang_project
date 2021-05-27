@@ -59,13 +59,14 @@ static spinlock_t semaphore_table_slock;
  * as unreserved (non-existing).
  */
 
-void semaphore_init(void)
+void
+semaphore_init(void)
 {
-    int i;
+  int i;
 
-    spinlock_reset(&semaphore_table_slock);
-    for(i = 0; i < CONFIG_MAX_SEMAPHORES; i++)
-        semaphore_table[i].creator = -1;
+  spinlock_reset(&semaphore_table_slock);
+  for (i = 0; i < CONFIG_MAX_SEMAPHORES; i++)
+  { semaphore_table[i].creator = -1; }
 }
 
 /**
@@ -79,40 +80,41 @@ void semaphore_init(void)
  * @see semaphore_destroy
  */
 
-semaphore_t *semaphore_create(int value)
+semaphore_t*
+semaphore_create(int value)
 {
-    interrupt_status_t intr_status;
-    static int next = 0;
-    int i;
-    int sem_id;
+  interrupt_status_t intr_status;
+  static int next = 0;
+  int i;
+  int sem_id;
 
-    KERNEL_ASSERT(value >= 0);
+  KERNEL_ASSERT(value >= 0);
 
-    intr_status = _interrupt_disable();
-    spinlock_acquire(&semaphore_table_slock);
+  intr_status = _interrupt_disable();
+  spinlock_acquire(&semaphore_table_slock);
 
-    /* Find free semaphore from semaphore table */
-    for(i = 0; i < CONFIG_MAX_SEMAPHORES; i++) {
-        sem_id = next;
-        next = (next + 1) % CONFIG_MAX_SEMAPHORES;
-        if (semaphore_table[sem_id].creator == -1) {
-            semaphore_table[sem_id].creator = thread_get_current_thread();
-            break;
-        }
+  /* Find free semaphore from semaphore table */
+  for (i = 0; i < CONFIG_MAX_SEMAPHORES; i++) {
+    sem_id = next;
+    next = (next + 1) % CONFIG_MAX_SEMAPHORES;
+    if (semaphore_table[sem_id].creator == -1) {
+      semaphore_table[sem_id].creator = thread_get_current_thread();
+      break;
     }
+  }
 
-    spinlock_release(&semaphore_table_slock);
-    _interrupt_set_state(intr_status);
+  spinlock_release(&semaphore_table_slock);
+  _interrupt_set_state(intr_status);
 
-    if (i == CONFIG_MAX_SEMAPHORES) {
-	/* semaphore table does not have any free semaphores, creation fails */
-        return NULL;
-    }
+  if (i == CONFIG_MAX_SEMAPHORES) {
+    /* semaphore table does not have any free semaphores, creation fails */
+    return NULL;
+  }
 
-    semaphore_table[sem_id].value = value;
-    spinlock_reset(&semaphore_table[sem_id].slock);
+  semaphore_table[sem_id].value = value;
+  spinlock_reset(&semaphore_table[sem_id].slock);
 
-    return &semaphore_table[sem_id];
+  return &semaphore_table[sem_id];
 }
 
 /**
@@ -122,9 +124,10 @@ semaphore_t *semaphore_create(int value)
  * @param sem Semaphore to free (destroy)
  */
 
-void semaphore_destroy(semaphore_t *sem)
+void
+semaphore_destroy(semaphore_t* sem)
 {
-    sem->creator = -1;
+  sem->creator = -1;
 }
 
 /**
@@ -139,48 +142,50 @@ void semaphore_destroy(semaphore_t *sem)
  * @param sem Semaphore to lower by one.
  */
 
-void semaphore_P(semaphore_t *sem)
+void
+semaphore_P(semaphore_t* sem)
 {
-    interrupt_status_t intr_status;
+  interrupt_status_t intr_status;
 
-    intr_status = _interrupt_disable();
-    spinlock_acquire(&sem->slock);
+  intr_status = _interrupt_disable();
+  spinlock_acquire(&sem->slock);
 
-    sem->value--;
-    if (sem->value < 0) {
-        sleepq_add(sem);
-        spinlock_release(&sem->slock);
-        thread_switch();
-    } else {
-        spinlock_release(&sem->slock);
-    }
-    _interrupt_set_state(intr_status);
+  sem->value--;
+  if (sem->value < 0) {
+    sleepq_add(sem);
+    spinlock_release(&sem->slock);
+    thread_switch();
+  } else {
+    spinlock_release(&sem->slock);
+  }
+  _interrupt_set_state(intr_status);
 }
 
 /**
  * Increases the value of the semaphore sem by one. Wakes up
- * one waiter, if needed. 
- * 
+ * one waiter, if needed.
+ *
  * Note that this function is safe to call both from interrupt handlers
  * and threads, because the call will not block.
  *
  * @param sem Semaphore to raise by one.
  *
- */ 
+ */
 
-void semaphore_V(semaphore_t *sem)
+void
+semaphore_V(semaphore_t* sem)
 {
-    interrupt_status_t intr_status;
-    
-    intr_status = _interrupt_disable();
-    spinlock_acquire(&sem->slock);
+  interrupt_status_t intr_status;
 
-    sem->value++;
-    if (sem->value <= 0) {
-        sleepq_wake(sem);
-    }
+  intr_status = _interrupt_disable();
+  spinlock_acquire(&sem->slock);
 
-    spinlock_release(&sem->slock);
-    _interrupt_set_state(intr_status);
+  sem->value++;
+  if (sem->value <= 0) {
+    sleepq_wake(sem);
+  }
+
+  spinlock_release(&sem->slock);
+  _interrupt_set_state(intr_status);
 }
 

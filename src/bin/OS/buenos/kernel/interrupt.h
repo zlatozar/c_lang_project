@@ -72,17 +72,17 @@ typedef uint32_t interrupt_status_t;
 
 /* structure for registered interrupt handlers */
 typedef struct {
-    device_t *device;
-    uint32_t irq;
-    void (*handler)(device_t *);
+  device_t* device;
+  uint32_t irq;
+  void (*handler)(device_t*);
 } interrupt_entry_t;
 
 /* C functions */
 
 void interrupt_init(int num_cpus);
 void interrupt_register(uint32_t irq,
-			void (*handler)(device_t *),
-			device_t *device);
+                        void (*handler)(device_t*),
+                        device_t* device);
 void interrupt_handle(uint32_t cause);
 
 

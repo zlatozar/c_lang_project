@@ -35,15 +35,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void *smalloc(int amount) {
-	void *p;
-  
-    if((p = malloc(amount)) == NULL) {
-	fprintf(stderr, 
-		"Simulator run out of memory (short %d bytes)\n",
-		amount);
-	exit(1);
-    }
+void*
+smalloc(int amount)
+{
+  void* p;
 
-    return p;
+  if ((p = malloc(amount)) == NULL) {
+    fprintf(stderr,
+            "Simulator run out of memory (short %d bytes)\n",
+            amount);
+    exit(1);
+  }
+
+  return p;
 }

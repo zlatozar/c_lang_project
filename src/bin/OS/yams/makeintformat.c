@@ -11,26 +11,28 @@
 
 #include <stdio.h>
 
-int main() {
-    printf("#ifndef INTFORMAT_H\n#define INTFORMAT_H\n\n");
+int
+main()
+{
+  printf("#ifndef INTFORMAT_H\n#define INTFORMAT_H\n\n");
 
-    printf("#define PRId32 \"d\"\n");
-    printf("#define PRIu32 \"u\"\n");
-    printf("#define PRIx32 \"x\"\n");
-    printf("#define PRIx16 \"x\"\n");
-    printf("#define PRIx8 \"x\"\n");
+  printf("#define PRId32 \"d\"\n");
+  printf("#define PRIu32 \"u\"\n");
+  printf("#define PRIx32 \"x\"\n");
+  printf("#define PRIx16 \"x\"\n");
+  printf("#define PRIx8 \"x\"\n");
 
-    if (sizeof(unsigned long) == 8) {
-	printf("#define PRIu64 \"lu\"\n");
-	printf("#define UINT64_C(c) c ## UL\n");
-    }
+  if (sizeof(unsigned long) == 8) {
+    printf("#define PRIu64 \"lu\"\n");
+    printf("#define UINT64_C(c) c ## UL\n");
+  }
 #ifdef HAVE_LONG_LONG
-    else {
-	printf("#define PRIu64 \"llu\"\n");
-	printf("#define UINT64_C(c) c ## ULL\n");
-    }
+  else {
+    printf("#define PRIu64 \"llu\"\n");
+    printf("#define UINT64_C(c) c ## ULL\n");
+  }
 #endif
 
-    printf("\n#endif\n");
-    return 0;
+  printf("\n#endif\n");
+  return 0;
 }

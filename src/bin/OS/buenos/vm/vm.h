@@ -41,13 +41,13 @@
 
 void vm_init(void);
 
-pagetable_t *vm_create_pagetable(uint32_t asid);
-void vm_destroy_pagetable(pagetable_t *pagetable);
+pagetable_t* vm_create_pagetable(uint32_t asid);
+void vm_destroy_pagetable(pagetable_t* pagetable);
 
-void vm_map(pagetable_t *pagetable, uint32_t physaddr, 
-	    uint32_t vaddr, int dirty);
-void vm_unmap(pagetable_t *pagetable, uint32_t vaddr);
+void vm_map(pagetable_t* pagetable, uint32_t physaddr,
+            uint32_t vaddr, int dirty);
+void vm_unmap(pagetable_t* pagetable, uint32_t vaddr);
 
-void vm_set_dirty(pagetable_t *pagetable, uint32_t vaddr, int dirty);
+void vm_set_dirty(pagetable_t* pagetable, uint32_t vaddr, int dirty);
 
 #endif /* BUENOS_VM_VM_H */

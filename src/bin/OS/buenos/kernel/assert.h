@@ -41,7 +41,7 @@
 
 /* Causes kernel panic if condition is false */
 #define KERNEL_ASSERT(condition) \
-if(!(condition))\
-_kernel_panic(__FILE__, __LINE__, "Assertion failed")
+  if(!(condition))\
+    _kernel_panic(__FILE__, __LINE__, "Assertion failed")
 
 #endif

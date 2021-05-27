@@ -46,35 +46,35 @@
 
 
 /* Kernel print routine */
-void kwrite(char *s);
+void kwrite(char* s);
 
 /* Kernel read routine */
-void kread(char *s, int len);
+void kread(char* s, int len);
 
 /* formatted printing functions */
-int kprintf(const char *, ...);
-int snprintf(char *, int, const char *, ...);
+int kprintf(const char*, ...);
+int snprintf(char*, int, const char*, ...);
 
 /* the same with va_list arguments */
-int kvprintf(const char *, va_list);
-int vsnprintf(char *, int, const char *, va_list);
+int kvprintf(const char*, va_list);
+int vsnprintf(char*, int, const char*, va_list);
 
 /* Prototypes for random number generator functions */
 void _set_rand_seed(uint32_t seed);
 uint32_t _get_rand(uint32_t range);
 
 /* Prototypes for string manipulation functions */
-int stringcmp(const char *str1, const char *str2);
-char *stringcopy(char *target, const char *source, int buflen);
-int strlen(const char *str);
+int stringcmp(const char* str1, const char* str2);
+char* stringcopy(char* target, const char* source, int buflen);
+int strlen(const char* str);
 
 /* memory copy */
-void memcopy(int buflen, void *target, const void *source);
+void memcopy(int buflen, void* target, const void* source);
 
 /* memory set */
-void memoryset(void *target, char value, int size);
+void memoryset(void* target, char value, int size);
 
 /* convert string to integer */
-int atoi(const char *s);
+int atoi(const char* s);
 
 #endif /* BUENOS_LIB_LIBC_H */

@@ -48,12 +48,12 @@ network_address_t network_get_loopback_address(void);
 int network_get_mtu(network_address_t local_address);
 
 int network_send(network_address_t source,
-		 network_address_t destination,
-		 uint32_t protocol_id,
-		 int length,
-		 void *buffer);
+                 network_address_t destination,
+                 uint32_t protocol_id,
+                 int length,
+                 void* buffer);
 
-void network_free_frame(void *frame);
+void network_free_frame(void* frame);
 
 /* Return values of the network frame layer functions. */
 #define NET_OK 0

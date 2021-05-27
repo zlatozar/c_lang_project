@@ -33,7 +33,7 @@
 #define PLUGIO_CPU(x) ((x) & 0xff)
 #define PLUGIO_TAG(x) (((x) & 0xff0000) >> 16)
 #define PLUGIO_MAKECMD(flags, tag, cmd, cpu) \
-	((flags) | (cpu) | ((tag) << 16) | ((cmd) << 8))
+  ((flags) | (cpu) | ((tag) << 16) | ((cmd) << 8))
 
 #define PLUGIO_CMD_INIT     1
 #define PLUGIO_REPLY_DEVICE 2
@@ -59,35 +59,35 @@
 
 
 typedef struct _pluggable_device_t {
-    struct _pluggable_device_t *mmap_next; /* for MMAP handling */
-    struct _pluggable_device_t *next; /* for fd,tag -> dev lookup */
+  struct _pluggable_device_t* mmap_next; /* for MMAP handling */
+  struct _pluggable_device_t* next; /* for fd,tag -> dev lookup */
 
-    int tag, async;
+  int tag, async;
 
-    int fd;
+  int fd;
 
-    uint32_t mmap_size, mmap_base;
+  uint32_t mmap_size, mmap_base;
 
-    int irq_processor, irq_pending;
+  int irq_processor, irq_pending;
 
-    uint64_t delayed_effect, timer;
+  uint64_t delayed_effect, timer;
 } pluggable_device_t;
 
 
-int plugio_init(int domain, char *name, int port, int listen,
-	       int irq, int async, char *options);
-void plugio_destroy(device_t *plugio_dev);
+int plugio_init(int domain, char* name, int port, int listen,
+                int irq, int async, char* options);
+void plugio_destroy(device_t* plugio_dev);
 
-int plugio_mmap(pluggable_device_t *dev, uint32_t addr);
+int plugio_mmap(pluggable_device_t* dev, uint32_t addr);
 
-int plugio_mmap_read(pluggable_device_t *dev, uint32_t addr,
-		    void *buf, int size);
-int plugio_mmap_write(pluggable_device_t *dev, uint32_t addr,
-		     void *buf, int size);
+int plugio_mmap_read(pluggable_device_t* dev, uint32_t addr,
+                     void* buf, int size);
+int plugio_mmap_write(pluggable_device_t* dev, uint32_t addr,
+                      void* buf, int size);
 
-int plugio_io_write(device_t *dev, uint32_t addr, uint32_t data);
-int plugio_io_read(device_t *dev, uint32_t addr, uint32_t *data);
-int plugio_update(device_t *dev);
+int plugio_io_write(device_t* dev, uint32_t addr, uint32_t data);
+int plugio_io_read(device_t* dev, uint32_t addr, uint32_t* data);
+int plugio_update(device_t* dev);
 
 
 #endif /* YAMS_PLUGIO_H */

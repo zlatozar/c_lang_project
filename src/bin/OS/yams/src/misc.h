@@ -22,6 +22,6 @@
 #ifndef YAMS_MISC_H
 #define YAMS_MISC_H
 
-void *smalloc(int amount);
+void* smalloc(int amount);
 
 #endif /* YAMS_MISC_H */

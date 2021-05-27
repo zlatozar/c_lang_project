@@ -45,27 +45,27 @@
  * header (see network.c)
  */
 typedef struct {
-    uint16_t source_port __attribute__ ((packed));
-    uint16_t dest_port   __attribute__ ((packed));
-    uint32_t size        __attribute__ ((packed)); /* payload size */
+  uint16_t source_port __attribute__ ((packed));
+  uint16_t dest_port   __attribute__ ((packed));
+  uint32_t size        __attribute__ ((packed)); /* payload size */
 } pop_header_t;
 
 
 /* POP queue data type */
 typedef struct {
-    void *frame;            /* the incoming packet */
-    sock_t socket;          /* socket this frame belongs to */
-    uint32_t timestamp;     /* when this frame was put into the queue */
-    network_address_t from; /* address of the sender */
-    int busy;               /* is this queue entry in use? */
+  void* frame;            /* the incoming packet */
+  sock_t socket;          /* socket this frame belongs to */
+  uint32_t timestamp;     /* when this frame was put into the queue */
+  network_address_t from; /* address of the sender */
+  int busy;               /* is this queue entry in use? */
 } pop_queue_t;
 
 
 void pop_init();
 int pop_push_frame(network_address_t fromaddr,
-		   network_address_t toaddr,
-		   uint32_t protocol_id,
-		   void *frame);
+                   network_address_t toaddr,
+                   uint32_t protocol_id,
+                   void* frame);
 
 
 #endif /* NET_POP_H */

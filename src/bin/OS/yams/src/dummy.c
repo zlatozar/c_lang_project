@@ -21,15 +21,21 @@
 */
 #include "dummy.h"
 
-int dummy_io_write(device_t *dev, uint32_t addr, uint32_t data) {
-    return (dev == NULL);
+int
+dummy_io_write(device_t* dev, uint32_t addr, uint32_t data)
+{
+  return (dev == NULL);
 }
 
-int dummy_io_read(device_t *dev, uint32_t addr, uint32_t *data) {
-    *data = 0; /* better than leaving the data alone, imho */
-    return (dev == NULL);
+int
+dummy_io_read(device_t* dev, uint32_t addr, uint32_t* data)
+{
+  *data = 0; /* better than leaving the data alone, imho */
+  return (dev == NULL);
 }
 
-int dummy_update(device_t *dev) {
-    return (dev == NULL);
+int
+dummy_update(device_t* dev)
+{
+  return (dev == NULL);
 }

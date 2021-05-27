@@ -25,25 +25,29 @@
 #include <assert.h>
 #include <string.h>
 
-void device_set_irq(device_t *dev, uint32_t irq) {
-    assert(irq <= 5);
+void
+device_set_irq(device_t* dev, uint32_t irq)
+{
+  assert(irq <= 5);
 
-    dev->irq = irq;
+  dev->irq = irq;
 }
 
-void device_set_vendor(device_t *dev, char *vendor) {
-    if(vendor == NULL) {
-	memcpy(dev->vendor_string, "xxxxxxxx", 8);
-    } else {
-	int l;
-	l = strlen(vendor);
-	if(l > 8) {
-	    l=8;
-	    printf("Warning: truncating vendor '%s' to 8 chars\n",
-		   vendor);
-	}
-
-	memset(dev->vendor_string, 0, 8);
-	memcpy(dev->vendor_string, vendor, l);
+void
+device_set_vendor(device_t* dev, char* vendor)
+{
+  if (vendor == NULL) {
+    memcpy(dev->vendor_string, "xxxxxxxx", 8);
+  } else {
+    int l;
+    l = strlen(vendor);
+    if (l > 8) {
+      l = 8;
+      printf("Warning: truncating vendor '%s' to 8 chars\n",
+             vendor);
     }
+
+    memset(dev->vendor_string, 0, 8);
+    memcpy(dev->vendor_string, vendor, l);
+  }
 }

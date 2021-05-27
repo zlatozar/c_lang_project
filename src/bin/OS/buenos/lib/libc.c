@@ -44,7 +44,7 @@ extern void _shutdown(void);
 
 
 /*** @name Library routines
- * 
+ *
  * This module implements various library routines.
  *
  * @{
@@ -57,12 +57,13 @@ extern void _shutdown(void);
  *
  * @param s The null-terminated string to be printed.
  */
-void kwrite(char *s)
+void
+kwrite(char* s)
 {
-    while(*s) {
-        polltty_putchar(*s);
-        s++;
-    }
+  while (*s) {
+    polltty_putchar(*s);
+    s++;
+  }
 }
 
 /***
@@ -77,18 +78,19 @@ void kwrite(char *s)
  * @param len The length of the buffer \texttt{s}.
  *
  */
-void kread(char *s, 
-           int len)
+void
+kread(char* s,
+      int len)
 {
-    int ch;
-    int count = 0;
+  int ch;
+  int count = 0;
 
-    while (((ch = polltty_getchar()) != '\n') &&
-           (count < len - 1)){
-        s[count] = ch;
-        count++;
-    }
-    s[count] = '\0';
+  while (((ch = polltty_getchar()) != '\n') &&
+         (count < len - 1)) {
+    s[count] = ch;
+    count++;
+  }
+  s[count] = '\0';
 }
 
 /**
@@ -105,21 +107,22 @@ void kread(char *s,
  * @return The difference of the first pair of bytes in str1 and str2
  * that differ. If the strings are equal returns 0.
  */
-int stringcmp(const char *str1, const char *str2)
+int
+stringcmp(const char* str1, const char* str2)
 {
-    while(1) {
-        if (*str1 == '\0' && *str2 == '\0')
-            return 0;
-        if (*str1 == '\0' || *str2 == '\0' ||
-            *str1 != *str2)
-            return *str1-*str2;
+  while (1) {
+    if (*str1 == '\0' && *str2 == '\0')
+    { return 0; }
+    if (*str1 == '\0' || *str2 == '\0' ||
+        *str1 != *str2)
+    { return *str1 - *str2; }
 
-        str1++;
-        str2++;
-    }
+    str1++;
+    str2++;
+  }
 
-    /* Dummy return to keep gcc happy */
-    return 0; 
+  /* Dummy return to keep gcc happy */
+  return 0;
 }
 
 /**
@@ -140,29 +143,30 @@ int stringcmp(const char *str1, const char *str2)
  * @param source The string to be copied.
  *
  */
-char *stringcopy(char *target, const char *source, int buflen)
+char*
+stringcopy(char* target, const char* source, int buflen)
 {
-    int i;
-    char *ret;
+  int i;
+  char* ret;
 
-    ret = target;
+  ret = target;
 
-    for(i = 0; i < buflen - 1; i++) {
-        *target = *source;
-        if (*source == '\0') {
-            i++;
-            while(i < buflen) {
-                *target = '\0';
-                i++;
-            }
-            return ret;
-        }
-        target++;
-        source++;
+  for (i = 0; i < buflen - 1; i++) {
+    *target = *source;
+    if (*source == '\0') {
+      i++;
+      while (i < buflen) {
+        *target = '\0';
+        i++;
+      }
+      return ret;
     }
-    *target = '\0';
+    target++;
+    source++;
+  }
+  *target = '\0';
 
-    return ret;
+  return ret;
 }
 
 
@@ -177,43 +181,44 @@ char *stringcopy(char *target, const char *source, int buflen)
  * @param source The source buffer to be copied.
  *
  */
-void memcopy(int buflen, void *target, const void *source)
+void
+memcopy(int buflen, void* target, const void* source)
 {
-    int i;
-    char *t;
-    const char *s;
-    uint32_t *tgt;
-    const uint32_t *src;
+  int i;
+  char* t;
+  const char* s;
+  uint32_t* tgt;
+  const uint32_t* src;
 
-    tgt = (uint32_t *) target;
-    src = (uint32_t *) source;
+  tgt = (uint32_t*) target;
+  src = (uint32_t*) source;
 
-    if(((uint32_t)tgt % 4) != 0 || ((uint32_t)src % 4) != 0 ) {
-	t = (char *)tgt;
-	s = (const char *)src;
-	
-	for(i = 0; i < buflen; i++) {
-	    t[i] = s[i];
-	}
+  if (((uint32_t)tgt % 4) != 0 || ((uint32_t)src % 4) != 0 ) {
+    t = (char*)tgt;
+    s = (const char*)src;
 
-	return;
-    }
-
-    for(i = 0; i < (buflen/4); i++) {
-        *tgt = *src;
-	tgt++;
-	src++;
-    }
-    
-
-    t = (char *)tgt;
-    s = (const char *)src;
-    
-    for(i = 0; i < (buflen%4); i++) {
-	t[i] = s[i];
+    for (i = 0; i < buflen; i++) {
+      t[i] = s[i];
     }
 
     return;
+  }
+
+  for (i = 0; i < (buflen / 4); i++) {
+    *tgt = *src;
+    tgt++;
+    src++;
+  }
+
+
+  t = (char*)tgt;
+  s = (const char*)src;
+
+  for (i = 0; i < (buflen % 4); i++) {
+    t[i] = s[i];
+  }
+
+  return;
 }
 
 
@@ -227,14 +232,15 @@ void memcopy(int buflen, void *target, const void *source)
  * @param size How many bytes to set.
  *
  */
-void memoryset(void *target, char value, int size)
+void
+memoryset(void* target, char value, int size)
 {
-    int i;
-    char *tgt;
+  int i;
+  char* tgt;
 
-    tgt = (char *)target;
-    for(i = 0; i < size; i++)
-        tgt[i] = value;
+  tgt = (char*)target;
+  for (i = 0; i < size; i++)
+  { tgt[i] = value; }
 }
 
 /** Converts the initial portion of a string to an integer
@@ -246,44 +252,46 @@ void memoryset(void *target, char value, int size)
  * @param s The string to convert
  * @return The converted numeric value
  */
-int atoi(const char *s)
+int
+atoi(const char* s)
 {
-    int sign = 1;
-    int i = 0;
-    int value = 0;
+  int sign = 1;
+  int i = 0;
+  int value = 0;
 
-    /* skip leading whitespace*/
-    while(s[i] != 0 &&
-	  (s[i] == ' ' || s[i] == '\t' || s[i] == '\r' || s[i] == '\n'))
-	i++;
+  /* skip leading whitespace*/
+  while (s[i] != 0 &&
+         (s[i] == ' ' || s[i] == '\t' || s[i] == '\r' || s[i] == '\n'))
+  { i++; }
 
-    /* check possible sign */
-    switch(s[i]) {
+  /* check possible sign */
+  switch (s[i]) {
     case 0:
-	return 0; /* only whitespace in s */
+      return 0; /* only whitespace in s */
     case '-':
-	sign = -1;
-	/* and fall through */
+      sign = -1;
+    /* and fall through */
     case '+':
-	i++;
-    }
+      i++;
+  }
 
-    /* read chars until a nondigit (or end of string) is met */
-    while(s[i] >= '0' && s[i] <= '9') {
-	value = 10*value + sign*(int)(s[i]-'0');
-	i++;
-    }
+  /* read chars until a nondigit (or end of string) is met */
+  while (s[i] >= '0' && s[i] <= '9') {
+    value = 10 * value + sign * (int)(s[i] - '0');
+    i++;
+  }
 
-    return value;
+  return value;
 }
 
-int strlen(const char *str)
+int
+strlen(const char* str)
 {
-    int l=0;
+  int l = 0;
 
-    while(*(str++) != 0) l++;
+  while (*(str++) != 0) { l++; }
 
-    return l;
+  return l;
 }
 
 /*** @} */

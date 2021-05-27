@@ -50,7 +50,7 @@
 
 /* Bitmap field of physical pages. Length is number of physical pages
    rounded up to a word boundary */
-static bitmap_t *pagepool_free_pages;
+static bitmap_t* pagepool_free_pages;
 
 /* Number of physical pages */
 static int pagepool_num_pages;
@@ -71,63 +71,65 @@ static spinlock_t pagepool_slock;
  * number of staticly reserved physical pages. Marks reserved pages
  * reserved in pagepool_free_pages.
  */
-void pagepool_init(void)
+void
+pagepool_init(void)
 {
-    int num_res_pages;
-    int i;
+  int num_res_pages;
+  int i;
 
-    pagepool_num_pages = kmalloc_get_numpages();
+  pagepool_num_pages = kmalloc_get_numpages();
 
-    pagepool_free_pages = 
-        (uint32_t *)kmalloc(bitmap_sizeof(pagepool_num_pages));
-    bitmap_init(pagepool_free_pages, pagepool_num_pages);
+  pagepool_free_pages =
+    (uint32_t*)kmalloc(bitmap_sizeof(pagepool_num_pages));
+  bitmap_init(pagepool_free_pages, pagepool_num_pages);
 
-    /* Note that number of reserved pages must be get after we have 
-       (staticly) reserved memory for bitmap. */
-    num_res_pages = kmalloc_get_reserved_pages();
-    pagepool_num_free_pages = pagepool_num_pages - num_res_pages;
-    pagepool_static_end = num_res_pages;
+  /* Note that number of reserved pages must be get after we have
+     (staticly) reserved memory for bitmap. */
+  num_res_pages = kmalloc_get_reserved_pages();
+  pagepool_num_free_pages = pagepool_num_pages - num_res_pages;
+  pagepool_static_end = num_res_pages;
 
-    for (i = 0; i < num_res_pages; i++)
-        bitmap_set(pagepool_free_pages, i, 1);
+  for (i = 0; i < num_res_pages; i++)
+  { bitmap_set(pagepool_free_pages, i, 1); }
 
-    spinlock_reset(&pagepool_slock);
+  spinlock_reset(&pagepool_slock);
 
-    kprintf("Pagepool: Found %d pages of size %d\n", pagepool_num_pages,
-            PAGE_SIZE);
-    kprintf("Pagepool: Static allocation for kernel: %d pages\n", 
-            num_res_pages);
+  kprintf("Pagepool: Found %d pages of size %d\n", pagepool_num_pages,
+          PAGE_SIZE);
+  kprintf("Pagepool: Static allocation for kernel: %d pages\n",
+          num_res_pages);
 
 }
 
 /**
- * Finds first free physical page and marks it reserved.  
+ * Finds first free physical page and marks it reserved.
  *
  * @return Address of first free physical page, zero if no free pages
  * are available.
  */
-uint32_t pagepool_get_phys_page(void)
+uint32_t
+pagepool_get_phys_page(void)
 {
-    interrupt_status_t intr_status;
-    int i;
+  interrupt_status_t intr_status;
+  int i;
 
-    intr_status = _interrupt_disable();
-    spinlock_acquire(&pagepool_slock);
-    
-    if (pagepool_num_free_pages > 0) {
-	i = bitmap_findnset(pagepool_free_pages,pagepool_num_pages);
-	pagepool_num_free_pages--;
+  intr_status = _interrupt_disable();
+  spinlock_acquire(&pagepool_slock);
 
-        /* There should have been a free page. Check that the pagepool
-           internal variables are in synch. */
-	KERNEL_ASSERT(i >= 0 && pagepool_num_free_pages >= 0);
-    } else {
-        i = 0;
-    }
+  if (pagepool_num_free_pages > 0) {
+    i = bitmap_findnset(pagepool_free_pages, pagepool_num_pages);
+    pagepool_num_free_pages--;
 
-    spinlock_release(&pagepool_slock);
-    _interrupt_set_state(intr_status);
-    return i*PAGE_SIZE;
+    /* There should have been a free page. Check that the pagepool
+       internal variables are in synch. */
+    KERNEL_ASSERT(i >= 0 && pagepool_num_free_pages >= 0);
+  } else {
+    i = 0;
+  }
+
+  spinlock_release(&pagepool_slock);
+  _interrupt_set_state(intr_status);
+  return i * PAGE_SIZE;
 }
 
 /**
@@ -136,27 +138,28 @@ uint32_t pagepool_get_phys_page(void)
  *
  * @param phys_addr Page to be freed.
  */
-void pagepool_free_phys_page(uint32_t phys_addr)
+void
+pagepool_free_phys_page(uint32_t phys_addr)
 {
-    interrupt_status_t intr_status;
-    int i;
+  interrupt_status_t intr_status;
+  int i;
 
-    i = phys_addr / PAGE_SIZE;
+  i = phys_addr / PAGE_SIZE;
 
-    /* A page allocated by kmalloc should not be freed. */
-    KERNEL_ASSERT(i >= pagepool_static_end);
+  /* A page allocated by kmalloc should not be freed. */
+  KERNEL_ASSERT(i >= pagepool_static_end);
 
-    intr_status = _interrupt_disable();
-    spinlock_acquire(&pagepool_slock);
-    
-    /* Check that the page was reserved. */
-    KERNEL_ASSERT(bitmap_get(pagepool_free_pages, i) == 1);
+  intr_status = _interrupt_disable();
+  spinlock_acquire(&pagepool_slock);
 
-    bitmap_set(pagepool_free_pages, i, 0);
-    pagepool_num_free_pages++;
+  /* Check that the page was reserved. */
+  KERNEL_ASSERT(bitmap_get(pagepool_free_pages, i) == 1);
 
-    spinlock_release(&pagepool_slock);
-    _interrupt_set_state(intr_status);
+  bitmap_set(pagepool_free_pages, i, 0);
+  pagepool_num_free_pages++;
+
+  spinlock_release(&pagepool_slock);
+  _interrupt_set_state(intr_status);
 }
 
 

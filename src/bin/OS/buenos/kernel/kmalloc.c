@@ -65,28 +65,29 @@ static uint32_t memory_end;
  *
  * @return The number of memory pages
  */
-int kmalloc_get_numpages()
+int
+kmalloc_get_numpages()
 {
-    uint32_t num_pages = 0;
-    int i;
+  uint32_t num_pages = 0;
+  int i;
 
-    io_descriptor_t *io_desc;
+  io_descriptor_t* io_desc;
 
-    io_desc = (io_descriptor_t *)IO_DESCRIPTOR_AREA;
-    
-    /* Find MemInfo meta device */
-    for(i = 0; i < YAMS_MAX_DEVICES; i++) {
-        if (io_desc->type == 0x101) {
-	    num_pages = (*(uint32_t *)io_desc->io_area_base);
-            break;
-        }
-        io_desc++;
+  io_desc = (io_descriptor_t*)IO_DESCRIPTOR_AREA;
+
+  /* Find MemInfo meta device */
+  for (i = 0; i < YAMS_MAX_DEVICES; i++) {
+    if (io_desc->type == 0x101) {
+      num_pages = (*(uint32_t*)io_desc->io_area_base);
+      break;
     }
+    io_desc++;
+  }
 
-    if (num_pages == 0)
-        KERNEL_PANIC("No MemInfo device found.");
+  if (num_pages == 0)
+  { KERNEL_PANIC("No MemInfo device found."); }
 
-    return num_pages;
+  return num_pages;
 }
 
 /**
@@ -94,17 +95,18 @@ int kmalloc_get_numpages()
  *
  * @return The number of pages
  */
-int kmalloc_get_reserved_pages()
+int
+kmalloc_get_reserved_pages()
 {
 
-    int num_res_pages;
+  int num_res_pages;
 
-    num_res_pages = (free_area_start - 0x80000000) / PAGE_SIZE;
+  num_res_pages = (free_area_start - 0x80000000) / PAGE_SIZE;
 
-    if (((free_area_start - 0x80000000) % PAGE_SIZE) != 0)
-        num_res_pages++;
+  if (((free_area_start - 0x80000000) % PAGE_SIZE) != 0)
+  { num_res_pages++; }
 
-    return num_res_pages;
+  return num_res_pages;
 
 }
 
@@ -112,9 +114,10 @@ int kmalloc_get_reserved_pages()
  * Disable static memory allocation for kernel. This is called from
  * the virtual memory initialization function.
  */
-void kmalloc_disable()
+void
+kmalloc_disable()
 {
-    free_area_start = 0xffffffff;
+  free_area_start = 0xffffffff;
 }
 
 /**
@@ -125,34 +128,35 @@ void kmalloc_disable()
  * initialized. Causes kernel panic if the MemInfo device descriptor
  * is not found.
  */
-void kmalloc_init(void)
+void
+kmalloc_init(void)
 {
-    uint32_t system_memory_size = 0;
+  uint32_t system_memory_size = 0;
 
-    io_descriptor_t UNUSED *io_desc;
+  io_descriptor_t UNUSED* io_desc;
 
-    memory_end = 0;
-    io_desc = (io_descriptor_t *)IO_DESCRIPTOR_AREA;
-    
-    system_memory_size = kmalloc_get_numpages() * PAGE_SIZE;
+  memory_end = 0;
+  io_desc = (io_descriptor_t*)IO_DESCRIPTOR_AREA;
 
-    memory_end = 0x80000000 + system_memory_size;
+  system_memory_size = kmalloc_get_numpages() * PAGE_SIZE;
 
-    free_area_start = (uint32_t) &KERNEL_ENDS_HERE;
+  memory_end = 0x80000000 + system_memory_size;
 
-    /* Check that the address is aligned on a word boundary */
-    if (free_area_start & 0x03) {
-        free_area_start += 4;
-        free_area_start &= 0xfffffffc;
-    }
+  free_area_start = (uint32_t) &KERNEL_ENDS_HERE;
 
-    kprintf("Kernel size is 0x%.8x (%d) bytes\n", 
-	    (free_area_start - KERNEL_BOOT_ADDRESS),
-	    (free_area_start - KERNEL_BOOT_ADDRESS));
+  /* Check that the address is aligned on a word boundary */
+  if (free_area_start & 0x03) {
+    free_area_start += 4;
+    free_area_start &= 0xfffffffc;
+  }
 
-    kprintf("System memory size is 0x%.8x (%d) bytes\n",
-	    system_memory_size, system_memory_size);
-	    
+  kprintf("Kernel size is 0x%.8x (%d) bytes\n",
+          (free_area_start - KERNEL_BOOT_ADDRESS),
+          (free_area_start - KERNEL_BOOT_ADDRESS));
+
+  kprintf("System memory size is 0x%.8x (%d) bytes\n",
+          system_memory_size, system_memory_size);
+
 }
 
 /**
@@ -164,38 +168,39 @@ void kmalloc_init(void)
  *
  * @return The start address of the reseved memory address.
  */
-void *kmalloc(int bytes)
+void*
+kmalloc(int bytes)
 {
-    uint32_t res;
+  uint32_t res;
 
-    /* Panic if VM is initialized */
-    if (free_area_start == 0xffffffff){
-        KERNEL_PANIC("Attempting to use kmalloc after vm init\n");
-    }
+  /* Panic if VM is initialized */
+  if (free_area_start == 0xffffffff) {
+    KERNEL_PANIC("Attempting to use kmalloc after vm init\n");
+  }
 
-    if (free_area_start == 0) {
-        KERNEL_PANIC("Attempting to use kmalloc before initialization\n");
-    }    
+  if (free_area_start == 0) {
+    KERNEL_PANIC("Attempting to use kmalloc before initialization\n");
+  }
 
-    /* bytes == 0 may be useful for aligning memory so it is allowed */
-    if (bytes < 0)
-	KERNEL_PANIC("Attempting to kmalloc negative amount of bytes\n");
+  /* bytes == 0 may be useful for aligning memory so it is allowed */
+  if (bytes < 0)
+  { KERNEL_PANIC("Attempting to kmalloc negative amount of bytes\n"); }
 
-    if (free_area_start + bytes > memory_end)
-	KERNEL_PANIC("Out of memory\n");
+  if (free_area_start + bytes > memory_end)
+  { KERNEL_PANIC("Out of memory\n"); }
 
-    res = free_area_start;
+  res = free_area_start;
 
-    free_area_start += bytes;
+  free_area_start += bytes;
 
-    /* Check that the start of free area is aligned on a word
-       boundary */
-    if (free_area_start & 0x03) {
-        free_area_start += 4;
-        free_area_start &= 0xfffffffc;
-    }
+  /* Check that the start of free area is aligned on a word
+     boundary */
+  if (free_area_start & 0x03) {
+    free_area_start += 4;
+    free_area_start &= 0xfffffffc;
+  }
 
-    return (void *)res;
+  return (void*)res;
 }
 
 

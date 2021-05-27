@@ -33,14 +33,14 @@
 #include "includes.h"
 
 typedef struct _device_t {
-  struct _device_t *next;
-  
+  struct _device_t* next;
+
   uint32_t typecode;
   char vendor_string[8];
   uint32_t io_base;
   uint32_t irq;
   uint32_t io_length;
-  
+
   /* This is a pointer to a structure containing all the parameters
    * for a specified device. e.g. for disk devices the structure
    * contains the image file name and handles etc. This may be left
@@ -52,15 +52,15 @@ typedef struct _device_t {
    * needed variables by typecasting,
    * e.g. (diskdevice_t*)(dev->realdevice)
    */
-  void *realdevice;
-  
-  int (*io_write)(struct _device_t *dev, uint32_t addr, uint32_t data);
-  int (*io_read)(struct _device_t *dev, uint32_t addr, uint32_t *data);
-  int (*update)(struct _device_t *dev);
+  void* realdevice;
+
+  int (*io_write)(struct _device_t* dev, uint32_t addr, uint32_t data);
+  int (*io_read)(struct _device_t* dev, uint32_t addr, uint32_t* data);
+  int (*update)(struct _device_t* dev);
 } device_t;
 
-void device_set_irq(device_t *dev, uint32_t irq);
-void device_set_vendor(device_t *dev, char *vendor);
+void device_set_irq(device_t* dev, uint32_t irq);
+void device_set_vendor(device_t* dev, char* vendor);
 
 #endif /* YAMS_DEVICE_H */
 

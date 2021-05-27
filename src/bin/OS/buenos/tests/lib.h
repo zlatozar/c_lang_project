@@ -51,21 +51,21 @@ uint32_t _syscall(uint32_t syscall_num, uint32_t a1, uint32_t a2, uint32_t a3);
 
 void syscall_halt(void);
 
-int syscall_exec(const char *filename);
-int syscall_execp(const char *filename, int argc, const char **argv);
+int syscall_exec(const char* filename);
+int syscall_execp(const char* filename, int argc, const char** argv);
 int syscall_join(int pid);
 void syscall_exit(int retval);
 
-int syscall_open(const char *filename);
+int syscall_open(const char* filename);
 int syscall_close(int filehandle);
 int syscall_seek(int filehandle, int offset);
-int syscall_read(int filehandle, void *buffer, int length);
-int syscall_write(int filehandle, const void *buffer, int length);
-int syscall_create(const char *filename, int size);
-int syscall_delete(const char *filename);
+int syscall_read(int filehandle, void* buffer, int length);
+int syscall_write(int filehandle, const void* buffer, int length);
+int syscall_create(const char* filename, int size);
+int syscall_delete(const char* filename);
 
 int syscall_fork(void (*func)(int), int arg);
-void *syscall_memlimit(void *heap_end);
+void* syscall_memlimit(void* heap_end);
 
 
 #endif /* BUENOS_USERLAND_LIB_H */

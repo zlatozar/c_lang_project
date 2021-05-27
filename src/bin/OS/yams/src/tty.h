@@ -45,27 +45,27 @@
 #define IOLENGTH_TTY 12
 
 typedef struct {
-    int send_delay;
-    int sock  ;
-    int desc;
-    char *sock_name;
-    int sock_port;
-    int sock_domain;
+  int send_delay;
+  int sock  ;
+  int desc;
+  char* sock_name;
+  int sock_port;
+  int sock_domain;
 
-    int inbuf; /* -1 == empty, othervice contains number [0,255] (byte) */
-    int outbuf; /* -1 == empty, ohtervice contains number [0,255] (byte) */
-    int irq_processor;
+  int inbuf; /* -1 == empty, othervice contains number [0,255] (byte) */
+  int outbuf; /* -1 == empty, ohtervice contains number [0,255] (byte) */
+  int irq_processor;
 
-    int wirq_pending;
-    int wirq_enabled;
-    int rirq_pending;
+  int wirq_pending;
+  int wirq_enabled;
+  int rirq_pending;
 
-    uint32_t error_status;
+  uint32_t error_status;
 } ttydevice_t;
 
 /* Allocates memory for a disk device */
-device_t *tty_create();
-void tty_destroy(device_t *tty);
+device_t* tty_create();
+void tty_destroy(device_t* tty);
 
 /* Creates a new TTY device
  * domain: either PF_INET or PF_UNIX
@@ -79,15 +79,15 @@ void tty_destroy(device_t *tty);
  * 1 - bind() failed for the socket
  * 2 - invalid parameters
  */
-int tty_init(int domain, char *name, int port, int listen,
-	     device_t *tty);
+int tty_init(int domain, char* name, int port, int listen,
+             device_t* tty);
 
 /*returns: 0 - OK, 1 - invalid parameters */
-int tty_setdelay(int delay, device_t *tty);
+int tty_setdelay(int delay, device_t* tty);
 
-int tty_io_write(device_t *dev, uint32_t addr, uint32_t data);
-int tty_io_read(device_t *dev, uint32_t addr, uint32_t *data);
-int tty_update(device_t *dev);
+int tty_io_write(device_t* dev, uint32_t addr, uint32_t data);
+int tty_io_read(device_t* dev, uint32_t addr, uint32_t* data);
+int tty_update(device_t* dev);
 
 
 

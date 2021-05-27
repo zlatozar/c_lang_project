@@ -27,7 +27,7 @@
 #include "cpu_defs.h"
 
 
-extern char *cp0_register_names[];
+extern char* cp0_register_names[];
 
 
 
@@ -55,7 +55,7 @@ extern char *cp0_register_names[];
 
 #define CP0_STATUS_BEV(cpu) \
   ((0x00400000 & (cpu)->cp0->registers[Status]) >> 22)
-  
+
 #define CP0_STATUS_RP(cpu) \
   ((0x08000000 & (cpu)->cp0->registers[Status]) >> 27)
 
@@ -106,148 +106,148 @@ extern char *cp0_register_names[];
 
 #define SET_CP0_CAUSE_IP_HW(cpu, value) \
   (cpu)->cp0->registers[Cause] = ((cpu)->cp0->registers[Cause] & ~0x0000fc00) \
-  | ((value)<<10) 
+                                 | ((value)<<10)
 
 #define SET_CP0_CAUSE_IP7(cpu, value) \
   (cpu)->cp0->registers[Cause] = ((cpu)->cp0->registers[Cause] & ~0x00008000) \
-  | ((value)<<15) 
+                                 | ((value)<<15)
 
 #define SET_CP0_CAUSE_IP(cpu, which, value) \
   (cpu)->cp0->registers[Cause] = \
-        ((cpu)->cp0->registers[Cause] & ~(1 << ((which) + 8))) \
-        | ((value)<< (which + 8)) 
+                                 ((cpu)->cp0->registers[Cause] & ~(1 << ((which) + 8))) \
+                                 | ((value)<< (which + 8))
 
 #define SET_CP0_CAUSE_CE(cpu, value) \
   (cpu)->cp0->registers[Cause] = ((cpu)->cp0->registers[Cause] & ~0x30000000) \
-  | ((value)<<28) 
+                                 | ((value)<<28)
 
 
 #define SET_CP0_CAUSE_BD(cpu, value) \
   (cpu)->cp0->registers[Cause] = ((cpu)->cp0->registers[Cause] & ~0x80000000) \
-  | ((value)<<31) 
+                                 | ((value)<<31)
 
 
 #define SET_CP0_CAUSE_EXCODE(cpu, value) \
   (cpu)->cp0->registers[Cause] = ((cpu)->cp0->registers[Cause] & ~0x0000007c) \
-  | ((value)<<2) 
+                                 | ((value)<<2)
 
 
 #define SET_CP0_STATUS_EXL(cpu, value) \
   (cpu)->cp0->registers[Status] = ((cpu)->cp0->registers[Status] & ~0x00000002) \
-  | ((value)<<1) 
+                                  | ((value)<<1)
 
 
 #define SET_CP0_STATUS_ERL(cpu, value) \
   (cpu)->cp0->registers[Status] = ((cpu)->cp0->registers[Status] & ~0x00000004) \
-  | ((value)<<2) 
+                                  | ((value)<<2)
 
 #define SET_CP0_STATUS_RP(cpu, value) \
- (cpu)->cp0->registers[Status] = ((cpu)->cp0->registers[Status] & ~0x08000000) \
-  | ((value)<<27)
+  (cpu)->cp0->registers[Status] = ((cpu)->cp0->registers[Status] & ~0x08000000) \
+                                  | ((value)<<27)
 
 #define SET_CP0_CONTEXT_BADVPN2(cpu, addr) \
   (cpu)->cp0->registers[Context] = ((cpu)->cp0->registers[Context] &  ~0x007ffff0) \
-  | (((addr) & 0xffffe000) >> 9)
+                                   | (((addr) & 0xffffe000) >> 9)
 
 #define SET_CP0_ENTRYHI_BADVPN2(cpu, addr) \
   (cpu)->cp0->registers[EntryHi] = ((cpu)->cp0->registers[EntryHi] &  ~0xffffe000) \
-  | ((addr) & 0xffffe000)
+                                   | ((addr) & 0xffffe000)
 
 
 #define TLB_G(cp0, n) \
- (((cp0)->tlb[n].vp & 0x00000100) >> 8)
+  (((cp0)->tlb[n].vp & 0x00000100) >> 8)
 
 #define TLB_ASID(cp0, n) \
- (((cp0)->tlb[n].vp & 0x000000ff))
+  (((cp0)->tlb[n].vp & 0x000000ff))
 
 #define TLB_VPN2(cp0, n) \
- (((cp0)->tlb[n].vp & 0xffffe000) >> 13)
+  (((cp0)->tlb[n].vp & 0xffffe000) >> 13)
 
 #define TLB_PFN0(cp0, n) \
- (((cp0)->tlb[n].even_entry & 0x3fffffc0) >> 6)
+  (((cp0)->tlb[n].even_entry & 0x3fffffc0) >> 6)
 
 #define TLB_C0(cp0, n) \
- (((cp0)->tlb[n].even_entry & 0x00000038) >> 3)
+  (((cp0)->tlb[n].even_entry & 0x00000038) >> 3)
 
 #define TLB_D0(cp0, n) \
- (((cp0)->tlb[n].even_entry & 0x00000004) >> 2)
+  (((cp0)->tlb[n].even_entry & 0x00000004) >> 2)
 
 #define TLB_V0(cp0, n) \
- (((cp0)->tlb[n].even_entry & 0x00000002) >> 1)
+  (((cp0)->tlb[n].even_entry & 0x00000002) >> 1)
 
 
 #define TLB_PFN1(cp0, n) \
- (((cp0)->tlb[n].odd_entry & 0x3fffffc0) >> 6)
+  (((cp0)->tlb[n].odd_entry & 0x3fffffc0) >> 6)
 
 #define TLB_C1(cp0, n) \
- (((cp0)->tlb[n].odd_entry & 0x00000038) >> 3)
+  (((cp0)->tlb[n].odd_entry & 0x00000038) >> 3)
 
 #define TLB_D1(cp0, n) \
- (((cp0)->tlb[n].odd_entry & 0x00000004) >> 2)
+  (((cp0)->tlb[n].odd_entry & 0x00000004) >> 2)
 
 #define TLB_V1(cp0, n) \
- (((cp0)->tlb[n].odd_entry & 0x00000002) >> 1)
+  (((cp0)->tlb[n].odd_entry & 0x00000002) >> 1)
 
 
 /* Macros to set TLB fields. */
 
 #define SET_TLB_G(cp0, n, value) \
   (cp0)->tlb[n].vp = ((cp0)->tlb[n].vp & ~0x00000100) \
-  | ((value)<<8)
+                     | ((value)<<8)
 
 #define SET_TLB_ASID(cp0, n, value) \
   (cp0)->tlb[n].vp = ((cp0)->tlb[n].vp & ~0x000000ff) \
-  | (value)
+                     | (value)
 
 #define SET_TLB_VPN2(cp0, n, value) \
   (cp0)->tlb[n].vp =((cp0)->tlb[n].vp & ~0xffffe000) \
-  | ((value) << 13)
+                    | ((value) << 13)
 
 #define SET_TLB_PFN0(cp0, n, value) \
   (cp0)->tlb[n].even_entry = ((cp0)->tlb[n].even_entry & ~0x3fffffc0) \
-  | ((value) << 6)
+                             | ((value) << 6)
 
 #define SET_TLB_C0(cp0, n, value) \
   (cp0)->tlb[n].even_entry = ((cp0)->tlb[n].even_entry & ~0x00000038) \
-  | ((value) << 3)
+                             | ((value) << 3)
 
 #define SET_TLB_D0(cp0, n, value) \
   (cp0)->tlb[n].even_entry = ((cp0)->tlb[n].even_entry & ~0x00000004) \
-  | ((value) << 2)
+                             | ((value) << 2)
 
 #define SET_TLB_V0(cp0, n, value) \
   (cp0)->tlb[n].even_entry = ((cp0)->tlb[n].even_entry & ~0x00000002) \
-  | ((value) << 1)
+                             | ((value) << 1)
 
 
 #define SET_TLB_PFN1(cp0, n, value) \
   (cp0)->tlb[n].odd_entry = ((cp0)->tlb[n].odd_entry & ~0x3fffffc0) \
-  | ((value) << 6)
+                            | ((value) << 6)
 
 #define SET_TLB_C1(cp0, n, value) \
   (cp0)->tlb[n].odd_entry = ((cp0)->tlb[n].odd_entry & ~0x00000038) \
-  | ((value) << 3)
+                            | ((value) << 3)
 
 #define SET_TLB_D1(cp0, n, value) \
   (cp0)->tlb[n].odd_entry = ((cp0)->tlb[n].odd_entry & ~0x00000004) \
-  | ((value) << 2)
+                            | ((value) << 2)
 
 #define SET_TLB_V1(cp0, n, value) \
   (cp0)->tlb[n].odd_entry = ((cp0)->tlb[n].odd_entry & ~0x00000002) \
-  | ((value) << 1)
+                            | ((value) << 1)
 
 #define WRITE_CP0_REG(cp0ptr, reg, value) \
-    ((cp0ptr)->registers[(reg)] = (value))
-    
+  ((cp0ptr)->registers[(reg)] = (value))
+
 #define READ_CP0_REG(cp0ptr, reg) \
-    ((cp0ptr)->registers[(reg)])
+  ((cp0ptr)->registers[(reg)])
 
 
-cp0_t *cp0_create(int cpu_id);
+cp0_t* cp0_create(int cpu_id);
 
 /* Translate virtual address into physical address */
-exception_t tlb_translate(cpu_t *cpu, uint32_t va, uint32_t *pa, int reftype);
+exception_t tlb_translate(cpu_t* cpu, uint32_t va, uint32_t* pa, int reftype);
 
-uint32_t cp0_register_to_number(char * name);
+uint32_t cp0_register_to_number(char* name);
 
 #endif

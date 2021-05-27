@@ -65,51 +65,51 @@
 */
 #define TFS_BLOCKS_MAX ((TFS_BLOCK_SIZE/sizeof(uint32_t))-1)
 
-/* Maximum file size. 512-byte Inode can store 127 blocks for a file. 
+/* Maximum file size. 512-byte Inode can store 127 blocks for a file.
    512*127=65024 */
 #define TFS_MAX_FILESIZE (TFS_BLOCK_SIZE*TFS_BLOCKS_MAX)
 
 /* File inode block. Inode contains the filesize and a table of blocknumbers
    allocated for the file. In TFS files can't have more blocks than fits in
-   block table of the inode block. 
+   block table of the inode block.
 
    One 512 byte block can hold 128 32-bit integers. Therefore the table
    size is limited to 127 and filesize to 127*512=65024.
 */
 
 typedef struct {
-    /* filesize in bytes */
-    uint32_t filesize;
+  /* filesize in bytes */
+  uint32_t filesize;
 
-    /* block numbers allocated for this file, zero 
-       means unused block. */
-    uint32_t block[TFS_BLOCKS_MAX];			   		      
+  /* block numbers allocated for this file, zero
+     means unused block. */
+  uint32_t block[TFS_BLOCKS_MAX];
 } tfs_inode_t;
 
 
-/* Master directory block entry. If inode is zero, entry is 
-   unused (free). */ 
+/* Master directory block entry. If inode is zero, entry is
+   unused (free). */
 typedef struct {
-    /* File's inode block number. */
-    uint32_t inode;
+  /* File's inode block number. */
+  uint32_t inode;
 
-    /* File name */
-    char     name[TFS_FILENAME_MAX];
+  /* File name */
+  char     name[TFS_FILENAME_MAX];
 } tfs_direntry_t;
 
 #define TFS_MAX_FILES (TFS_BLOCK_SIZE/sizeof(tfs_direntry_t))
 
 /* functions */
-fs_t * tfs_init(gbd_t *disk);
+fs_t* tfs_init(gbd_t* disk);
 
-int tfs_unmount(fs_t *fs);
-int tfs_open(fs_t *fs, char *filename);
-int tfs_close(fs_t *fs, int fileid);
-int tfs_create(fs_t *fs, char *filename, int size);
-int tfs_remove(fs_t *fs, char *filename);
-int tfs_read(fs_t *fs, int fileid, void *buffer, int bufsize, int offset);
-int tfs_write(fs_t *fs, int fileid, void *buffer, int datasize, int offset);
-int tfs_getfree(fs_t *fs);
+int tfs_unmount(fs_t* fs);
+int tfs_open(fs_t* fs, char* filename);
+int tfs_close(fs_t* fs, int fileid);
+int tfs_create(fs_t* fs, char* filename, int size);
+int tfs_remove(fs_t* fs, char* filename);
+int tfs_read(fs_t* fs, int fileid, void* buffer, int bufsize, int offset);
+int tfs_write(fs_t* fs, int fileid, void* buffer, int datasize, int offset);
+int tfs_getfree(fs_t* fs);
 
 
 #endif    /* FS_TFS_H */

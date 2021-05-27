@@ -47,16 +47,17 @@
  *
  */
 
-void DEBUG(char *debuglevelname, char *format, ...)
+void
+DEBUG(char* debuglevelname, char* format, ...)
 {
-    if(bootargs_get(debuglevelname) != NULL) {
-	va_list args;
-	va_start(args, format);
+  if (bootargs_get(debuglevelname) != NULL) {
+    va_list args;
+    va_start(args, format);
 
-	kvprintf(format, args);
+    kvprintf(format, args);
 
-	va_end(args);
-    }
+    va_end(args);
+  }
 }
 
 

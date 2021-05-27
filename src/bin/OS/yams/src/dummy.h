@@ -25,8 +25,8 @@
 #include <sys/types.h>
 #include "device.h"
 
-int dummy_io_write(device_t *dev, uint32_t addr, uint32_t data);
-int dummy_io_read(device_t *dev, uint32_t addr, uint32_t *data);
-int dummy_update(device_t *dev);
+int dummy_io_write(device_t* dev, uint32_t addr, uint32_t data);
+int dummy_io_read(device_t* dev, uint32_t addr, uint32_t* data);
+int dummy_update(device_t* dev);
 
 #endif

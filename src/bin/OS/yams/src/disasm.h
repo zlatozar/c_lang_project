@@ -23,6 +23,6 @@
 #ifndef DISASM_H
 #define DISASM_H
 
-void disasm(uint32_t addr, instr_t *instr, char *buf, int len);
+void disasm(uint32_t addr, instr_t* instr, char* buf, int len);
 
 #endif  /* DISASM_H */

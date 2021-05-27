@@ -53,13 +53,14 @@ extern void _timer_set_ticks(uint32_t ticks);
  *
  */
 
-void timer_set_ticks(uint32_t ticks)
+void
+timer_set_ticks(uint32_t ticks)
 {
-    interrupt_status_t intr_status;
+  interrupt_status_t intr_status;
 
-    intr_status = _interrupt_disable();
-    _timer_set_ticks(ticks);
-    _interrupt_set_state(intr_status);
+  intr_status = _interrupt_disable();
+  _timer_set_ticks(ticks);
+  _interrupt_set_state(intr_status);
 }
 
 /** @} */

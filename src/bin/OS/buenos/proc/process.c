@@ -63,128 +63,129 @@
  * @executable The name of the executable to be run in the userland
  * process
  */
-void process_start(const char *executable)
+void
+process_start(const char* executable)
 {
-    thread_table_t *my_entry;
-    pagetable_t *pagetable;
-    uint32_t phys_page;
-    context_t user_context;
-    uint32_t stack_bottom;
-    elf_info_t elf;
-    openfile_t file;
+  thread_table_t* my_entry;
+  pagetable_t* pagetable;
+  uint32_t phys_page;
+  context_t user_context;
+  uint32_t stack_bottom;
+  elf_info_t elf;
+  openfile_t file;
 
-    int i;
+  int i;
 
-    interrupt_status_t intr_status;
+  interrupt_status_t intr_status;
 
-    my_entry = thread_get_current_thread_entry();
+  my_entry = thread_get_current_thread_entry();
 
-    /* If the pagetable of this thread is not NULL, we are trying to
-       run a userland process for a second time in the same thread.
-       This is not possible. */
-    KERNEL_ASSERT(my_entry->pagetable == NULL);
+  /* If the pagetable of this thread is not NULL, we are trying to
+     run a userland process for a second time in the same thread.
+     This is not possible. */
+  KERNEL_ASSERT(my_entry->pagetable == NULL);
 
-    pagetable = vm_create_pagetable(thread_get_current_thread());
-    KERNEL_ASSERT(pagetable != NULL);
+  pagetable = vm_create_pagetable(thread_get_current_thread());
+  KERNEL_ASSERT(pagetable != NULL);
 
-    intr_status = _interrupt_disable();
-    my_entry->pagetable = pagetable;
-    _interrupt_set_state(intr_status);
+  intr_status = _interrupt_disable();
+  my_entry->pagetable = pagetable;
+  _interrupt_set_state(intr_status);
 
-    file = vfs_open((char *)executable);
-    /* Make sure the file existed and was a valid ELF file */
-    KERNEL_ASSERT(file >= 0);
-    KERNEL_ASSERT(elf_parse_header(&elf, file));
+  file = vfs_open((char*)executable);
+  /* Make sure the file existed and was a valid ELF file */
+  KERNEL_ASSERT(file >= 0);
+  KERNEL_ASSERT(elf_parse_header(&elf, file));
 
-    /* Trivial and naive sanity check for entry point: */
-    KERNEL_ASSERT(elf.entry_point >= PAGE_SIZE);
+  /* Trivial and naive sanity check for entry point: */
+  KERNEL_ASSERT(elf.entry_point >= PAGE_SIZE);
 
-    /* Calculate the number of pages needed by the whole process
-       (including userland stack). Since we don't have proper tlb
-       handling code, all these pages must fit into TLB. */
-    KERNEL_ASSERT(elf.ro_pages + elf.rw_pages + CONFIG_USERLAND_STACK_SIZE
-		  <= _tlb_get_maxindex() + 1);
+  /* Calculate the number of pages needed by the whole process
+     (including userland stack). Since we don't have proper tlb
+     handling code, all these pages must fit into TLB. */
+  KERNEL_ASSERT(elf.ro_pages + elf.rw_pages + CONFIG_USERLAND_STACK_SIZE
+                <= _tlb_get_maxindex() + 1);
 
-    /* Allocate and map stack */
-    for(i = 0; i < CONFIG_USERLAND_STACK_SIZE; i++) {
-        phys_page = pagepool_get_phys_page();
-        KERNEL_ASSERT(phys_page != 0);
-        vm_map(my_entry->pagetable, phys_page, 
-               (USERLAND_STACK_TOP & PAGE_SIZE_MASK) - i*PAGE_SIZE, 1);
-    }
+  /* Allocate and map stack */
+  for (i = 0; i < CONFIG_USERLAND_STACK_SIZE; i++) {
+    phys_page = pagepool_get_phys_page();
+    KERNEL_ASSERT(phys_page != 0);
+    vm_map(my_entry->pagetable, phys_page,
+           (USERLAND_STACK_TOP & PAGE_SIZE_MASK) - i * PAGE_SIZE, 1);
+  }
 
-    /* Allocate and map pages for the segments. We assume that
-       segments begin at page boundary. (The linker script in tests
-       directory creates this kind of segments) */
-    for(i = 0; i < (int)elf.ro_pages; i++) {
-        phys_page = pagepool_get_phys_page();
-        KERNEL_ASSERT(phys_page != 0);
-        vm_map(my_entry->pagetable, phys_page, 
-               elf.ro_vaddr + i*PAGE_SIZE, 1);
-    }
+  /* Allocate and map pages for the segments. We assume that
+     segments begin at page boundary. (The linker script in tests
+     directory creates this kind of segments) */
+  for (i = 0; i < (int)elf.ro_pages; i++) {
+    phys_page = pagepool_get_phys_page();
+    KERNEL_ASSERT(phys_page != 0);
+    vm_map(my_entry->pagetable, phys_page,
+           elf.ro_vaddr + i * PAGE_SIZE, 1);
+  }
 
-    for(i = 0; i < (int)elf.rw_pages; i++) {
-        phys_page = pagepool_get_phys_page();
-        KERNEL_ASSERT(phys_page != 0);
-        vm_map(my_entry->pagetable, phys_page, 
-               elf.rw_vaddr + i*PAGE_SIZE, 1);
-    }
+  for (i = 0; i < (int)elf.rw_pages; i++) {
+    phys_page = pagepool_get_phys_page();
+    KERNEL_ASSERT(phys_page != 0);
+    vm_map(my_entry->pagetable, phys_page,
+           elf.rw_vaddr + i * PAGE_SIZE, 1);
+  }
 
-    /* Put the mapped pages into TLB. Here we again assume that the
-       pages fit into the TLB. After writing proper TLB exception
-       handling this call should be skipped. */
-    intr_status = _interrupt_disable();
-    tlb_fill(my_entry->pagetable);
-    _interrupt_set_state(intr_status);
-    
-    /* Now we may use the virtual addresses of the segments. */
+  /* Put the mapped pages into TLB. Here we again assume that the
+     pages fit into the TLB. After writing proper TLB exception
+     handling this call should be skipped. */
+  intr_status = _interrupt_disable();
+  tlb_fill(my_entry->pagetable);
+  _interrupt_set_state(intr_status);
 
-    /* Zero the pages. */
-    memoryset((void *)elf.ro_vaddr, 0, elf.ro_pages*PAGE_SIZE);
-    memoryset((void *)elf.rw_vaddr, 0, elf.rw_pages*PAGE_SIZE);
+  /* Now we may use the virtual addresses of the segments. */
 
-    stack_bottom = (USERLAND_STACK_TOP & PAGE_SIZE_MASK) - 
-        (CONFIG_USERLAND_STACK_SIZE-1)*PAGE_SIZE;
-    memoryset((void *)stack_bottom, 0, CONFIG_USERLAND_STACK_SIZE*PAGE_SIZE);
+  /* Zero the pages. */
+  memoryset((void*)elf.ro_vaddr, 0, elf.ro_pages * PAGE_SIZE);
+  memoryset((void*)elf.rw_vaddr, 0, elf.rw_pages * PAGE_SIZE);
 
-    /* Copy segments */
+  stack_bottom = (USERLAND_STACK_TOP & PAGE_SIZE_MASK) -
+                 (CONFIG_USERLAND_STACK_SIZE - 1) * PAGE_SIZE;
+  memoryset((void*)stack_bottom, 0, CONFIG_USERLAND_STACK_SIZE * PAGE_SIZE);
 
-    if (elf.ro_size > 0) {
-	/* Make sure that the segment is in proper place. */
-        KERNEL_ASSERT(elf.ro_vaddr >= PAGE_SIZE);
-        KERNEL_ASSERT(vfs_seek(file, elf.ro_location) == VFS_OK);
-        KERNEL_ASSERT(vfs_read(file, (void *)elf.ro_vaddr, elf.ro_size)
-		      == (int)elf.ro_size);
-    }
+  /* Copy segments */
 
-    if (elf.rw_size > 0) {
-	/* Make sure that the segment is in proper place. */
-        KERNEL_ASSERT(elf.rw_vaddr >= PAGE_SIZE);
-        KERNEL_ASSERT(vfs_seek(file, elf.rw_location) == VFS_OK);
-        KERNEL_ASSERT(vfs_read(file, (void *)elf.rw_vaddr, elf.rw_size)
-		      == (int)elf.rw_size);
-    }
+  if (elf.ro_size > 0) {
+    /* Make sure that the segment is in proper place. */
+    KERNEL_ASSERT(elf.ro_vaddr >= PAGE_SIZE);
+    KERNEL_ASSERT(vfs_seek(file, elf.ro_location) == VFS_OK);
+    KERNEL_ASSERT(vfs_read(file, (void*)elf.ro_vaddr, elf.ro_size)
+                  == (int)elf.ro_size);
+  }
+
+  if (elf.rw_size > 0) {
+    /* Make sure that the segment is in proper place. */
+    KERNEL_ASSERT(elf.rw_vaddr >= PAGE_SIZE);
+    KERNEL_ASSERT(vfs_seek(file, elf.rw_location) == VFS_OK);
+    KERNEL_ASSERT(vfs_read(file, (void*)elf.rw_vaddr, elf.rw_size)
+                  == (int)elf.rw_size);
+  }
 
 
-    /* Set the dirty bit to zero (read-only) on read-only pages. */
-    for(i = 0; i < (int)elf.ro_pages; i++) {
-        vm_set_dirty(my_entry->pagetable, elf.ro_vaddr + i*PAGE_SIZE, 0);
-    }
+  /* Set the dirty bit to zero (read-only) on read-only pages. */
+  for (i = 0; i < (int)elf.ro_pages; i++) {
+    vm_set_dirty(my_entry->pagetable, elf.ro_vaddr + i * PAGE_SIZE, 0);
+  }
 
-    /* Insert page mappings again to TLB to take read-only bits into use */
-    intr_status = _interrupt_disable();
-    tlb_fill(my_entry->pagetable);
-    _interrupt_set_state(intr_status);
+  /* Insert page mappings again to TLB to take read-only bits into use */
+  intr_status = _interrupt_disable();
+  tlb_fill(my_entry->pagetable);
+  _interrupt_set_state(intr_status);
 
-    /* Initialize the user context. (Status register is handled by
-       thread_goto_userland) */
-    memoryset(&user_context, 0, sizeof(user_context));
-    user_context.cpu_regs[MIPS_REGISTER_SP] = USERLAND_STACK_TOP;
-    user_context.pc = elf.entry_point;
+  /* Initialize the user context. (Status register is handled by
+     thread_goto_userland) */
+  memoryset(&user_context, 0, sizeof(user_context));
+  user_context.cpu_regs[MIPS_REGISTER_SP] = USERLAND_STACK_TOP;
+  user_context.pc = elf.entry_point;
 
-    thread_goto_userland(&user_context);
+  thread_goto_userland(&user_context);
 
-    KERNEL_PANIC("thread_goto_userland failed.");
+  KERNEL_PANIC("thread_goto_userland failed.");
 }
 
 /** @} */

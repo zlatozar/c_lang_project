@@ -47,6 +47,6 @@ void kmalloc_disable();
 void kmalloc_init(void);
 
 /* Permanent kernel memory allocation */
-void *kmalloc(int bytes);
+void* kmalloc(int bytes);
 
 #endif

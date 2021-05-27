@@ -41,14 +41,15 @@
 /**
  * Halt the kernel.
  */
-void halt_kernel(void)
+void
+halt_kernel(void)
 {
 
-    kprintf("Kernel: System shutdown started...\n");
+  kprintf("Kernel: System shutdown started...\n");
 
-    /* Unmount all filesystems */
-    vfs_deinit();
+  /* Unmount all filesystems */
+  vfs_deinit();
 
-    kprintf("Kernel: System shutdown complete, powering off\n");
-    shutdown(POWEROFF_SHUTDOWN_MAGIC);
+  kprintf("Kernel: System shutdown complete, powering off\n");
+  shutdown(POWEROFF_SHUTDOWN_MAGIC);
 }

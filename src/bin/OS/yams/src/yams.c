@@ -31,17 +31,19 @@
 #include "memory.h"
 #include "gdb.h"
 
-struct option longopts[] =
-   {{ "config", required_argument, NULL, 'c'},
-    { "help", no_argument, NULL, 'h' },
-    { "script", required_argument, NULL, 's'},
-    { "version", no_argument, NULL, 'v' },
-    { "gdb", required_argument, NULL, 'g' },
-    { NULL, 0, NULL, 0 }};
+struct option longopts[] = {
+  { "config", required_argument, NULL, 'c'},
+  { "help", no_argument, NULL, 'h' },
+  { "script", required_argument, NULL, 's'},
+  { "version", no_argument, NULL, 'v' },
+  { "gdb", required_argument, NULL, 'g' },
+  { NULL, 0, NULL, 0 }
+};
 
-static void print_help(void)
+static void
+print_help(void)
 {
-    printf ("\
+  printf ("\
 YAMS, Yet Another Machine Simulator\n\
 Usage yams [-chsvg] [--config file] [--script file] [--help] [--version]\n\
            [--gdb tcp-port] [binary-file [opt1] .. [opt n]]\n\
@@ -56,11 +58,12 @@ Usage yams [-chsvg] [--config file] [--script file] [--help] [--version]\n\
 
 extern char version[];
 
-static void print_version(void)
+static void
+print_version(void)
 {
-    printf("YAMS - Yet Another Machine Simulator %s \n", version);
-    printf("\n");
-    printf("\
+  printf("YAMS - Yet Another Machine Simulator %s \n", version);
+  printf("\n");
+  printf("\
 Copyright (C) 2002-2010 Juha Aatrokoski, Timo Lilja, Leena Salmela,\n\
   Teemu Takanen, Aleksi Virtanen\n\
 \n\
@@ -73,130 +76,131 @@ see the file COPYING for details.\n\
 
 
 /* for our attempts to release all memory */
-void *yams_original_brk;
+void* yams_original_brk;
 
 
-int main(int argc, char *argv[])
+int
+main(int argc, char* argv[])
 {
-    int optc;
-    int help = 0, version = 0, config = 0;
-    int script = 0, gdb_debug = 0, binary = 0, lose = 0;
-    int exit_code = 0, scripts = 0;
-    int gdb_port = 0;
-    int ret = -1;
+  int optc;
+  int help = 0, version = 0, config = 0;
+  int script = 0, gdb_debug = 0, binary = 0, lose = 0;
+  int exit_code = 0, scripts = 0;
+  int gdb_port = 0;
+  int ret = -1;
 
-    char config_file[MAX_FILENAME_LENGTH];
-    char script_file[MAX_FILENAME_LENGTH][MAX_SCRIPTS];
-    char *binary_file = NULL;
-    char kernel_params[KERNEL_PARAMAREA_LENGTH];
+  char config_file[MAX_FILENAME_LENGTH];
+  char script_file[MAX_FILENAME_LENGTH][MAX_SCRIPTS];
+  char* binary_file = NULL;
+  char kernel_params[KERNEL_PARAMAREA_LENGTH];
 
 #ifdef HAVE_BRK
-    yams_original_brk = sbrk(0);
+  yams_original_brk = sbrk(0);
 #endif
 
-    while ((optc = getopt_long(argc, argv, "+c:hs:vg:", longopts, (int *) 0))
-           != EOF)
+  while ((optc = getopt_long(argc, argv, "+c:hs:vg:", longopts, (int*) 0))
+         != EOF)
 
-      switch (optc) {
+    switch (optc) {
       case 'v':
-          version = 1;
-          break;
+        version = 1;
+        break;
       case 'h':
-          help = 1;
-          break;
+        help = 1;
+        break;
       case 'c':
-          config = 1;
-          strncpy(config_file, optarg, MAX_FILENAME_LENGTH);
-          break;
+        config = 1;
+        strncpy(config_file, optarg, MAX_FILENAME_LENGTH);
+        break;
       case 's':
-          script = 1;
-          if (scripts < MAX_SCRIPTS)
-              strncpy(script_file[scripts++], optarg, MAX_FILENAME_LENGTH);
-          break;
+        script = 1;
+        if (scripts < MAX_SCRIPTS)
+        { strncpy(script_file[scripts++], optarg, MAX_FILENAME_LENGTH); }
+        break;
       case 'g':
-          gdb_debug = 1;
-          gdb_port = strtol(optarg, NULL, 10); /* XXX error checking */
-          break;
+        gdb_debug = 1;
+        gdb_port = strtol(optarg, NULL, 10); /* XXX error checking */
+        break;
       default:
-          lose = 1;
-          break;
-      }
-
-    if (lose || optind < argc) {
-        int i, space_left = KERNEL_PARAMAREA_LENGTH;
-        binary_file = argv[optind];
-        binary = 1;
-
-        for (i = optind+1; i < argc && space_left > 0; i++) {
-            space_left -= strlen(argv[i]) + 1;
-            strncat(kernel_params, argv[i], space_left - 1);
-            if (i+1 != argc)
-                strncat(kernel_params, " ", 1);
-        }
+        lose = 1;
+        break;
     }
 
-    if (help) {
-      /* Print help info and exit.  */
-        print_help();
-        exit(EXIT_SUCCESS);
-    }
+  if (lose || optind < argc) {
+    int i, space_left = KERNEL_PARAMAREA_LENGTH;
+    binary_file = argv[optind];
+    binary = 1;
 
-    print_version();
-
-    if (version)
-        exit(EXIT_SUCCESS);
-
-    if (config && !cfg_read(config_file)) {
-        printf("yams: unable to read configuration from file: %s\n",
-               config_file);
-        exit(1);
+    for (i = optind + 1; i < argc && space_left > 0; i++) {
+      space_left -= strlen(argv[i]) + 1;
+      strncat(kernel_params, argv[i], space_left - 1);
+      if (i + 1 != argc)
+      { strncat(kernel_params, " ", 1); }
     }
-    if (!config && !cfg_read_cwd() && !cfg_read_home() && !cfg_read_etc()) {
-        printf("yams: unable to read configuration file.\n");
-        exit(1);
-    }
-    cfg_init();
+  }
+
+  if (help) {
+    /* Print help info and exit.  */
+    print_help();
+    exit(EXIT_SUCCESS);
+  }
+
+  print_version();
+
+  if (version)
+  { exit(EXIT_SUCCESS); }
+
+  if (config && !cfg_read(config_file)) {
+    printf("yams: unable to read configuration from file: %s\n",
+           config_file);
+    exit(1);
+  }
+  if (!config && !cfg_read_cwd() && !cfg_read_home() && !cfg_read_etc()) {
+    printf("yams: unable to read configuration file.\n");
+    exit(1);
+  }
+  cfg_init();
 
 #ifdef WORDS_BIGENDIAN
-    printf("Starting on a big-endian host.\n");
+  printf("Starting on a big-endian host.\n");
 #else
-    printf("Starting on a little-endian host.\n");
+  printf("Starting on a little-endian host.\n");
 #endif /* WORDS_BIGENDIAN */
 
-    if (simulator_bigendian)
-	printf("Simulating a big-endian machine.\n");
-    else
-	printf("Simulating a little-endian machine.\n");
+  if (simulator_bigendian)
+  { printf("Simulating a big-endian machine.\n"); }
+  else
+  { printf("Simulating a little-endian machine.\n"); }
 
 
-    if (gdb_debug)
-        gdb_interface_open(gdb_port);
+  if (gdb_debug)
+  { gdb_interface_open(gdb_port); }
 
-    simulator_init();
+  simulator_init();
 
 
-    if (binary) {
-        command_boot(binary_file, kernel_params);
-        if(hardware->running == -1)
-            exit(EXIT_SUCCESS);
+  if (binary) {
+    command_boot(binary_file, kernel_params);
+    if (hardware->running == -1)
+    { exit(EXIT_SUCCESS); }
+  }
+
+  if (script) {
+    int i;
+    for (i = 0; i < scripts; i++) {
+      ret = command_source(script_file[i]);
+      if (ret == -2) /* file not found */
+      { exit(EXIT_FAILURE); }
+      else if (ret >= 0) /* stop yams */
+      { break; }
     }
+  }
+  if (ret == -1) {
+    exit_code = hwconsole_run();
+  } else
+  { exit_code = ret; }
 
-    if (script) {
-            int i;
-            for (i = 0; i < scripts; i++) {
-                ret = command_source(script_file[i]);
-                if (ret == -2) /* file not found */
-                    exit(EXIT_FAILURE);
-                else if (ret >= 0) /* stop yams */
-                    break;
-            }
-    }
-    if (ret == -1) {
-        exit_code = hwconsole_run();
-    } else
-        exit_code = ret;
-
-    exit(exit_code);
+  exit(exit_code);
 }
 
 

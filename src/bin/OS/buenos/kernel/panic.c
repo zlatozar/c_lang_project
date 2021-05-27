@@ -56,21 +56,22 @@
  *   @param file Filename of the module where panic has been called.
  *
  *   @param line Line-number in file where panic has been called.
- * 
+ *
  *   @param description Descriptive text that gets printed on screen
  *   before dying.
  *
  */
 
-void _kernel_panic(char *file, int line, char *description)
+void
+_kernel_panic(char* file, int line, char* description)
 {
-    int cpu;
+  int cpu;
 
-    _interrupt_disable();
-    cpu = _interrupt_getcpu();
-    kprintf("Kernel panic (cpu: %d): %s:%d --- %s\n", cpu, file, line, 
-            description);
-    shutdown(DEFAULT_SHUTDOWN_MAGIC);
+  _interrupt_disable();
+  cpu = _interrupt_getcpu();
+  kprintf("Kernel panic (cpu: %d): %s:%d --- %s\n", cpu, file, line,
+          description);
+  shutdown(DEFAULT_SHUTDOWN_MAGIC);
 }
 
 /** @} */

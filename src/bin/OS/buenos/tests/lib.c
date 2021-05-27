@@ -44,11 +44,12 @@
 
 
 /* Halt the system (sync disks and power off). This function will
- * never return. 
+ * never return.
  */
-void syscall_halt(void)
+void
+syscall_halt(void)
 {
-    _syscall(SYSCALL_HALT, 0, 0, 0);
+  _syscall(SYSCALL_HALT, 0, 0, 0);
 }
 
 
@@ -56,20 +57,22 @@ void syscall_halt(void)
  * it. Returns the process ID of the created process. Negative values
  * are errors.
  */
-int syscall_exec(const char *filename)
+int
+syscall_exec(const char* filename)
 {
-    return (int)_syscall(SYSCALL_EXEC, (uint32_t)filename, 0, 0);
+  return (int)_syscall(SYSCALL_EXEC, (uint32_t)filename, 0, 0);
 }
 
 /* Load the file indicated by 'filename' as a new process and execute
  * it. Returns the process ID of the created process. Negative values
  * are errors.
  */
-int syscall_execp(const char *filename, int argc, const char **argv)
+int
+syscall_execp(const char* filename, int argc, const char** argv)
 {
-    return (int)_syscall(SYSCALL_EXEC, (uint32_t)filename, 
-                         (uint32_t) argc, 
-                         (uint32_t) argv);
+  return (int)_syscall(SYSCALL_EXEC, (uint32_t)filename,
+                       (uint32_t) argc,
+                       (uint32_t) argv);
 }
 
 
@@ -78,9 +81,10 @@ int syscall_execp(const char *filename, int argc, const char **argv)
  * values are interpreted as errors in the join call itself. This
  * function will never return.
  */
-void syscall_exit(int retval)
+void
+syscall_exit(int retval)
 {
-    _syscall(SYSCALL_EXIT, (uint32_t)retval, 0, 0);
+  _syscall(SYSCALL_EXIT, (uint32_t)retval, 0, 0);
 }
 
 
@@ -88,9 +92,10 @@ void syscall_exit(int retval)
  * finished. Returns the exit code of the joined process, or a
  * negative value on error.
  */
-int syscall_join(int pid)
+int
+syscall_join(int pid)
 {
-    return (int)_syscall(SYSCALL_JOIN, (uint32_t)pid, 0, 0);
+  return (int)_syscall(SYSCALL_JOIN, (uint32_t)pid, 0, 0);
 }
 
 
@@ -99,9 +104,10 @@ int syscall_join(int pid)
  * will end when 'func' returns. 'arg' is passed as an argument to
  * 'func'. Returns 0 on success or a negative value on error.
  */
-int syscall_fork(void (*func)(int), int arg)
+int
+syscall_fork(void (*func)(int), int arg)
 {
-    return (int)_syscall(SYSCALL_FORK, (uint32_t)func, (uint32_t)arg, 0);
+  return (int)_syscall(SYSCALL_FORK, (uint32_t)func, (uint32_t)arg, 0);
 }
 
 
@@ -109,9 +115,10 @@ int syscall_fork(void (*func)(int), int arg)
  * 'heap_end'. Returns the new end address of the heap, or NULL on
  * error. If 'heap_end' is NULL, the current heap end is returned.
  */
-void *syscall_memlimit(void *heap_end)
+void*
+syscall_memlimit(void* heap_end)
 {
-    return (void*)_syscall(SYSCALL_MEMLIMIT, (uint32_t)heap_end, 0, 0);
+  return (void*)_syscall(SYSCALL_MEMLIMIT, (uint32_t)heap_end, 0, 0);
 }
 
 
@@ -119,18 +126,20 @@ void *syscall_memlimit(void *heap_end)
  * writing. Returns the file handle of the opened file (positive
  * value), or a negative value on error.
  */
-int syscall_open(const char *filename)
+int
+syscall_open(const char* filename)
 {
-    return (int)_syscall(SYSCALL_OPEN, (uint32_t)filename, 0, 0);
+  return (int)_syscall(SYSCALL_OPEN, (uint32_t)filename, 0, 0);
 }
 
 
 /* Close the open file identified by 'filehandle'. Zero will be returned
- * success, other values indicate errors. 
+ * success, other values indicate errors.
  */
-int syscall_close(int filehandle)
+int
+syscall_close(int filehandle)
 {
-    return (int)_syscall(SYSCALL_CLOSE, (uint32_t)filehandle, 0, 0);
+  return (int)_syscall(SYSCALL_CLOSE, (uint32_t)filehandle, 0, 0);
 }
 
 
@@ -139,20 +148,22 @@ int syscall_close(int filehandle)
  * number of bytes actually read (e.g. 0 if the file position is at
  * the end of file) or a negative value on error.
  */
-int syscall_read(int filehandle, void *buffer, int length)
+int
+syscall_read(int filehandle, void* buffer, int length)
 {
-    return (int)_syscall(SYSCALL_READ, (uint32_t)filehandle,
-                    (uint32_t)buffer, (uint32_t)length);
+  return (int)_syscall(SYSCALL_READ, (uint32_t)filehandle,
+                       (uint32_t)buffer, (uint32_t)length);
 }
 
 
 /* Set the file position of the open file identified by 'filehandle'
- * to 'offset'. Returns 0 on success or a negative value on error. 
+ * to 'offset'. Returns 0 on success or a negative value on error.
  */
-int syscall_seek(int filehandle, int offset)
+int
+syscall_seek(int filehandle, int offset)
 {
-    return (int)_syscall(SYSCALL_SEEK,
-			 (uint32_t)filehandle, (uint32_t)offset, 0);
+  return (int)_syscall(SYSCALL_SEEK,
+                       (uint32_t)filehandle, (uint32_t)offset, 0);
 }
 
 
@@ -160,26 +171,29 @@ int syscall_seek(int filehandle, int offset)
  * 'filehandle', starting from the current file position. Returns the
  * number of bytes actually written or a negative value on error.
  */
-int syscall_write(int filehandle, const void *buffer, int length)
+int
+syscall_write(int filehandle, const void* buffer, int length)
 {
-    return (int)_syscall(SYSCALL_WRITE, (uint32_t)filehandle, (uint32_t)buffer,
-                    (uint32_t)length);
+  return (int)_syscall(SYSCALL_WRITE, (uint32_t)filehandle, (uint32_t)buffer,
+                       (uint32_t)length);
 }
 
 
 /* Create a file with the name 'filename' and initial size of
- * 'size'. Returns 0 on success and a negative value on error. 
+ * 'size'. Returns 0 on success and a negative value on error.
  */
-int syscall_create(const char *filename, int size)
+int
+syscall_create(const char* filename, int size)
 {
-    return (int)_syscall(SYSCALL_CREATE, (uint32_t)filename, (uint32_t)size, 0);
+  return (int)_syscall(SYSCALL_CREATE, (uint32_t)filename, (uint32_t)size, 0);
 }
 
 
 /* Remove the file identified by 'filename' from the file system it
- * resides on. Returns 0 on success or a negative value on error. 
+ * resides on. Returns 0 on success or a negative value on error.
  */
-int syscall_delete(const char *filename)
+int
+syscall_delete(const char* filename)
 {
-    return (int)_syscall(SYSCALL_DELETE, (uint32_t)filename, 0, 0);
+  return (int)_syscall(SYSCALL_DELETE, (uint32_t)filename, 0, 0);
 }

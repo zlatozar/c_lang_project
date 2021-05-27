@@ -71,20 +71,20 @@
 
 /* Thread context data structure */
 typedef struct {
-    uint32_t cpu_regs[29];   /* The general purpose registers. zero, k0 and 
+  uint32_t cpu_regs[29];   /* The general purpose registers. zero, k0 and
                                 k1 registers are omitted. */
-    uint32_t hi;             /* The hi register. */
-    uint32_t lo;             /* The lo register. */
-    uint32_t pc;             /* The program counter. Actually loaded from 
+  uint32_t hi;             /* The hi register. */
+  uint32_t lo;             /* The lo register. */
+  uint32_t pc;             /* The program counter. Actually loaded from
                                 EPC register in co-processor 0. */
-    uint32_t status;         /* Status register bits. */
-    void    *prev_context;   /* Previous context in a nested exception chain */
+  uint32_t status;         /* Status register bits. */
+  void*    prev_context;   /* Previous context in a nested exception chain */
 } context_t;
 
 /* Code to be inserted to interrupt vector */
 void _cswitch_vector_code(void);
 
 /* Userland entering code */
-void _cswitch_to_userland(context_t *usercontext);
+void _cswitch_to_userland(context_t* usercontext);
 
 #endif

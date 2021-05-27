@@ -58,16 +58,17 @@
  */
 
 static struct bootargs_t {
-    char *key;
-    char *value;
+  char* key;
+  char* value;
 } bootargs_values[CONFIG_BOOTARGS_MAX];
 
 
-static void bmemcopy(void *target, const void *source, int len)
+static void
+bmemcopy(void* target, const void* source, int len)
 {
-    while(len-- > 0) {
-	*((uint8_t *) target++) = *((uint8_t *) source++);
-    }
+  while (len-- > 0) {
+    *((uint8_t*) target++) = *((uint8_t*) source++);
+  }
 }
 
 /**
@@ -76,63 +77,66 @@ static void bmemcopy(void *target, const void *source, int len)
  *
  */
 
-void bootargs_init(void)
+void
+bootargs_init(void)
 {
-    int l,i,o,last;
-    char *bootarg_area = (char *) BOOT_ARGUMENT_AREA;
-    char *value_area = NULL;
+  int l, i, o, last;
+  char* bootarg_area = (char*) BOOT_ARGUMENT_AREA;
+  char* value_area = NULL;
 
-    for(i=0; i<CONFIG_BOOTARGS_MAX; i++) {
-	bootargs_values[i].key = NULL;
+  for (i = 0; i < CONFIG_BOOTARGS_MAX; i++) {
+    bootargs_values[i].key = NULL;
+  }
+
+  l = strlen(bootarg_area);
+  value_area = (char*) kmalloc(l + 1);
+  bmemcopy(value_area, bootarg_area, l + 1);
+
+  i = 0;
+  o = 0;
+  last = 0;
+
+  while (o <= l) {
+    /* search for = or end of key (space or 0) */
+    if (*(value_area + o) == ' ' ||
+        *(value_area + o) == 0   ||
+        *(value_area + o) == '=') {
+
+      bootargs_values[i].key   = value_area + last;
+      bootargs_values[i].value = "";
+
+      last = o + 1;
+
+      if (*(value_area + o) == '=') {
+        *(value_area + o) = 0;
+        /* we have value for this key */
+        o++;
+        while (o <= l) {
+          if (*(value_area + o) == ' ' ||
+              *(value_area + o) == 0) {
+            /* value ends */
+            bootargs_values[i].value = value_area + last;
+            *(value_area + o) = 0;
+            o++;
+            last = o;
+            break;
+          }
+          o++;
+        }
+      } else {
+        *(value_area + o) = 0;
+        o++;
+      }
+
+      i++;
+    } else {
+      o++;
     }
-    
-    l = strlen(bootarg_area);
-    value_area = (char *) kmalloc(l+1);
-    bmemcopy(value_area, bootarg_area, l+1);
-
-    i=0; o=0; last=0;
-
-    while(o<=l) {
-	/* search for = or end of key (space or 0) */
-	if(*(value_area+o) == ' ' ||
-	   *(value_area+o) == 0   ||
-	   *(value_area+o) == '=') {
-
-	    bootargs_values[i].key   = value_area+last;
-	    bootargs_values[i].value = "";
-
-	    last = o+1;
-
-	    if(*(value_area+o) == '=') {
-		*(value_area+o) = 0;
-		/* we have value for this key */
-		o++;
-		while(o<=l) {
-		    if(*(value_area+o) == ' ' ||
-		       *(value_area+o) == 0) {
-			/* value ends */
-			bootargs_values[i].value = value_area+last;
-			*(value_area+o) = 0;
-			o++;
-			last=o;
-			break;
-		    }
-		    o++;
-		}
-	    } else {
-		*(value_area+o) = 0;
-		o++;
-	    }
-
-	    i++;
-	} else {
-	    o++;
-	}
-    }
+  }
 }
 
 /**
- * Gets specified boot argument. 
+ * Gets specified boot argument.
  *
  * @param key The key to search for.
  *
@@ -140,25 +144,26 @@ void bootargs_init(void)
  *
  */
 
-char *bootargs_get(char *key)
+char*
+bootargs_get(char* key)
 {
-    int i,o;
+  int i, o;
 
-    for(i=0; i<CONFIG_BOOTARGS_MAX; i++) {
-	if(bootargs_values[i].key == NULL)
-	    return NULL;
+  for (i = 0; i < CONFIG_BOOTARGS_MAX; i++) {
+    if (bootargs_values[i].key == NULL)
+    { return NULL; }
 
-	o=0;
-	while(*(bootargs_values[i].key+o) == 
-	      *(key+o)) {
-	    if(*(key+o) == 0)
-		return bootargs_values[i].value;
+    o = 0;
+    while (*(bootargs_values[i].key + o) ==
+           *(key + o)) {
+      if (*(key + o) == 0)
+      { return bootargs_values[i].value; }
 
-	    o++;
-	}
+      o++;
     }
-    
-    return NULL;
+  }
+
+  return NULL;
 }
 
 /** @} */

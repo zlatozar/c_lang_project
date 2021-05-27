@@ -32,7 +32,7 @@
 #define LOADELF_FAILURE 0
 #define LOADELF_NOTELF 1
 #define LOADELF_SUCCESS 2
-int load_elf(char *fname, uint32_t *entry_point);
+int load_elf(char* fname, uint32_t* entry_point);
 
 
 /* This stuff directly from TIS/ELF 1.2 specification */
@@ -54,23 +54,23 @@ int load_elf(char *fname, uint32_t *entry_point);
 #define ELF_MAGIC "\177ELF"
 
 /* ELF file header. The fields are aligned on data type sizes so no
- * need for the (non-portable) packed-attribute. 
+ * need for the (non-portable) packed-attribute.
  */
 typedef struct {
-    unsigned char e_ident[EI_NIDENT];
-    uint16_t e_type;
-    uint16_t e_machine;
-    uint32_t e_version;
-    uint32_t e_entry;
-    uint32_t e_phoff;
-    uint32_t e_shoff;
-    uint32_t e_flags;
-    uint16_t e_ehsize;
-    uint16_t e_phentsize;
-    uint16_t e_phnum;
-    uint16_t e_shentsize;
-    uint16_t e_shnum;
-    uint16_t e_shstrndx;
+  unsigned char e_ident[EI_NIDENT];
+  uint16_t e_type;
+  uint16_t e_machine;
+  uint32_t e_version;
+  uint32_t e_entry;
+  uint32_t e_phoff;
+  uint32_t e_shoff;
+  uint32_t e_flags;
+  uint16_t e_ehsize;
+  uint16_t e_phentsize;
+  uint16_t e_phnum;
+  uint16_t e_shentsize;
+  uint16_t e_shnum;
+  uint16_t e_shstrndx;
 } Elf32_Ehdr;
 
 #define PT_NULL 0
@@ -90,14 +90,14 @@ typedef struct {
 
 /* ELF program header */
 typedef struct {
-    uint32_t p_type;
-    uint32_t p_offset;
-    uint32_t p_vaddr;
-    uint32_t p_paddr;
-    uint32_t p_filesz;
-    uint32_t p_memsz;
-    uint32_t p_flags;
-    uint32_t p_align;
+  uint32_t p_type;
+  uint32_t p_offset;
+  uint32_t p_vaddr;
+  uint32_t p_paddr;
+  uint32_t p_filesz;
+  uint32_t p_memsz;
+  uint32_t p_flags;
+  uint32_t p_align;
 } Elf32_Phdr;
 
 #endif /* YAMS_ELF_H */

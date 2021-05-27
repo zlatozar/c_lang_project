@@ -59,20 +59,20 @@
  * be much larger than indicated by the size field.
  */
 typedef struct {
-    uint32_t entry_point; /* Entry point for the code */
+  uint32_t entry_point; /* Entry point for the code */
 
-    uint32_t ro_location; /* Location of RO segment in the file */
-    uint32_t ro_size;     /* Size of RO segment in the file */
-    uint32_t ro_pages;    /* Pages needed by the RO segment */
-    uint32_t ro_vaddr;    /* Virtual address of the RO segment */
+  uint32_t ro_location; /* Location of RO segment in the file */
+  uint32_t ro_size;     /* Size of RO segment in the file */
+  uint32_t ro_pages;    /* Pages needed by the RO segment */
+  uint32_t ro_vaddr;    /* Virtual address of the RO segment */
 
-    uint32_t rw_location; /* Location of RW segment in the file */
-    uint32_t rw_size;     /* Size of RW segment in the file */
-    uint32_t rw_pages;    /* Pages needed by the RW segment */
-    uint32_t rw_vaddr;    /* Virtual address of the RW segment */
+  uint32_t rw_location; /* Location of RW segment in the file */
+  uint32_t rw_size;     /* Size of RW segment in the file */
+  uint32_t rw_pages;    /* Pages needed by the RW segment */
+  uint32_t rw_vaddr;    /* Virtual address of the RW segment */
 } elf_info_t;
 
-int elf_parse_header(elf_info_t *elf, openfile_t file);
+int elf_parse_header(elf_info_t* elf, openfile_t file);
 
 
 /* These are directly from the TIS/ELF 1.2 specification */
@@ -92,41 +92,41 @@ int elf_parse_header(elf_info_t *elf, openfile_t file);
 #define ELF_MAGIC 0x7f454c46
 
 /* ELF file header. The structure fields are aligned by data type
- * size, so the packed-attribute is not really necessary. 
+ * size, so the packed-attribute is not really necessary.
  */
 #define EI_NIDENT 16
 typedef struct {
-    /* ELF identification data */
-    union {
-        unsigned char c[EI_NIDENT];
-        uint32_t i;
-    } e_ident                        __attribute__ ((packed));
-    /* Object file type (executable, relocatable...) */
-    uint16_t e_type                  __attribute__ ((packed));
-    /* Machine architecture (we want MIPS) */
-    uint16_t e_machine               __attribute__ ((packed));
-    /* ELF version */
-    uint32_t e_version               __attribute__ ((packed));
-    /* Program entry point virtual address */
-    uint32_t e_entry                 __attribute__ ((packed));
-    /* Program header table's file offset */
-    uint32_t e_phoff                 __attribute__ ((packed));
-    /* Section header table's file offset */
-    uint32_t e_shoff                 __attribute__ ((packed));
-    /* Processor specific flags */
-    uint32_t e_flags                 __attribute__ ((packed));
-    /* ELF header size in bytes */
-    uint16_t e_ehsize                __attribute__ ((packed));
-    /* Program header entry size */
-    uint16_t e_phentsize             __attribute__ ((packed));
-    /* Number of program headers */
-    uint16_t e_phnum                 __attribute__ ((packed));
-    /* Section header entry size */
-    uint16_t e_shentsize             __attribute__ ((packed));
-    /* Number of section headers */
-    uint16_t e_shnum                 __attribute__ ((packed));
-    /* Section header index of the section name string table */
-    uint16_t e_shstrndx              __attribute__ ((packed));
+  /* ELF identification data */
+  union {
+    unsigned char c[EI_NIDENT];
+    uint32_t i;
+  } e_ident                        __attribute__ ((packed));
+  /* Object file type (executable, relocatable...) */
+  uint16_t e_type                  __attribute__ ((packed));
+  /* Machine architecture (we want MIPS) */
+  uint16_t e_machine               __attribute__ ((packed));
+  /* ELF version */
+  uint32_t e_version               __attribute__ ((packed));
+  /* Program entry point virtual address */
+  uint32_t e_entry                 __attribute__ ((packed));
+  /* Program header table's file offset */
+  uint32_t e_phoff                 __attribute__ ((packed));
+  /* Section header table's file offset */
+  uint32_t e_shoff                 __attribute__ ((packed));
+  /* Processor specific flags */
+  uint32_t e_flags                 __attribute__ ((packed));
+  /* ELF header size in bytes */
+  uint16_t e_ehsize                __attribute__ ((packed));
+  /* Program header entry size */
+  uint16_t e_phentsize             __attribute__ ((packed));
+  /* Number of program headers */
+  uint16_t e_phnum                 __attribute__ ((packed));
+  /* Section header entry size */
+  uint16_t e_shentsize             __attribute__ ((packed));
+  /* Number of section headers */
+  uint16_t e_shnum                 __attribute__ ((packed));
+  /* Section header index of the section name string table */
+  uint16_t e_shstrndx              __attribute__ ((packed));
 } Elf32_Ehdr;
 
 /* Segment types */
@@ -148,22 +148,22 @@ typedef struct {
 
 /* ELF program header */
 typedef struct {
-    /* Segment type */
-    uint32_t p_type   __attribute__ ((packed));
-    /* Location in the file */
-    uint32_t p_offset __attribute__ ((packed));
-    /* Virtual address */
-    uint32_t p_vaddr  __attribute__ ((packed));
-    /* Physical address (not used on many platforms) */
-    uint32_t p_paddr  __attribute__ ((packed));
-    /* Number of bytes stored in the file */
-    uint32_t p_filesz __attribute__ ((packed));
-    /* Number of bytes this segment occupies in memory */
-    uint32_t p_memsz  __attribute__ ((packed));
-    /* Segment flags */
-    uint32_t p_flags  __attribute__ ((packed));
-    /* Alignment in file and memory */
-    uint32_t p_align  __attribute__ ((packed));
+  /* Segment type */
+  uint32_t p_type   __attribute__ ((packed));
+  /* Location in the file */
+  uint32_t p_offset __attribute__ ((packed));
+  /* Virtual address */
+  uint32_t p_vaddr  __attribute__ ((packed));
+  /* Physical address (not used on many platforms) */
+  uint32_t p_paddr  __attribute__ ((packed));
+  /* Number of bytes stored in the file */
+  uint32_t p_filesz __attribute__ ((packed));
+  /* Number of bytes this segment occupies in memory */
+  uint32_t p_memsz  __attribute__ ((packed));
+  /* Segment flags */
+  uint32_t p_flags  __attribute__ ((packed));
+  /* Alignment in file and memory */
+  uint32_t p_align  __attribute__ ((packed));
 } Elf32_Phdr;
 
 

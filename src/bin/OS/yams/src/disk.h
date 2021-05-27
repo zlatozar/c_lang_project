@@ -67,43 +67,43 @@
 #define IOLENGTH_DISK 20
 
 typedef struct {
-    char *imagefilename;
-    FILE *image;
+  char* imagefilename;
+  FILE* image;
 
-    int numsectors, sectorsize, numcylinders, current_cylinder;
-    int64_t time_rot, time_fullseek; /* in clock cycles */
+  int numsectors, sectorsize, numcylinders, current_cylinder;
+  int64_t time_rot, time_fullseek; /* in clock cycles */
 
-    /* Internal stuff */
-    uint32_t status_word, transfer_sector, new_transfer_sector,
-	transfer_addr, new_transfer_addr, data_port;
-    uint64_t next_interest;
-    int mode, irqcpu;
+  /* Internal stuff */
+  uint32_t status_word, transfer_sector, new_transfer_sector,
+           transfer_addr, new_transfer_addr, data_port;
+  uint64_t next_interest;
+  int mode, irqcpu;
 } diskdevice_t;
 
 
 
 /* Allocates memory for a disk device */
-device_t *disk_create();
-void disk_destroy(device_t *disk);
+device_t* disk_create();
+void disk_destroy(device_t* disk);
 
-/* places the initialized data in disk 
+/* places the initialized data in disk
  * returns:
  * 0 - OK
  * 1 - file too small to hold disk
  * 2 - unable to create file
  * 3 - invalid sectorsize/numsectors
  */
-int disk_init(char *filename, int sectorsize, int numsectors,
-	      device_t *disk);
+int disk_init(char* filename, int sectorsize, int numsectors,
+              device_t* disk);
 
-/* returns: 0 - OK, 1 - invalid parameters, 2 - parameter already set 
+/* returns: 0 - OK, 1 - invalid parameters, 2 - parameter already set
  * value -1 for a parameter is ignored */
 int disk_setparams(int numcylinders, int time_rot, int time_fullseek,
-		   device_t *disk);
+                   device_t* disk);
 
 
-int disk_io_write(device_t *dev, uint32_t addr, uint32_t data);
-int disk_io_read(device_t *dev, uint32_t addr, uint32_t *data);
-int disk_update(device_t *dev);
+int disk_io_write(device_t* dev, uint32_t addr, uint32_t data);
+int disk_io_read(device_t* dev, uint32_t addr, uint32_t* data);
+int disk_update(device_t* dev);
 
 #endif /* YAMS_DISK_H */

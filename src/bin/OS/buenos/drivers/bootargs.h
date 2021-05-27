@@ -38,6 +38,6 @@
 #define DRIVERS_BOOTARGS_H
 
 void bootargs_init(void);
-char *bootargs_get(char *key);
+char* bootargs_get(char* key);
 
 #endif /* DRIVERS_BOOTARGS_H */

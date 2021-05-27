@@ -36,9 +36,10 @@
 
 #include "tests/lib.h"
 
-int main(void)
+int
+main(void)
 {
-    syscall_halt();
+  syscall_halt();
 
-    return 0;
+  return 0;
 }

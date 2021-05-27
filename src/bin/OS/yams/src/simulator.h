@@ -35,27 +35,27 @@
 #include "plugio.h"
 
 typedef struct _hardware_t {
-    memory_t *memory;
+  memory_t* memory;
 
-    cpu_t **cpus;
-    int num_cpus;
-    uint32_t clockspeed; /* in Hz */
+  cpu_t** cpus;
+  int num_cpus;
+  uint32_t clockspeed; /* in Hz */
 
-    device_t *devices;
-    int num_devices;
+  device_t* devices;
+  int num_devices;
 
-    uint64_t cycle_count;
+  uint64_t cycle_count;
 
-    int running;
-    uint32_t breakpoint;
+  int running;
+  uint32_t breakpoint;
 } hardware_t;
 
-extern hardware_t *hardware;
+extern hardware_t* hardware;
 
-void simulator_create(int mem_pages, int num_cpus, int clock_speed, 
+void simulator_create(int mem_pages, int num_cpus, int clock_speed,
                       int cpu_irq);
-void simulator_add_device(device_t *dev);
-void simulator_add_mmap(pluggable_device_t *dev);
+void simulator_add_device(device_t* dev);
+void simulator_add_mmap(pluggable_device_t* dev);
 void simulator_init();
 void simulator_run(uint64_t stop_at_cycle);
 
@@ -72,15 +72,19 @@ extern int simulator_bigendian;
    where they are needed (simulating a little-endian machine on a
    big-endian host) is not very common
 */
-static inline uint16_t swap_bytes_16(uint16_t x) {
-    return ((x & 0xff00) >> 8)
-	| ((x & 0x00ff) << 8);
+static inline uint16_t
+swap_bytes_16(uint16_t x)
+{
+  return ((x & 0xff00) >> 8)
+         | ((x & 0x00ff) << 8);
 }
-static inline uint32_t swap_bytes_32(uint32_t x) {
-    return ((x & 0xff000000) >> 24)
-	| ((x & 0x00ff0000) >> 8)
-	| ((x & 0x0000ff00) << 8)
-	| ((x & 0x000000ff) << 24);
+static inline uint32_t
+swap_bytes_32(uint32_t x)
+{
+  return ((x & 0xff000000) >> 24)
+         | ((x & 0x00ff0000) >> 8)
+         | ((x & 0x0000ff00) << 8)
+         | ((x & 0x000000ff) << 24);
 }
 
 #define tofrombe16(x) (x)
@@ -90,7 +94,7 @@ static inline uint32_t swap_bytes_32(uint32_t x) {
 
 #else
 
-#define swap_bytes_16(x) ntohs(x) 
+#define swap_bytes_16(x) ntohs(x)
 #define swap_bytes_32(x) ntohl(x)
 #define tofrombe16(x) swap_bytes_16(x)
 #define tofrombe32(x) swap_bytes_32(x)

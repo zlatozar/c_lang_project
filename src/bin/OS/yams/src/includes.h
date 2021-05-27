@@ -63,18 +63,18 @@
 extern int errno;
 #endif
 
-#ifdef	STDC_HEADERS
+#ifdef  STDC_HEADERS
 #include <stdlib.h>
 #include <stddef.h>
-#else	/* Not STDC_HEADERS */
+#else /* Not STDC_HEADERS */
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif /* HAVE_STDLIB_H */
 extern void exit ();
-extern char *malloc ();
-#endif	/* STDC_HEADERS */
+extern char* malloc ();
+#endif  /* STDC_HEADERS */
 
-#ifdef	HAVE_STRING_H
+#ifdef  HAVE_STRING_H
 #if !STDC_HEADERS && HAVE_MEMORY_H
 #include <memory.h>
 #endif  /* !STDC_HEADERS && HAVE_MEMORY_H */

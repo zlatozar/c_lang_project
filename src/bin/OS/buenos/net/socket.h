@@ -42,24 +42,24 @@
 #include "net/protocols.h"
 #include "kernel/semaphore.h"
 
-/* sock_t is an index to the open socket table 
+/* sock_t is an index to the open socket table
  * valid values 0..CONFIG_MAX_OPEN_SOCKETS-1
  */
-typedef int sock_t; 
+typedef int sock_t;
 
 
 /* Open socket structure */
 typedef struct {
-    uint16_t port;             /* port this socket is bound to */
-    uint8_t protocol;          /* protocol of this socket */
+  uint16_t port;             /* port this socket is bound to */
+  uint8_t protocol;          /* protocol of this socket */
 
-    /* These are used when waiting for a packet on this socket */
-    semaphore_t *receive_complete; /* signaled when packet arrived */
-    void *rbuf;                    /* payload copied here */
-    uint32_t bufsize;              /* size of the receive buffer */
-    network_address_t *sender;     /* sender's address stored here */
-    int *copied;                   /* bytes copied stored here */
-    uint16_t *sport;               /* sender's port stored here */
+  /* These are used when waiting for a packet on this socket */
+  semaphore_t* receive_complete; /* signaled when packet arrived */
+  void* rbuf;                    /* payload copied here */
+  uint32_t bufsize;              /* size of the receive buffer */
+  network_address_t* sender;     /* sender's address stored here */
+  int* copied;                   /* bytes copied stored here */
+  uint16_t* sport;               /* sender's port stored here */
 } socket_descriptor_t;
 
 
@@ -68,16 +68,16 @@ void socket_init();
 sock_t socket_open(uint8_t protocol, uint16_t port);
 void socket_close(sock_t socket);
 int socket_sendto(sock_t s,
-		  network_address_t addr,
-		  uint16_t dport,
-		  void *buf,
-		  int size);
+                  network_address_t addr,
+                  uint16_t dport,
+                  void* buf,
+                  int size);
 int socket_recvfrom(sock_t s,
-		    network_address_t *addr,
-		    uint16_t *sport,
-		    void *buf,
-		    int maxlength,
-		    int *length);
+                    network_address_t* addr,
+                    uint16_t* sport,
+                    void* buf,
+                    int maxlength,
+                    int* length);
 
 
 #endif /* NET_SOCKET_H */

@@ -39,33 +39,33 @@
 #include "lib/types.h"
 #include "lib/libc.h"
 
-/** @name Network protocols 
+/** @name Network protocols
  *
  * This module contains a list of available network protocols.
  */
 
 /* A structure containing available network protocols */
 typedef struct {
-    /* The unique typecode of the protocol */
-    uint32_t protocol_id;
+  /* The unique typecode of the protocol */
+  uint32_t protocol_id;
 
-    /* Function which handles incoming frames for this protocol. This
-       function takes four arguments: source address destination
-       address, protocol id and the payload. The return value zero
-       means failure. Other values are interpreted as success. */
-    frame_handler_t frame_handler;
+  /* Function which handles incoming frames for this protocol. This
+     function takes four arguments: source address destination
+     address, protocol id and the payload. The return value zero
+     means failure. Other values are interpreted as success. */
+  frame_handler_t frame_handler;
 
-    /* Initialization function for this protocol. */
-    void (*init)(void);
+  /* Initialization function for this protocol. */
+  void (*init)(void);
 } network_protocols_t;
 
 /** List of available network protocols. */
 network_protocols_t network_protocols[] = {
-    {PROTOCOL_POP, &pop_push_frame, &pop_init},
-    {0, NULL, NULL}
+  {PROTOCOL_POP, &pop_push_frame, &pop_init},
+  {0, NULL, NULL}
 };
 
-/** 
+/**
  * Gets the frame handler function for the given protocol_id.
  *
  * @param protocol_id The id of the protocol whose frame handler
@@ -74,26 +74,28 @@ network_protocols_t network_protocols[] = {
  * @return The frame handler function.
  *
  */
-frame_handler_t protocols_get_frame_handler(uint32_t protocol_id)
+frame_handler_t
+protocols_get_frame_handler(uint32_t protocol_id)
 {
-    network_protocols_t *p;
+  network_protocols_t* p;
 
-    for(p = network_protocols; p->frame_handler != NULL; p++) {
-	if(p->protocol_id == protocol_id)
-	    return p->frame_handler;
-    }
-    
-    return NULL;
+  for (p = network_protocols; p->frame_handler != NULL; p++) {
+    if (p->protocol_id == protocol_id)
+    { return p->frame_handler; }
+  }
+
+  return NULL;
 }
 
 /**
  * Initialize all network protocols.
  */
-void protocols_init(void)
+void
+protocols_init(void)
 {
-    network_protocols_t *p;
+  network_protocols_t* p;
 
-    for(p = network_protocols; p->frame_handler != NULL; p++) {
-	p->init();
-    }
+  for (p = network_protocols; p->frame_handler != NULL; p++) {
+    p->init();
+  }
 }

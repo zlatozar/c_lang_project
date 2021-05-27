@@ -67,43 +67,44 @@ extern TID_t scheduler_current_thread[CONFIG_MAX_CPUS];
  *  table entry states to THREAD_FREE. Called only once before any
  *  threads are created.
  */
-void thread_table_init(void)
+void
+thread_table_init(void)
 {
-    int i;
+  int i;
 
-    /* Thread table entry _must_ be 64 bytes long, because the
-       context switching code in kernel/cswitch.S expects that. Let's
-       make sure it is. If you hit this error, you have changed either
-       context_t or thread_table_t, but have not changed padding in
-       the end of thread_table_t definition in kernel/thread.h */
-    KERNEL_ASSERT(sizeof(thread_table_t) == 64);
+  /* Thread table entry _must_ be 64 bytes long, because the
+     context switching code in kernel/cswitch.S expects that. Let's
+     make sure it is. If you hit this error, you have changed either
+     context_t or thread_table_t, but have not changed padding in
+     the end of thread_table_t definition in kernel/thread.h */
+  KERNEL_ASSERT(sizeof(thread_table_t) == 64);
 
-    spinlock_reset(&thread_table_slock);
+  spinlock_reset(&thread_table_slock);
 
-    /* Init all entries to 'NULL' */
-    for (i=0; i<CONFIG_MAX_THREADS; i++) {
-	/* Set context pointers to the top of the stack*/
-	thread_table[i].context      = (context_t *) (thread_stack_areas
-	    +CONFIG_THREAD_STACKSIZE*i + CONFIG_THREAD_STACKSIZE - 
-						      sizeof(context_t));
-	thread_table[i].user_context = NULL;
-	thread_table[i].state        = THREAD_FREE;
-	thread_table[i].sleeps_on    = 0;
-	thread_table[i].pagetable    = NULL;
-	thread_table[i].process_id   = -1;	
-	thread_table[i].next         = -1;	
-    }
+  /* Init all entries to 'NULL' */
+  for (i = 0; i < CONFIG_MAX_THREADS; i++) {
+    /* Set context pointers to the top of the stack*/
+    thread_table[i].context      = (context_t*) (thread_stack_areas
+                                                 + CONFIG_THREAD_STACKSIZE * i + CONFIG_THREAD_STACKSIZE -
+                                                 sizeof(context_t));
+    thread_table[i].user_context = NULL;
+    thread_table[i].state        = THREAD_FREE;
+    thread_table[i].sleeps_on    = 0;
+    thread_table[i].pagetable    = NULL;
+    thread_table[i].process_id   = -1;
+    thread_table[i].next         = -1;
+  }
 
-    thread_table[IDLE_THREAD_TID].context->cpu_regs[MIPS_REGISTER_SP] =
-	(uint32_t) thread_stack_areas + CONFIG_THREAD_STACKSIZE -4 -
-	sizeof(context_t);
-    thread_table[IDLE_THREAD_TID].context->pc = 
-        (uint32_t) _idle_thread_wait_loop;
-    thread_table[IDLE_THREAD_TID].context->status = 
-        INTERRUPT_MASK_ALL | INTERRUPT_MASK_MASTER;
-    thread_table[IDLE_THREAD_TID].state = THREAD_READY;
-    thread_table[IDLE_THREAD_TID].context->prev_context =
-	thread_table[IDLE_THREAD_TID].context;
+  thread_table[IDLE_THREAD_TID].context->cpu_regs[MIPS_REGISTER_SP] =
+    (uint32_t) thread_stack_areas + CONFIG_THREAD_STACKSIZE - 4 -
+    sizeof(context_t);
+  thread_table[IDLE_THREAD_TID].context->pc =
+    (uint32_t) _idle_thread_wait_loop;
+  thread_table[IDLE_THREAD_TID].context->status =
+    INTERRUPT_MASK_ALL | INTERRUPT_MASK_MASTER;
+  thread_table[IDLE_THREAD_TID].state = THREAD_READY;
+  thread_table[IDLE_THREAD_TID].context->prev_context =
+    thread_table[IDLE_THREAD_TID].context;
 }
 
 
@@ -118,89 +119,90 @@ void thread_table_init(void)
  * @return The thread ID of the created thread, or negative if
  * creation failed (thread table is full).
  */
-TID_t thread_create(void (*func)(uint32_t), uint32_t arg)
+TID_t
+thread_create(void (*func)(uint32_t), uint32_t arg)
 {
-    static TID_t next_tid = 0;
-    TID_t i, tid = -1;
+  static TID_t next_tid = 0;
+  TID_t i, tid = -1;
 
 
-    interrupt_status_t intr_status;
-      
-    intr_status = _interrupt_disable();
+  interrupt_status_t intr_status;
 
-    spinlock_acquire(&thread_table_slock);
-    
-    /* Find the first free thread table entry starting from 'next_tid' */
-    for (i=0; i<CONFIG_MAX_THREADS; i++) {
-	TID_t t = (i + next_tid) % CONFIG_MAX_THREADS;
+  intr_status = _interrupt_disable();
 
-	if(t == IDLE_THREAD_TID)
-	    continue;
-	
-	if (thread_table[t].state
-	    == THREAD_FREE) {
-	    tid = t;
-	    break;
-	}
+  spinlock_acquire(&thread_table_slock);
+
+  /* Find the first free thread table entry starting from 'next_tid' */
+  for (i = 0; i < CONFIG_MAX_THREADS; i++) {
+    TID_t t = (i + next_tid) % CONFIG_MAX_THREADS;
+
+    if (t == IDLE_THREAD_TID)
+    { continue; }
+
+    if (thread_table[t].state
+        == THREAD_FREE) {
+      tid = t;
+      break;
     }
+  }
 
-    /* Is the thread table full? */
-    if (tid < 0) { 
-	spinlock_release(&thread_table_slock);
-	_interrupt_set_state(intr_status);
-	return tid;
-    }
-
-    next_tid = (tid+1) % CONFIG_MAX_THREADS;
-
-    thread_table[tid].state = THREAD_NONREADY;
-
+  /* Is the thread table full? */
+  if (tid < 0) {
     spinlock_release(&thread_table_slock);
     _interrupt_set_state(intr_status);
-
-    thread_table[tid].context      = (context_t *) (thread_stack_areas
-	+CONFIG_THREAD_STACKSIZE*tid + CONFIG_THREAD_STACKSIZE - 
-	 sizeof(context_t));
-
-    for (i=0; i< (int) sizeof(context_t)/4; i++) {
-	*(((uint32_t *) thread_table[tid].context) + i) = 0;
-    }
-
-    thread_table[tid].user_context = NULL;
-    thread_table[tid].pagetable    = NULL;
-    thread_table[tid].sleeps_on    = 0;
-    thread_table[tid].process_id   = -1;
-    thread_table[tid].next         = -1;
-
-    /* Make sure that we always have a valid back reference on context chain */
-    thread_table[tid].context->prev_context = thread_table[tid].context;
-
-    /* set stack pointer to the end of stack */
-    thread_table[tid].context->cpu_regs[MIPS_REGISTER_SP] = 
-	(uint32_t)thread_stack_areas
-	+ (CONFIG_THREAD_STACKSIZE * tid) 
-	+ CONFIG_THREAD_STACKSIZE-4-
-	sizeof(context_t); /* to the end of stack */
-
-    /* set program counter to the specified function */
-    thread_table[tid].context->pc = (uint32_t)func;
-
-    /* set the return address to thread_finish */
-    thread_table[tid].context->cpu_regs[MIPS_REGISTER_RA] = 
-	(uint32_t)thread_finish;    
-
-    /* set the argument register to the specified argument ... */
-    thread_table[tid].context->cpu_regs[MIPS_REGISTER_A0] = arg;    
-    /* ... and reserve space for the argument in the stack (GCC calling
-       convention requires this even when the argument is not in the stack) */
-    thread_table[tid].context->cpu_regs[MIPS_REGISTER_SP] = 
-        thread_table[tid].context->cpu_regs[MIPS_REGISTER_SP] - 4;
-
-    /* enable interrupts for this new thread */
-    thread_table[tid].context->status = 
-        INTERRUPT_MASK_ALL | INTERRUPT_MASK_MASTER;
-
     return tid;
+  }
+
+  next_tid = (tid + 1) % CONFIG_MAX_THREADS;
+
+  thread_table[tid].state = THREAD_NONREADY;
+
+  spinlock_release(&thread_table_slock);
+  _interrupt_set_state(intr_status);
+
+  thread_table[tid].context      = (context_t*) (thread_stack_areas
+                                                 + CONFIG_THREAD_STACKSIZE * tid + CONFIG_THREAD_STACKSIZE -
+                                                 sizeof(context_t));
+
+  for (i = 0; i < (int) sizeof(context_t) / 4; i++) {
+    *(((uint32_t*) thread_table[tid].context) + i) = 0;
+  }
+
+  thread_table[tid].user_context = NULL;
+  thread_table[tid].pagetable    = NULL;
+  thread_table[tid].sleeps_on    = 0;
+  thread_table[tid].process_id   = -1;
+  thread_table[tid].next         = -1;
+
+  /* Make sure that we always have a valid back reference on context chain */
+  thread_table[tid].context->prev_context = thread_table[tid].context;
+
+  /* set stack pointer to the end of stack */
+  thread_table[tid].context->cpu_regs[MIPS_REGISTER_SP] =
+    (uint32_t)thread_stack_areas
+    + (CONFIG_THREAD_STACKSIZE * tid)
+    + CONFIG_THREAD_STACKSIZE - 4 -
+    sizeof(context_t); /* to the end of stack */
+
+  /* set program counter to the specified function */
+  thread_table[tid].context->pc = (uint32_t)func;
+
+  /* set the return address to thread_finish */
+  thread_table[tid].context->cpu_regs[MIPS_REGISTER_RA] =
+    (uint32_t)thread_finish;
+
+  /* set the argument register to the specified argument ... */
+  thread_table[tid].context->cpu_regs[MIPS_REGISTER_A0] = arg;
+  /* ... and reserve space for the argument in the stack (GCC calling
+     convention requires this even when the argument is not in the stack) */
+  thread_table[tid].context->cpu_regs[MIPS_REGISTER_SP] =
+    thread_table[tid].context->cpu_regs[MIPS_REGISTER_SP] - 4;
+
+  /* enable interrupts for this new thread */
+  thread_table[tid].context->status =
+    INTERRUPT_MASK_ALL | INTERRUPT_MASK_MASTER;
+
+  return tid;
 }
 
 
@@ -210,9 +212,10 @@ TID_t thread_create(void (*func)(uint32_t), uint32_t arg)
  *
  * @param t The ID of the thread to be run.
  */
-void thread_run(TID_t t)
+void
+thread_run(TID_t t)
 {
-    scheduler_add_ready(t);
+  scheduler_add_ready(t);
 }
 
 
@@ -224,34 +227,36 @@ void thread_run(TID_t t)
  * execution immediately. This should NOT be used as a substitute for
  * sleeping.
  */
-void thread_switch(void)
+void
+thread_switch(void)
 {
-      interrupt_status_t intr_status;
-      
-      intr_status = _interrupt_enable();
-      _interrupt_generate_sw0();
-      _interrupt_set_state(intr_status);
+  interrupt_status_t intr_status;
+
+  intr_status = _interrupt_enable();
+  _interrupt_generate_sw0();
+  _interrupt_set_state(intr_status);
 }
 
 /**
- * Return the TID of the calling thread. 
+ * Return the TID of the calling thread.
  * Finds out what is the TID of the thread calling this function.
  *
  * @return Thread ID of the calling thread.
  */
 
-TID_t thread_get_current_thread(void)
+TID_t
+thread_get_current_thread(void)
 {
-    TID_t t;
-    interrupt_status_t intr_status;
-      
-    intr_status = _interrupt_disable();
+  TID_t t;
+  interrupt_status_t intr_status;
 
-    t = scheduler_current_thread[_interrupt_getcpu()];
+  intr_status = _interrupt_disable();
 
-    _interrupt_set_state(intr_status);
+  t = scheduler_current_thread[_interrupt_getcpu()];
 
-    return t;
+  _interrupt_set_state(intr_status);
+
+  return t;
 }
 
 /**
@@ -262,38 +267,40 @@ TID_t thread_get_current_thread(void)
  * synchronizations must be handled by caller of this function.
  */
 
-thread_table_t *thread_get_current_thread_entry(void)
+thread_table_t*
+thread_get_current_thread_entry(void)
 {
-    TID_t t;
-    interrupt_status_t intr_status;
-      
-    intr_status = _interrupt_disable();
+  TID_t t;
+  interrupt_status_t intr_status;
 
-    t = scheduler_current_thread[_interrupt_getcpu()];
+  intr_status = _interrupt_disable();
 
-    _interrupt_set_state(intr_status);
+  t = scheduler_current_thread[_interrupt_getcpu()];
 
-    return &thread_table[t];
+  _interrupt_set_state(intr_status);
+
+  return &thread_table[t];
 }
 
 /**
  * Changes the calling thread to userland thread. This function
  * will never return.
- * 
+ *
  * @param usercontext Context in userland into which this thread will
  * enter.
  *
  */
 
-void thread_goto_userland(context_t *usercontext)
+void
+thread_goto_userland(context_t* usercontext)
 {
-    /* Set userland bit and enable interrupts before entering userland. */
-    usercontext->status = usercontext->status | USERLAND_ENABLE_BIT;
-    usercontext->status = usercontext->status | INTERRUPT_MASK_ALL;
-    usercontext->status = usercontext->status | INTERRUPT_MASK_MASTER;
-    _cswitch_to_userland(usercontext);
-    
-    KERNEL_PANIC("Userland entering returned for unknown reason.");
+  /* Set userland bit and enable interrupts before entering userland. */
+  usercontext->status = usercontext->status | USERLAND_ENABLE_BIT;
+  usercontext->status = usercontext->status | INTERRUPT_MASK_ALL;
+  usercontext->status = usercontext->status | INTERRUPT_MASK_MASTER;
+  _cswitch_to_userland(usercontext);
+
+  KERNEL_PANIC("Userland entering returned for unknown reason.");
 }
 
 /** Perform suicide. The calling thread will kill itself by freeing
@@ -301,26 +308,27 @@ void thread_goto_userland(context_t *usercontext)
  * scheduler will free the thread table entry when it encounters dying
  * threads.
  */
-void thread_finish(void)
+void
+thread_finish(void)
 {
-    TID_t my_tid;
+  TID_t my_tid;
 
-    my_tid = thread_get_current_thread();
+  my_tid = thread_get_current_thread();
 
-    _interrupt_disable();
+  _interrupt_disable();
 
-    /* Check that the page mappings have been cleared. */
-    KERNEL_ASSERT(thread_table[my_tid].pagetable == NULL);
+  /* Check that the page mappings have been cleared. */
+  KERNEL_ASSERT(thread_table[my_tid].pagetable == NULL);
 
-    spinlock_acquire(&thread_table_slock);
-    thread_table[my_tid].state = THREAD_DYING;
-    spinlock_release(&thread_table_slock);
+  spinlock_acquire(&thread_table_slock);
+  thread_table[my_tid].state = THREAD_DYING;
+  spinlock_release(&thread_table_slock);
 
-    _interrupt_enable();
-    _interrupt_generate_sw0();
+  _interrupt_enable();
+  _interrupt_generate_sw0();
 
-    /* not possible without a stack? alternative in assembler? */
-    KERNEL_PANIC("thread_finish(): thread was not destroyed");
+  /* not possible without a stack? alternative in assembler? */
+  KERNEL_PANIC("thread_finish(): thread was not destroyed");
 }
 
 /** @} */

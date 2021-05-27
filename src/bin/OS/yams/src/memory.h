@@ -38,60 +38,60 @@
 
 struct _device_t;
 
-typedef struct _memory_t{
-    void *physmem;
-    int pagesize;
-    int num_pages;
-    
-    void *io_descrarea; /* io descriptors stored in this buffer */
-    void *kernel_paramarea;
-    
-    uint32_t io_area_base;
-    uint32_t io_area_length;
-    
-    /* dynamic lookup tables for memory mapped devices */
-    int (**io_device_write)(struct _device_t *dev, 
-			    uint32_t addr, 
-			    uint32_t data);
-    int (**io_device_read)(struct _device_t *dev, 
-			   uint32_t addr, 
-			   uint32_t *data);
-    struct _device_t **io_devices;
+typedef struct _memory_t {
+  void* physmem;
+  int pagesize;
+  int num_pages;
 
-    /* A chain of PLUGIO devices to check for MMAP access */
-    pluggable_device_t *mmap;
-    int num_mmap;
+  void* io_descrarea; /* io descriptors stored in this buffer */
+  void* kernel_paramarea;
+
+  uint32_t io_area_base;
+  uint32_t io_area_length;
+
+  /* dynamic lookup tables for memory mapped devices */
+  int (**io_device_write)(struct _device_t* dev,
+                          uint32_t addr,
+                          uint32_t data);
+  int (**io_device_read)(struct _device_t* dev,
+                         uint32_t addr,
+                         uint32_t* data);
+  struct _device_t** io_devices;
+
+  /* A chain of PLUGIO devices to check for MMAP access */
+  pluggable_device_t* mmap;
+  int num_mmap;
 } memory_t;
 
 /* Create simulated memory, return allocated info struct */
-memory_t * memory_create(uint32_t pagesize, uint32_t num_pages);
+memory_t* memory_create(uint32_t pagesize, uint32_t num_pages);
 
 /* Translates a virtual address to a physical address
- * does not check TLB exceptions so make sure they do not 
+ * does not check TLB exceptions so make sure they do not
  * occur when calling this ;) (e.g. by doing memory load/store _before_)
  */
-uint32_t phys_addr(uint32_t vaddr, cpu_t *cpu);
+uint32_t phys_addr(uint32_t vaddr, cpu_t* cpu);
 
 /* Read a byte, halfword or word from memory. Return exception number. */
-exception_t mem_read(memory_t *mem, uint32_t addr, void *buf, 
-                     int size, cpu_t *cpu);
+exception_t mem_read(memory_t* mem, uint32_t addr, void* buf,
+                     int size, cpu_t* cpu);
 
 /* Write a byte, halfword or word to memory. Return exception number. */
-exception_t mem_write(memory_t *mem, uint32_t addr, void *buf, 
-                      int size, cpu_t *cpu);
+exception_t mem_write(memory_t* mem, uint32_t addr, void* buf,
+                      int size, cpu_t* cpu);
 
 
 /* byte/halfword/word operations without translations */
-int mem_dread(memory_t *mem, uint32_t addr, void *buf, int size);
-int mem_dwrite(memory_t *mem, uint32_t addr, void *buf, int size);
+int mem_dread(memory_t* mem, uint32_t addr, void* buf, int size);
+int mem_dwrite(memory_t* mem, uint32_t addr, void* buf, int size);
 
 
-/* Read and write directly to the memory. No translation/conversion 
+/* Read and write directly to the memory. No translation/conversion
    is done.
 */
-int mem_store_direct(memory_t *mem, uint32_t addr, 
-		     uint32_t length, void *data);
-int mem_read_direct(memory_t *mem, uint32_t addr, 
-		    uint32_t length, void *data);
+int mem_store_direct(memory_t* mem, uint32_t addr,
+                     uint32_t length, void* data);
+int mem_read_direct(memory_t* mem, uint32_t addr,
+                    uint32_t length, void* data);
 
 #endif /* MEMORY_H */

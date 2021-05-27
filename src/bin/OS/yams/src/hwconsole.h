@@ -86,35 +86,35 @@
 #include "simulator.h"
 
 /* for flex input */
-extern char *hwc_lexer_input_ptr;
+extern char* hwc_lexer_input_ptr;
 
 int hwconsole_run();
-int hwconsole_handle_command(char *cmd);
+int hwconsole_handle_command(char* cmd);
 
-int command_source(char *filename);
+int command_source(char* filename);
 void command_start();
 void command_step(uint32_t stepcount);
 void command_breakpoint(uint32_t address);
 void command_quit(uint32_t exit_value);
-void command_memread(uint32_t address, uint32_t length, char *filename);
-int  command_memwrite(uint32_t address, char *filename);
+void command_memread(uint32_t address, uint32_t length, char* filename);
+int  command_memwrite(uint32_t address, char* filename);
 void command_regdump(uint32_t processor_id);
 void command_unbreak();
 void command_interrupt(uint32_t interrupt_number, uint32_t cpu_nro);
-void command_cpuregwrite(uint32_t processor_number, 
-			 uint32_t register_number,
-			 uint32_t value);
-void command_cp0regwrite(uint32_t processor_number, 
-			 uint32_t register_number,
-			 uint32_t value);
-void command_help(char *str);
+void command_cpuregwrite(uint32_t processor_number,
+                         uint32_t register_number,
+                         uint32_t value);
+void command_cp0regwrite(uint32_t processor_number,
+                         uint32_t register_number,
+                         uint32_t value);
+void command_help(char* str);
 void command_dump(uint32_t address, uint32_t words);
 void command_dump_regsource(uint32_t processor_number,
-			    uint32_t register_number,
-			    uint32_t words);
+                            uint32_t register_number,
+                            uint32_t words);
 void command_poke(uint32_t address, uint32_t word);
 void command_tlbdump(uint32_t processor_id);
-void command_boot(char *kernel_file, char *args);
+void command_boot(char* kernel_file, char* args);
 void command_gdb(uint16_t port);
 
 #endif

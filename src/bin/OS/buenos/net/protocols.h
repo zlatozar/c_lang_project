@@ -46,10 +46,10 @@
 
 /* Type declaration for a function which is used by the network frame
    layer to push frames to the upper layers. */
-typedef int (*frame_handler_t)(network_address_t source, 
-			       network_address_t destination, 
-			       uint32_t protocol_id, 
-			       void *payload);
+typedef int (*frame_handler_t)(network_address_t source,
+                               network_address_t destination,
+                               uint32_t protocol_id,
+                               void* payload);
 
 frame_handler_t protocols_get_frame_handler(uint32_t protocol_id);
 

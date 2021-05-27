@@ -38,6 +38,6 @@
 
 #include "lib/libc.h"
 
-void DEBUG(char *debuglevelname, char *format, ...);
+void DEBUG(char* debuglevelname, char* format, ...);
 
 #endif /* BUENOS_LIB_DEBUG_H */

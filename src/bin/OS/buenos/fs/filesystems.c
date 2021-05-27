@@ -41,8 +41,8 @@
 /* NULL terminated table of all available filesystems. */
 
 static filesystems_t filesystems[] = {
-    {"TFS", &tfs_init},
-    { NULL, NULL} /* Last entry must be a NULL pair. */ 
+  {"TFS", &tfs_init},
+  { NULL, NULL} /* Last entry must be a NULL pair. */
 };
 
 /**
@@ -54,21 +54,22 @@ static filesystems_t filesystems[] = {
  * attempts failed.
  */
 
-fs_t *filesystems_try_all(gbd_t *disk)
+fs_t*
+filesystems_try_all(gbd_t* disk)
 {
-    filesystems_t *driver;
-    fs_t *fs;
+  filesystems_t* driver;
+  fs_t* fs;
 
-    for(driver=filesystems; driver->name != NULL; driver++) {
-	fs=driver->init(disk);
-	if(fs!=NULL) {
-	    /* Init succeeded. */
-	    kprintf("VFS: %s initialized on disk at 0x%8.8x\n",
-		    driver->name, disk->device->io_address);
-	    return fs;
-	}
+  for (driver = filesystems; driver->name != NULL; driver++) {
+    fs = driver->init(disk);
+    if (fs != NULL) {
+      /* Init succeeded. */
+      kprintf("VFS: %s initialized on disk at 0x%8.8x\n",
+              driver->name, disk->device->io_address);
+      return fs;
     }
+  }
 
-    /* No match. */
-    return NULL;
+  /* No match. */
+  return NULL;
 }

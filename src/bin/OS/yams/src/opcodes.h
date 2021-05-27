@@ -136,7 +136,7 @@
 #define REGIMM_BGEZ    0x01 /* b00001 */
 #define REGIMM_BLTZL   0x02 /* b00010 */
 #define REGIMM_BGEZL   0x03 /* b00011 */
- 
+
 #define REGIMM_TGEI    0x08 /* b01000 */
 #define REGIMM_TGEIU   0x09 /* b01001 */
 #define REGIMM_TLTI    0x0a /* b01010 */

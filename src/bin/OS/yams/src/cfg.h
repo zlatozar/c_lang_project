@@ -66,27 +66,27 @@
 #define CFG_SOCKET_NET  2
 
 typedef struct {
-    enum {CFG_DISK, CFG_TTY, CFG_NIC, CFG_PLUGIN} type;
-    char *vendor;
-    char *name;
-    char *filename;
-    char *options;
+  enum {CFG_DISK, CFG_TTY, CFG_NIC, CFG_PLUGIN} type;
+  char* vendor;
+  char* name;
+  char* filename;
+  char* options;
 
-    int async;
-    int irq;
-    int sectorsize;
-    int numsectors;
-    int numcylinders;
-    int time_rot;
-    int time_fullseek;
-    int domain;  /* SOCKET_UNIX or SOCKET_NET */
-    int port;
-    int listen; /* listen=1, connect=0 */
-    int hwaddr;
-    int send_delay;
-    int mtu;
-    int reliability;
-    int dma_delay;
+  int async;
+  int irq;
+  int sectorsize;
+  int numsectors;
+  int numcylinders;
+  int time_rot;
+  int time_fullseek;
+  int domain;  /* SOCKET_UNIX or SOCKET_NET */
+  int port;
+  int listen; /* listen=1, connect=0 */
+  int hwaddr;
+  int send_delay;
+  int mtu;
+  int reliability;
+  int dma_delay;
 } cfg_device_t;
 
 extern cfg_device_t cfg_devices[CFG_MAX_DEVICES];
@@ -113,12 +113,12 @@ int cfg_plugoptions_check(void);
 #define MAX_FILENAME_LENGTH 255
 #define MAX_SCRIPTS 255
 
-int cfg_read(char *cfg_file);
+int cfg_read(char* cfg_file);
 int cfg_read_etc(void);
 int cfg_read_home(void);
 int cfg_read_cwd(void);
 int cfg_init(void);
 
-char *cfg_checksocketname(char *name);
+char* cfg_checksocketname(char* name);
 
 #endif /* CFG_H */

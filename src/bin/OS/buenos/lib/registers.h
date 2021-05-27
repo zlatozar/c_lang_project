@@ -30,7 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * $Id: registers.h,v 1.1 2003/02/10 08:45:33 lsalmela Exp $	
+ * $Id: registers.h,v 1.1 2003/02/10 08:45:33 lsalmela Exp $
  */
 
 #ifndef LIB_REGISTERS_H
@@ -39,7 +39,7 @@
 #define zero $0
 #define AT   $1   /* at is used in assembler directive .set at */
 #define v0   $2   /* return value registers */
-#define v1   $3 
+#define v1   $3
 #define a0   $4   /* argument registers */
 #define a1   $5
 #define a2   $6

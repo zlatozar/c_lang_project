@@ -48,7 +48,7 @@
  */
 
 /** Table of initialized device drivers. */
-static device_t *device_table[CONFIG_MAX_DEVICES];
+static device_t* device_table[CONFIG_MAX_DEVICES];
 
 /** Number of initialized device drivers. */
 static int number_of_devices = 0;
@@ -60,21 +60,22 @@ static int number_of_devices = 0;
  *
  * @return Device driver descriptor. NULL if not found.
  */
-static drivers_available_t *find_driver(uint32_t typecode)
+static drivers_available_t*
+find_driver(uint32_t typecode)
 {
-    drivers_available_t *driver;
+  drivers_available_t* driver;
 
-    driver = drivers_available;
+  driver = drivers_available;
 
-    if ((typecode & YAMS_TYPECODE_CPUMASK) == YAMS_TYPECODE_CPUSTATUS)
-	typecode = YAMS_TYPECODE_CPUSTATUS;
+  if ((typecode & YAMS_TYPECODE_CPUMASK) == YAMS_TYPECODE_CPUSTATUS)
+  { typecode = YAMS_TYPECODE_CPUSTATUS; }
 
-    while(driver->typecode != 0) {
-        if (driver->typecode == typecode)
-            return driver;
-        driver++;
-    }
-    return NULL;
+  while (driver->typecode != 0) {
+    if (driver->typecode == typecode)
+    { return driver; }
+    driver++;
+  }
+  return NULL;
 }
 
 /**
@@ -86,44 +87,45 @@ static drivers_available_t *find_driver(uint32_t typecode)
  *
  */
 
-void device_init(void)
+void
+device_init(void)
 {
-    int i;
-    io_descriptor_t *descriptor;
-    drivers_available_t *driver;
+  int i;
+  io_descriptor_t* descriptor;
+  drivers_available_t* driver;
 
-    descriptor = (io_descriptor_t*)IO_DESCRIPTOR_AREA;
+  descriptor = (io_descriptor_t*)IO_DESCRIPTOR_AREA;
 
-    /* search _all_ descriptors (see YAMS documentation) */
-    for (i=0; i<YAMS_MAX_DEVICES; i++) {
-        if (descriptor->type != 0) {
-            driver = find_driver(descriptor->type);
-            if (driver == NULL) {
-                kprintf("Warning: Unknown hardware device type "
-                        "0x%3.3x at 0x%8.8x\n",
-                        descriptor->type, descriptor->io_area_base);
-            } else {
-                if (descriptor->irq != 0xffffffff)  
-                    kprintf("Device: Type 0x%3.3x at 0x%8.8x irq 0x%x "
-                            "driver '%s'\n",
-                            descriptor->type, descriptor->io_area_base,
-                            descriptor->irq, driver->name);
-                else
-                    kprintf("Device: Type 0x%3.3x at 0x%8.8x no irq  "
-                            "driver '%s'\n",
-                            descriptor->type, descriptor->io_area_base,
-                            driver->name);
-                
-                device_table[number_of_devices]=driver->initfunc(descriptor);
-                if (device_table[number_of_devices] != NULL) {
-                    number_of_devices++;
-                    if (number_of_devices >= CONFIG_MAX_DEVICES)
-                        break;
-                }
-            }
+  /* search _all_ descriptors (see YAMS documentation) */
+  for (i = 0; i < YAMS_MAX_DEVICES; i++) {
+    if (descriptor->type != 0) {
+      driver = find_driver(descriptor->type);
+      if (driver == NULL) {
+        kprintf("Warning: Unknown hardware device type "
+                "0x%3.3x at 0x%8.8x\n",
+                descriptor->type, descriptor->io_area_base);
+      } else {
+        if (descriptor->irq != 0xffffffff)
+          kprintf("Device: Type 0x%3.3x at 0x%8.8x irq 0x%x "
+                  "driver '%s'\n",
+                  descriptor->type, descriptor->io_area_base,
+                  descriptor->irq, driver->name);
+        else
+          kprintf("Device: Type 0x%3.3x at 0x%8.8x no irq  "
+                  "driver '%s'\n",
+                  descriptor->type, descriptor->io_area_base,
+                  driver->name);
+
+        device_table[number_of_devices] = driver->initfunc(descriptor);
+        if (device_table[number_of_devices] != NULL) {
+          number_of_devices++;
+          if (number_of_devices >= CONFIG_MAX_DEVICES)
+          { break; }
         }
-	descriptor++;
+      }
     }
+    descriptor++;
+  }
 
 }
 
@@ -137,19 +139,20 @@ void device_init(void)
  *
  * @return The device driver. NULL if not found or n too large.
  */
-device_t *device_get(uint32_t typecode, uint32_t n)
+device_t*
+device_get(uint32_t typecode, uint32_t n)
 {
-    int i;
+  int i;
 
-    for(i = 0; i < number_of_devices; i++) {
-        if (device_table[i]->type == typecode) {
-            if (n == 0)
-                return device_table[i];
-            else
-                n--;
-        }
+  for (i = 0; i < number_of_devices; i++) {
+    if (device_table[i]->type == typecode) {
+      if (n == 0)
+      { return device_table[i]; }
+      else
+      { n--; }
     }
-    return NULL;
+  }
+  return NULL;
 }
 
 /** @} */

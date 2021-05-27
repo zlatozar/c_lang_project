@@ -39,7 +39,7 @@
 
 typedef int process_id_t;
 
-void process_start(const char *executable);
+void process_start(const char* executable);
 
 #define USERLAND_STACK_TOP 0x7fffeffc
 

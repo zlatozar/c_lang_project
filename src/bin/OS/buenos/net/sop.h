@@ -50,9 +50,9 @@ void sop_init();
 
 /* Implementation for frame_handler_t (protocols.h) for streaming protocol. */
 int sop_push_frame(network_address_t fromaddr,
-		   network_address_t toaddr,
-		   uint32_t protocol_id,
-		   void *frame);
+                   network_address_t toaddr,
+                   uint32_t protocol_id,
+                   void* frame);
 
 /* Connect to remote address addr, port port with given socket s.
 Return 0 on success and 1 on failure. */
@@ -63,11 +63,11 @@ void socket_listen(sock_t s);
 
 /* Read at most length bytes from given socket s to buffer buf.
 Return number of bytes read, zero on end of stream and negative on error. */
-int socket_read(sock_t s, void *buf, int length);
+int socket_read(sock_t s, void* buf, int length);
 
 /* Write length bytes from buffer buf to socket s. Return number of
 bytes delivered to target socket. If return value is not equal to
 length, connection (and some data) has been lost. */
-int socket_write(sock_t s, void *buf, int length);
+int socket_write(sock_t s, void* buf, int length);
 
 #endif /* NET_SOP_H */

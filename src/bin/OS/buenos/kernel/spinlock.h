@@ -39,8 +39,8 @@
 
 typedef int spinlock_t;
 
-void spinlock_reset(spinlock_t *slock);
-void spinlock_acquire(spinlock_t *slock);
-void spinlock_release(spinlock_t *slock);
+void spinlock_reset(spinlock_t* slock);
+void spinlock_acquire(spinlock_t* slock);
+void spinlock_release(spinlock_t* slock);
 
 #endif /* BUENOS_KERNEL_SPINLOCK_H */
