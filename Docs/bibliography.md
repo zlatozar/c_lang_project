@@ -2,7 +2,8 @@
 
 ### Basics
 - _"From Hardware to Software: an introduction to computers"_ by Graham Lee <br/>
-- _"Fundamentals of Operating Systems"_ by Eager
+- _"Computer Systems: Architecture, Organization, and Programming"_ by Arthur B. MacCabe <br/>
+- _"Fundamentals of Operating Systems"_ by R. D. Eager
 
 ### C Language
 
@@ -17,17 +18,16 @@
 
 #### C Philosophy
 - [C exercism](https://exercism.io/tracks/c)
-- _"C Interfaces and Implementations: Techniques for Creating Reusable Software"_ by David Hanson <br/>
+- _"Reusable Data Structures for C"_ by Robert Sessions <br/>
 - _"Data Structures: An Advanced Approach Using C"_ by Jeffry Esakov <br/>
-- _"Functional C"_ by Hartel  <br/>
-  [book and source](https://research.utwente.nl/en/publications/functional-c)
+- _"C Interfaces and Implementations: Techniques for Creating Reusable Software"_ by David Hanson
 
 ### Multi-threading
 - (pdf)["An Introduction to Programming with Threads"](https://www.hpl.hp.com/techreports/Compaq-DEC/SRC-RR-35.pdf) by Andrew Birrell <br/>
-- [PThreads tutorial](https://computing.llnl.gov/tutorials/pthreads/)
+- [PThreads tutorial](https://computing.llnl.gov/tutorials/pthreads/) <br/>
+- [The Little Book of Semaphores](https://greenteapress.com/wp/semaphores/)
 
 ### Building Tools
-- _"AUTOTOOLS. A Practitioner’s Guide to GNU Autoconf, Automake, and Libtool"_ by John Calcote <br/>
 - _"Professional CMake: A Practical Guid"_ by Craig Scott <br/>
   NOTE: `CMake` could generate [Ninja](https://ninja-build.org/) build files.
 
@@ -38,8 +38,7 @@
 - _"Shell Scripting: Expert Recipes for Linux, Bash, and More"_ by Steve Parker
 
 ### lex&yacc and compilers
-- _"Introduction to Compiler Construction with Unix"_ by Axel T. Schreiner
-
+- _"Introduction to Compiler Construction with Unix"_ by Axel T. Schreiner<br/>
 - _"Let's build a compiler"_ by by Jack Crenshaw (free book)  <br/>
   [source code](https://github.com/lotabout/Let-s-build-a-compiler)
 
@@ -52,8 +51,8 @@
 
 ### OS
 - _"Understanding UNIX/LINUX Programming: A Guide to Theory and Practice"_ by Bruce Molay <br/>
-- _"The Logical Design of Operating Systems"_ by Alan C. Shaw
+- _"Unix System Programming"_ by Keith Haviland
 
 ### OS Advanced Level
 - _"Operating Systems: A Design Oriented Approach"_ by Crowley <br/>
-- _"The Linux Programming Interface: A Linux and UNIX System Programming"_ by Michael Kerrisk
+- _"The Logical Design of Operating Systems"_ by Alan C. Shaw

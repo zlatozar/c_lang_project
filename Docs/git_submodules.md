@@ -1,5 +1,6 @@
 # Git Submodules basic explanation
 
+_Submodule is a pointer to external module_.
 
 ### Why submodules?
 
