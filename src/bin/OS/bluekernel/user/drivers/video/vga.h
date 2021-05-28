@@ -1,10 +1,10 @@
 /* vga.h : from Bochs /iodev/display/vga.h
- * 
+ *
  * It is currently modified by removing C++ class type.
  * Paul Cuttler 2013
- * 
+ *
  * $Id: vga.h 11541 2012-11-08 19:12:26Z vruppert $
- * 
+ *
  *  Copyright (C) 2002-2012  The Bochs Project
  *  PCI VGA dummy adapter Copyright (C) 2002,2003  Mike Nordell
  *
@@ -22,7 +22,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  *
- */ 
+ */
 
 #ifndef BX_IODEV_VGA_H
 #define BX_IODEV_VGA_H
@@ -77,8 +77,8 @@
 
 #define VBE_DISPI_LFB_PHYSICAL_ADDRESS   0xE0000000
 
-#define VBE_DISPI_TOTAL_VIDEO_MEMORY_KB		(VBE_DISPI_TOTAL_VIDEO_MEMORY_MB * 1024)
-#define VBE_DISPI_TOTAL_VIDEO_MEMORY_BYTES	(VBE_DISPI_TOTAL_VIDEO_MEMORY_KB * 1024)
+#define VBE_DISPI_TOTAL_VIDEO_MEMORY_KB   (VBE_DISPI_TOTAL_VIDEO_MEMORY_MB * 1024)
+#define VBE_DISPI_TOTAL_VIDEO_MEMORY_BYTES  (VBE_DISPI_TOTAL_VIDEO_MEMORY_KB * 1024)
 
 // End Bochs VBE definitions
 

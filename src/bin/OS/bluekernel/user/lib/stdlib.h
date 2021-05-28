@@ -1,15 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /* Header for standard library
-	stdlib.h
+  stdlib.h
 
-	This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0
-	International License. To view a copy of this license, visit
-	http://creativecommons.org/licenses/by-nc-nd/4.0/
-	or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+  This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0
+  International License. To view a copy of this license, visit
+  http://creativecommons.org/licenses/by-nc-nd/4.0/
+  or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
-	Also see http://www.bluekernel.com.au
+  Also see http://www.bluekernel.com.au
 
-	copyright Paul Cuttler 2017
+  copyright Paul Cuttler 2017
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -21,20 +21,20 @@
 #include "../../server/server.h"
 
 // string size is limited by msg size -1 first word is msg type, and *4 because 1 word = 4 chars.
-#define STRING_SIZE				((SERVER_MSG_SIZE - 1) * 4)
+#define STRING_SIZE       ((SERVER_MSG_SIZE - 1) * 4)
 
-#define READ_IRR_PORT_RES		0x10
-#define PIC1_COMMAND_PORT_RES	0x11
-#define PIC2_COMMAND_PORT_RES	0x12
-#define READ_ISR_PORT_RES		0x13
-#define PIC1_DATA_PORT_RES		0x14
+#define READ_IRR_PORT_RES   0x10
+#define PIC1_COMMAND_PORT_RES 0x11
+#define PIC2_COMMAND_PORT_RES 0x12
+#define READ_ISR_PORT_RES   0x13
+#define PIC1_DATA_PORT_RES    0x14
 
-void kprintf(const char *str);
-int	 printc(char c);
+void kprintf(const char* str);
+int  printc(char c);
 int  printx(uint32_t num, int width);
-int  atoi(const char *str);
-int  kstrcmp(const char *str1, const char *str2);
-char *kstrcpy(char *destination, const char *source);
+int  atoi(const char* str);
+int  kstrcmp(const char* str1, const char* str2);
+char* kstrcpy(char* destination, const char* source);
 
 #endif
 
