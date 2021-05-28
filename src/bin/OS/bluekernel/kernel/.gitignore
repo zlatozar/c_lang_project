@@ -1,0 +1,5 @@
+*.[oa]
+mechanism/pc/boot/bios_read_disk.c
+*.bin
+*.inc
+*.dis
