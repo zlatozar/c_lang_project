@@ -1,0 +1,6 @@
+export PATH="$PATH:/root/pintos/src/utils"
+
+alias pinv='pintos -v -- run'
+alias pint='pintos -t -- run'
+alias pinvg='pintos --gdb -v -- run'
+alias pintg='pintos --gdb -t -- run'
