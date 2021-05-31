@@ -3,7 +3,7 @@
    below. */
 
 /*
- * Copyright (C) 1997 Massachusetts Institute of Technology 
+ * Copyright (C) 1997 Massachusetts Institute of Technology
  *
  * This software is being provided by the copyright holders under the
  * following license. By obtaining, using and/or copying this software,
@@ -57,7 +57,7 @@ inb (uint16_t port)
 /* Reads CNT bytes from PORT, one after another, and stores them
    into the buffer starting at ADDR. */
 static inline void
-insb (uint16_t port, void *addr, size_t cnt)
+insb (uint16_t port, void* addr, size_t cnt)
 {
   /* See [IA32-v2a] "INS". */
   asm volatile ("cld; repne; insb"
@@ -79,7 +79,7 @@ inw (uint16_t port)
 /* Reads CNT 16-bit (halfword) units from PORT, one after
    another, and stores them into the buffer starting at ADDR. */
 static inline void
-insw (uint16_t port, void *addr, size_t cnt)
+insw (uint16_t port, void* addr, size_t cnt)
 {
   /* See [IA32-v2a] "INS". */
   asm volatile ("cld; repne; insw"
@@ -101,7 +101,7 @@ inl (uint16_t port)
 /* Reads CNT 32-bit (word) units from PORT, one after another,
    and stores them into the buffer starting at ADDR. */
 static inline void
-insl (uint16_t port, void *addr, size_t cnt)
+insl (uint16_t port, void* addr, size_t cnt)
 {
   /* See [IA32-v2a] "INS". */
   asm volatile ("cld; repne; insl"
@@ -121,7 +121,7 @@ outb (uint16_t port, uint8_t data)
 /* Writes to PORT each byte of data in the CNT-byte buffer
    starting at ADDR. */
 static inline void
-outsb (uint16_t port, const void *addr, size_t cnt)
+outsb (uint16_t port, const void* addr, size_t cnt)
 {
   /* See [IA32-v2b] "OUTS". */
   asm volatile ("cld; repne; outsb"
@@ -141,7 +141,7 @@ outw (uint16_t port, uint16_t data)
 /* Writes to PORT each 16-bit unit (halfword) of data in the
    CNT-halfword buffer starting at ADDR. */
 static inline void
-outsw (uint16_t port, const void *addr, size_t cnt)
+outsw (uint16_t port, const void* addr, size_t cnt)
 {
   /* See [IA32-v2b] "OUTS". */
   asm volatile ("cld; repne; outsw"
@@ -161,7 +161,7 @@ outl (uint16_t port, uint32_t data)
 /* Writes to PORT each 32-bit unit (word) of data in the CNT-word
    buffer starting at ADDR. */
 static inline void
-outsl (uint16_t port, const void *addr, size_t cnt)
+outsl (uint16_t port, const void* addr, size_t cnt)
 {
   /* See [IA32-v2b] "OUTS". */
   asm volatile ("cld; repne; outsl"

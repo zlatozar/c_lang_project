@@ -60,29 +60,27 @@ static unsigned long crctab[] = {
 
 /* This is the algorithm used by the Posix `cksum' utility. */
 unsigned long
-cksum (const void *b_, size_t n)
+cksum (const void* b_, size_t n)
 {
-  const unsigned char *b = b_;
+  const unsigned char* b = b_;
   uint32_t s = 0;
   size_t i;
-  for (i = n; i > 0; --i)
-    {
-      unsigned char c = *b++;
-      s = (s << 8) ^ crctab[(s >> 24) ^ c];
-    }
-  while (n != 0)
-    {
-      unsigned char c = n;
-      n >>= 8;
-      s = (s << 8) ^ crctab[(s >> 24) ^ c];
-    }
+  for (i = n; i > 0; --i) {
+    unsigned char c = *b++;
+    s = (s << 8) ^ crctab[(s >> 24) ^ c];
+  }
+  while (n != 0) {
+    unsigned char c = n;
+    n >>= 8;
+    s = (s << 8) ^ crctab[(s >> 24) ^ c];
+  }
   return ~s;
 }
 
 #ifdef STANDALONE_TEST
 #include <stdio.h>
 int
-main (void) 
+main (void)
 {
   char buf[65536];
   int n = fread (buf, 1, sizeof buf, stdin);

@@ -11,13 +11,13 @@
 char buf[BUF_SIZE];
 
 int
-main (int argc, char *argv[])
+main (int argc, char* argv[])
 {
   int child_idx;
   int fd;
 
   quiet = true;
-  
+
   CHECK (argc == 2, "argc must be 2, actually %d", argc);
   child_idx = atoi (argv[1]);
 

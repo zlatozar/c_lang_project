@@ -39,7 +39,7 @@
 size_t ram_pages;
 
 /* Page directory with kernel mappings only. */
-uint32_t *base_page_dir;
+uint32_t* base_page_dir;
 
 #ifdef FILESYS
 /* -f: Format the file system? */
@@ -52,9 +52,9 @@ bool power_off_when_done;
 static void ram_init (void);
 static void paging_init (void);
 
-static char **read_command_line (void);
-static char **parse_options (char **argv);
-static void run_actions (char **argv);
+static char** read_command_line (void);
+static char** parse_options (char** argv);
+static void run_actions (char** argv);
 static void usage (void);
 
 static void print_stats (void);
@@ -66,9 +66,9 @@ int main (void) NO_RETURN;
 int
 main (void)
 {
-  char **argv;
-  
-  /* Clear BSS and get machine's RAM size. */  
+  char** argv;
+
+  /* Clear BSS and get machine's RAM size. */
   ram_init ();
 
   /* Break command line into arguments and parse options. */
@@ -78,7 +78,7 @@ main (void)
   /* Initialize ourselves as a thread so we can use locks,
      then enable console locking. */
   thread_init ();
-  console_init ();  
+  console_init ();
 
   /* Greet user. */
   printf ("Pintos booting with %'zu kB RAM...\n", ram_pages * PGSIZE / 1024);
@@ -116,19 +116,19 @@ main (void)
 #endif
 
   printf ("Boot complete.\n");
-  
+
   /* Run actions specified on kernel command line. */
   run_actions (argv);
 
   /* Finish up. */
   if (power_off_when_done)
-    power_off ();
+  { power_off (); }
   thread_exit ();
 }
 
 /* Clear BSS and obtain RAM size from loader. */
 static void
-ram_init (void) 
+ram_init (void)
 {
   /* The "BSS" is a segment that should be initialized to zeros.
      It isn't actually stored on disk or zeroed by the kernel
@@ -140,7 +140,7 @@ ram_init (void)
   memset (&_start_bss, 0, &_end_bss - &_start_bss);
 
   /* Get RAM size from loader.  See loader.S. */
-  ram_pages = *(uint32_t *) ptov (LOADER_RAM_PGS);
+  ram_pages = *(uint32_t*) ptov (LOADER_RAM_PGS);
 }
 
 /* Populates the base page directory and page table with the
@@ -155,28 +155,26 @@ ram_init (void)
 static void
 paging_init (void)
 {
-  uint32_t *pd, *pt;
+  uint32_t* pd, *pt;
   size_t page;
   extern char _start, _end_kernel_text;
 
   pd = base_page_dir = palloc_get_page (PAL_ASSERT | PAL_ZERO);
   pt = NULL;
-  for (page = 0; page < ram_pages; page++) 
-    {
-      uintptr_t paddr = page * PGSIZE;
-      char *vaddr = ptov (paddr);
-      size_t pde_idx = pd_no (vaddr);
-      size_t pte_idx = pt_no (vaddr);
-      bool in_kernel_text = &_start <= vaddr && vaddr < &_end_kernel_text;
+  for (page = 0; page < ram_pages; page++) {
+    uintptr_t paddr = page * PGSIZE;
+    char* vaddr = ptov (paddr);
+    size_t pde_idx = pd_no (vaddr);
+    size_t pte_idx = pt_no (vaddr);
+    bool in_kernel_text = &_start <= vaddr && vaddr < &_end_kernel_text;
 
-      if (pd[pde_idx] == 0)
-        {
-          pt = palloc_get_page (PAL_ASSERT | PAL_ZERO);
-          pd[pde_idx] = pde_create (pt);
-        }
-
-      pt[pte_idx] = pte_create_kernel (vaddr, !in_kernel_text);
+    if (pd[pde_idx] == 0) {
+      pt = palloc_get_page (PAL_ASSERT | PAL_ZERO);
+      pd[pde_idx] = pde_create (pt);
     }
+
+    pt[pte_idx] = pte_create_kernel (vaddr, !in_kernel_text);
+  }
 
   /* Store the physical address of the page directory into CR3
      aka PDBR (page directory base register).  This activates our
@@ -188,34 +186,33 @@ paging_init (void)
 
 /* Breaks the kernel command line into words and returns them as
    an argv-like array. */
-static char **
-read_command_line (void) 
+static char**
+read_command_line (void)
 {
-  static char *argv[LOADER_ARGS_LEN / 2 + 1];
-  char *p, *end;
+  static char* argv[LOADER_ARGS_LEN / 2 + 1];
+  char* p, *end;
   int argc;
   int i;
 
-  argc = *(uint32_t *) ptov (LOADER_ARG_CNT);
+  argc = *(uint32_t*) ptov (LOADER_ARG_CNT);
   p = ptov (LOADER_ARGS);
   end = p + LOADER_ARGS_LEN;
-  for (i = 0; i < argc; i++) 
-    {
-      if (p >= end)
-        PANIC ("command line arguments overflow");
+  for (i = 0; i < argc; i++) {
+    if (p >= end)
+    { PANIC ("command line arguments overflow"); }
 
-      argv[i] = p;
-      p += strnlen (p, end - p) + 1;
-    }
+    argv[i] = p;
+    p += strnlen (p, end - p) + 1;
+  }
   argv[argc] = NULL;
 
   /* Print kernel command line. */
   printf ("Kernel command line:");
   for (i = 0; i < argc; i++)
     if (strchr (argv[i], ' ') == NULL)
-      printf (" %s", argv[i]);
+    { printf (" %s", argv[i]); }
     else
-      printf (" '%s'", argv[i]);
+    { printf (" '%s'", argv[i]); }
   printf ("\n");
 
   return argv;
@@ -223,44 +220,43 @@ read_command_line (void)
 
 /* Parses options in ARGV[]
    and returns the first non-option argument. */
-static char **
-parse_options (char **argv) 
+static char**
+parse_options (char** argv)
 {
-  for (; *argv != NULL && **argv == '-'; argv++)
-    {
-      char *save_ptr;
-      char *name = strtok_r (*argv, "=", &save_ptr);
-      char *value = strtok_r (NULL, "", &save_ptr);
-      
-      if (!strcmp (name, "-h"))
-        usage ();
-      else if (!strcmp (name, "-q"))
-        power_off_when_done = true;
+  for (; *argv != NULL &&** argv == '-'; argv++) {
+    char* save_ptr;
+    char* name = strtok_r (*argv, "=", &save_ptr);
+    char* value = strtok_r (NULL, "", &save_ptr);
+
+    if (!strcmp (name, "-h"))
+    { usage (); }
+    else if (!strcmp (name, "-q"))
+    { power_off_when_done = true; }
 #ifdef FILESYS
-      else if (!strcmp (name, "-f"))
-        format_filesys = true;
+    else if (!strcmp (name, "-f"))
+    { format_filesys = true; }
 #endif
-      else if (!strcmp (name, "-rs"))
-        random_init (atoi (value));
-      else if (!strcmp (name, "-mlfqs"))
-        thread_mlfqs = true;
+    else if (!strcmp (name, "-rs"))
+    { random_init (atoi (value)); }
+    else if (!strcmp (name, "-mlfqs"))
+    { thread_mlfqs = true; }
 #ifdef USERPROG
-      else if (!strcmp (name, "-ul"))
-        user_page_limit = atoi (value);
+    else if (!strcmp (name, "-ul"))
+    { user_page_limit = atoi (value); }
 #endif
-      else
-        PANIC ("unknown option `%s' (use -h for help)", name);
-    }
-  
+    else
+    { PANIC ("unknown option `%s' (use -h for help)", name); }
+  }
+
   return argv;
 }
 
 /* Runs the task specified in ARGV[1]. */
 static void
-run_task (char **argv)
+run_task (char** argv)
 {
-  const char *task = argv[1];
-  
+  const char* task = argv[1];
+
   printf ("Executing '%s':\n", task);
 #ifdef USERPROG
   process_wait (process_execute (task));
@@ -273,52 +269,49 @@ run_task (char **argv)
 /* Executes all of the actions specified in ARGV[]
    up to the null pointer sentinel. */
 static void
-run_actions (char **argv) 
+run_actions (char** argv)
 {
   /* An action. */
-  struct action 
-    {
-      char *name;                       /* Action name. */
-      int argc;                         /* # of args, including action name. */
-      void (*function) (char **argv);   /* Function to execute action. */
-    };
+  struct action {
+    char* name;                       /* Action name. */
+    int argc;                         /* # of args, including action name. */
+    void (*function) (char** argv);   /* Function to execute action. */
+  };
 
   /* Table of supported actions. */
-  static const struct action actions[] = 
-    {
-      {"run", 2, run_task},
+  static const struct action actions[] = {
+    {"run", 2, run_task},
 #ifdef FILESYS
-      {"ls", 1, fsutil_ls},
-      {"cat", 2, fsutil_cat},
-      {"rm", 2, fsutil_rm},
-      {"put", 2, fsutil_put},
-      {"get", 2, fsutil_get},
+    {"ls", 1, fsutil_ls},
+    {"cat", 2, fsutil_cat},
+    {"rm", 2, fsutil_rm},
+    {"put", 2, fsutil_put},
+    {"get", 2, fsutil_get},
 #endif
-      {NULL, 0, NULL},
-    };
+    {NULL, 0, NULL},
+  };
 
-  while (*argv != NULL)
-    {
-      const struct action *a;
-      int i;
+  while (*argv != NULL) {
+    const struct action* a;
+    int i;
 
-      /* Find action name. */
-      for (a = actions; ; a++)
-        if (a->name == NULL)
-          PANIC ("unknown action `%s' (use -h for help)", *argv);
-        else if (!strcmp (*argv, a->name))
-          break;
+    /* Find action name. */
+    for (a = actions; ; a++)
+      if (a->name == NULL)
+      { PANIC ("unknown action `%s' (use -h for help)", *argv); }
+      else if (!strcmp (*argv, a->name))
+      { break; }
 
-      /* Check for required arguments. */
-      for (i = 1; i < a->argc; i++)
-        if (argv[i] == NULL)
-          PANIC ("action `%s' requires %d argument(s)", *argv, a->argc - 1);
+    /* Check for required arguments. */
+    for (i = 1; i < a->argc; i++)
+      if (argv[i] == NULL)
+      { PANIC ("action `%s' requires %d argument(s)", *argv, a->argc - 1); }
 
-      /* Invoke action and advance. */
-      a->function (argv);
-      argv += a->argc;
-    }
-  
+    /* Invoke action and advance. */
+    a->function (argv);
+    argv += a->argc;
+  }
+
 }
 
 /* Prints a kernel command line help message and powers off the
@@ -352,7 +345,7 @@ usage (void)
 #ifdef USERPROG
           "  -ul=COUNT          Limit user memory to COUNT pages.\n"
 #endif
-          );
+         );
   power_off ();
 }
 
@@ -360,10 +353,10 @@ usage (void)
 /* Powers down the machine we're running on,
    as long as we're running on Bochs or QEMU. */
 void
-power_off (void) 
+power_off (void)
 {
   const char s[] = "Shutdown";
-  const char *p;
+  const char* p;
 
 #ifdef FILESYS
   filesys_done ();
@@ -375,7 +368,7 @@ power_off (void)
   serial_flush ();
 
   for (p = s; *p != '\0'; p++)
-    outb (0x8900, *p);
+  { outb (0x8900, *p); }
   asm volatile ("cli; hlt" : : : "memory");
   printf ("still running...\n");
   for (;;);
@@ -383,7 +376,7 @@ power_off (void)
 
 /* Print statistics about Pintos execution. */
 static void
-print_stats (void) 
+print_stats (void)
 {
   timer_print_stats ();
   thread_print_stats ();

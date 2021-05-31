@@ -11,7 +11,7 @@
 
 #define SIZE (128 * 1024)
 
-static char *buf = (char *) 0x10000000;
+static char* buf = (char*) 0x10000000;
 
 void
 test_main (void)
@@ -26,13 +26,12 @@ test_main (void)
 
   /* Initialize. */
   for (i = 0; i < SIZE; i++)
-    buf[i] = i * 257;
+  { buf[i] = i * 257; }
   msg ("init: cksum=%lu", cksum (buf, SIZE));
-    
+
   /* Shuffle repeatedly. */
-  for (i = 0; i < 10; i++)
-    {
-      shuffle (buf, SIZE, 1);
-      msg ("shuffle %zu: cksum=%lu", i, cksum (buf, SIZE));
-    }
+  for (i = 0; i < 10; i++) {
+    shuffle (buf, SIZE, 1);
+    msg ("shuffle %zu: cksum=%lu", i, cksum (buf, SIZE));
+  }
 }

@@ -29,7 +29,7 @@ static void clear_row (size_t y);
 static void cls (void);
 static void newline (void);
 static void move_cursor (void);
-static void find_cursor (size_t *x, size_t *y);
+static void find_cursor (size_t* x, size_t* y);
 
 /* Initializes the VGA text display. */
 static void
@@ -37,12 +37,11 @@ init (void)
 {
   /* Already initialized? */
   static bool inited;
-  if (!inited)
-    {
-      fb = ptov (0xb8000);
-      find_cursor (&cx, &cy);
-      inited = true; 
-    }
+  if (!inited) {
+    fb = ptov (0xb8000);
+    find_cursor (&cx, &cy);
+    inited = true;
+  }
 }
 
 /* Writes C to the VGA text display, interpreting control
@@ -55,9 +54,8 @@ vga_putc (int c)
   enum intr_level old_level = intr_disable ();
 
   init ();
-  
-  switch (c) 
-    {
+
+  switch (c) {
     case '\n':
       newline ();
       break;
@@ -68,9 +66,9 @@ vga_putc (int c)
 
     case '\b':
       if (cx > 0)
-        cx--;
+      { cx--; }
       break;
-      
+
     case '\r':
       cx = 0;
       break;
@@ -78,23 +76,23 @@ vga_putc (int c)
     case '\t':
       cx = ROUND_UP (cx + 1, 8);
       if (cx >= COL_CNT)
-        newline ();
+      { newline (); }
       break;
-      
+
     default:
       fb[cy][cx][0] = c;
       fb[cy][cx][1] = GRAY_ON_BLACK;
       if (++cx >= COL_CNT)
-        newline ();
+      { newline (); }
       break;
-    }
+  }
 
   /* Update cursor position. */
   move_cursor ();
 
   intr_set_level (old_level);
 }
-
+
 /* Clears the screen and moves the cursor to the upper left. */
 static void
 cls (void)
@@ -102,7 +100,7 @@ cls (void)
   size_t y;
 
   for (y = 0; y < ROW_CNT; y++)
-    clear_row (y);
+  { clear_row (y); }
 
   cx = cy = 0;
   move_cursor ();
@@ -110,15 +108,14 @@ cls (void)
 
 /* Clears row Y to spaces. */
 static void
-clear_row (size_t y) 
+clear_row (size_t y)
 {
   size_t x;
 
-  for (x = 0; x < COL_CNT; x++)
-    {
-      fb[y][x][0] = ' ';
-      fb[y][x][1] = GRAY_ON_BLACK;
-    }
+  for (x = 0; x < COL_CNT; x++) {
+    fb[y][x][0] = ' ';
+    fb[y][x][1] = GRAY_ON_BLACK;
+  }
 }
 
 /* Advances the cursor to the first column in the next line on
@@ -129,17 +126,16 @@ newline (void)
 {
   cx = 0;
   cy++;
-  if (cy >= ROW_CNT)
-    {
-      cy = ROW_CNT - 1;
-      memmove (&fb[0], &fb[1], sizeof fb[0] * (ROW_CNT - 1));
-      clear_row (ROW_CNT - 1);
-    }
+  if (cy >= ROW_CNT) {
+    cy = ROW_CNT - 1;
+    memmove (&fb[0], &fb[1], sizeof fb[0] * (ROW_CNT - 1));
+    clear_row (ROW_CNT - 1);
+  }
 }
 
 /* Moves the hardware cursor to (cx,cy). */
 static void
-move_cursor (void) 
+move_cursor (void)
 {
   /* See [FREEVGA] under "Manipulating the Text-mode Cursor". */
   uint16_t cp = cx + COL_CNT * cy;
@@ -149,7 +145,7 @@ move_cursor (void)
 
 /* Reads the current hardware cursor position into (*X,*Y). */
 static void
-find_cursor (size_t *x, size_t *y) 
+find_cursor (size_t* x, size_t* y)
 {
   /* See [FREEVGA] under "Manipulating the Text-mode Cursor". */
   uint16_t cp;

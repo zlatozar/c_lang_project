@@ -7,8 +7,8 @@
 /* Aborts the user program, printing the source file name, line
    number, and function name, plus a user-specific message. */
 void
-debug_panic (const char *file, int line, const char *function,
-             const char *message, ...)
+debug_panic (const char* file, int line, const char* function,
+             const char* message, ...)
 {
   va_list args;
 
@@ -20,6 +20,6 @@ debug_panic (const char *file, int line, const char *function,
   va_end (args);
 
   debug_backtrace ();
-  
+
   exit (1);
 }

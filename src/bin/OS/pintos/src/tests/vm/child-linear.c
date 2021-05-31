@@ -7,15 +7,15 @@
 #include "tests/lib.h"
 #include "tests/main.h"
 
-const char *test_name = "child-linear";
+const char* test_name = "child-linear";
 
 #define SIZE (1024 * 1024)
 static char buf[SIZE];
 
 int
-main (int argc, char *argv[])
+main (int argc, char* argv[])
 {
-  const char *key = argv[argc - 1];
+  const char* key = argv[argc - 1];
   struct arc4 arc4;
   size_t i;
 
@@ -30,7 +30,7 @@ main (int argc, char *argv[])
   /* Check that it's all zeros. */
   for (i = 0; i < SIZE; i++)
     if (buf[i] != '\0')
-      fail ("byte %zu != 0", i);
+    { fail ("byte %zu != 0", i); }
 
   return 0x42;
 }

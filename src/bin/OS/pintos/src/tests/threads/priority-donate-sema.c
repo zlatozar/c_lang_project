@@ -16,18 +16,17 @@
 #include "threads/synch.h"
 #include "threads/thread.h"
 
-struct lock_and_sema 
-  {
-    struct lock lock;
-    struct semaphore sema;
-  };
+struct lock_and_sema {
+  struct lock lock;
+  struct semaphore sema;
+};
 
 static thread_func l_thread_func;
 static thread_func m_thread_func;
 static thread_func h_thread_func;
 
 void
-test_priority_donate_sema (void) 
+test_priority_donate_sema (void)
 {
   struct lock_and_sema ls;
 
@@ -47,9 +46,9 @@ test_priority_donate_sema (void)
 }
 
 static void
-l_thread_func (void *ls_) 
+l_thread_func (void* ls_)
 {
-  struct lock_and_sema *ls = ls_;
+  struct lock_and_sema* ls = ls_;
 
   lock_acquire (&ls->lock);
   msg ("Thread L acquired lock.");
@@ -60,18 +59,18 @@ l_thread_func (void *ls_)
 }
 
 static void
-m_thread_func (void *ls_) 
+m_thread_func (void* ls_)
 {
-  struct lock_and_sema *ls = ls_;
+  struct lock_and_sema* ls = ls_;
 
   sema_down (&ls->sema);
   msg ("Thread M finished.");
 }
 
 static void
-h_thread_func (void *ls_) 
+h_thread_func (void* ls_)
 {
-  struct lock_and_sema *ls = ls_;
+  struct lock_and_sema* ls = ls_;
 
   lock_acquire (&ls->lock);
   msg ("Thread H acquired lock.");

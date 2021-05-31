@@ -24,7 +24,7 @@ test_main (void)
   msg ("read pass");
   for (i = 0; i < SIZE; i++)
     if (buf[i] != 0x5a)
-      fail ("byte %zu != 0x5a", i);
+    { fail ("byte %zu != 0x5a", i); }
 
   /* Encrypt zeros. */
   msg ("read/modify/write pass one");
@@ -40,5 +40,5 @@ test_main (void)
   msg ("read pass");
   for (i = 0; i < SIZE; i++)
     if (buf[i] != 0x5a)
-      fail ("byte %zu != 0x5a", i);
+    { fail ("byte %zu != 0x5a", i); }
 }

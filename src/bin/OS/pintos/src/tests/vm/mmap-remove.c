@@ -10,7 +10,7 @@
 void
 test_main (void)
 {
-  char *actual = (char *) 0x10000000;
+  char* actual = (char*) 0x10000000;
   int handle;
   mapid_t map;
   size_t i;
@@ -31,7 +31,7 @@ test_main (void)
 
   /* Check that mapped data is correct. */
   if (memcmp (actual, sample, strlen (sample)))
-    fail ("read of mmap'd file reported bad data");
+  { fail ("read of mmap'd file reported bad data"); }
 
   /* Verify that data is followed by zeros. */
   for (i = strlen (sample); i < 4096; i++)

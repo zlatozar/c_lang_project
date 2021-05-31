@@ -9,11 +9,11 @@
 #include "tests/main.h"
 
 void
-test_main (void) 
+test_main (void)
 {
   int handle;
   int byte_cnt;
-  char *sample_p;
+  char* sample_p;
 
   sample_p = copy_string_across_boundary (sample);
 
@@ -21,5 +21,5 @@ test_main (void)
 
   byte_cnt = write (handle, sample_p, sizeof sample - 1);
   if (byte_cnt != sizeof sample - 1)
-    fail ("write() returned %d instead of %zu", byte_cnt, sizeof sample - 1);
+  { fail ("write() returned %d instead of %zu", byte_cnt, sizeof sample - 1); }
 }

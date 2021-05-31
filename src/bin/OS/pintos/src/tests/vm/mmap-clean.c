@@ -12,7 +12,7 @@ test_main (void)
 {
   static const char overwrite[] = "Now is the time for all good...";
   static char buffer[sizeof sample - 1];
-  char *actual = (char *) 0x54321000;
+  char* actual = (char*) 0x54321000;
   int handle;
   mapid_t map;
 
@@ -20,7 +20,7 @@ test_main (void)
   CHECK ((handle = open ("sample.txt")) > 1, "open \"sample.txt\"");
   CHECK ((map = mmap (handle, actual)) != MAP_FAILED, "mmap \"sample.txt\"");
   if (memcmp (actual, sample, strlen (sample)))
-    fail ("read of mmap'd file reported bad data");
+  { fail ("read of mmap'd file reported bad data"); }
 
   /* Modify file. */
   CHECK (write (handle, overwrite, strlen (overwrite))
@@ -41,13 +41,11 @@ test_main (void)
   /* Verify that file overwrite worked. */
   if (memcmp (buffer, overwrite, strlen (overwrite))
       || memcmp (buffer + strlen (overwrite), sample + strlen (overwrite),
-                 strlen (sample) - strlen (overwrite))) 
-    {
-      if (!memcmp (buffer, sample, strlen (sample)))
-        fail ("munmap wrote back clean page");
-      else
-        fail ("read surprising data from file"); 
-    }
-  else
-    msg ("file change was retained after munmap");
+                 strlen (sample) - strlen (overwrite))) {
+    if (!memcmp (buffer, sample, strlen (sample)))
+    { fail ("munmap wrote back clean page"); }
+    else
+    { fail ("read surprising data from file"); }
+  } else
+  { msg ("file change was retained after munmap"); }
 }

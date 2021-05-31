@@ -3,7 +3,7 @@
    High-priority thread H then blocks on acquiring lock B.  Thus,
    thread H donates its priority to M, which in turn donates it
    to thread L.
-   
+
    Based on a test originally submitted for Stanford's CS 140 in
    winter 1999 by Matt Franklin <startled@leland.stanford.edu>,
    Greg Hutchins <gmh@leland.stanford.edu>, Yu Ping Hu
@@ -15,17 +15,16 @@
 #include "threads/synch.h"
 #include "threads/thread.h"
 
-struct locks 
-  {
-    struct lock *a;
-    struct lock *b;
-  };
+struct locks {
+  struct lock* a;
+  struct lock* b;
+};
 
 static thread_func medium_thread_func;
 static thread_func high_thread_func;
 
 void
-test_priority_donate_nest (void) 
+test_priority_donate_nest (void)
 {
   struct lock a, b;
   struct locks locks;
@@ -61,9 +60,9 @@ test_priority_donate_nest (void)
 }
 
 static void
-medium_thread_func (void *locks_) 
+medium_thread_func (void* locks_)
 {
-  struct locks *locks = locks_;
+  struct locks* locks = locks_;
 
   lock_acquire (locks->b);
   lock_acquire (locks->a);
@@ -83,9 +82,9 @@ medium_thread_func (void *locks_)
 }
 
 static void
-high_thread_func (void *lock_) 
+high_thread_func (void* lock_)
 {
-  struct lock *lock = lock_;
+  struct lock* lock = lock_;
 
   lock_acquire (lock);
   msg ("High thread got the lock.");

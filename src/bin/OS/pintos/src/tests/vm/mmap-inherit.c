@@ -10,7 +10,7 @@
 void
 test_main (void)
 {
-  char *actual = (char *) 0x54321000;
+  char* actual = (char*) 0x54321000;
   int handle;
   pid_t child;
 
@@ -18,7 +18,7 @@ test_main (void)
   CHECK ((handle = open ("sample.txt")) > 1, "open \"sample.txt\"");
   CHECK (mmap (handle, actual) != MAP_FAILED, "mmap \"sample.txt\"");
   if (memcmp (actual, sample, strlen (sample)))
-    fail ("read of mmap'd file reported bad data");
+  { fail ("read of mmap'd file reported bad data"); }
 
   /* Spawn child and wait. */
   CHECK ((child = exec ("child-inherit")) != -1, "exec \"child-inherit\"");

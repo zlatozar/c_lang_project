@@ -5,11 +5,11 @@
 #include "tests/filesys/extended/mk-tree.h"
 #include "tests/lib.h"
 
-static void do_mkdir (const char *format, ...) PRINTF_FORMAT (1, 2);
-static void do_touch (const char *format, ...) PRINTF_FORMAT (1, 2);
+static void do_mkdir (const char* format, ...) PRINTF_FORMAT (1, 2);
+static void do_touch (const char* format, ...) PRINTF_FORMAT (1, 2);
 
 void
-make_tree (int at, int bt, int ct, int dt) 
+make_tree (int at, int bt, int ct, int dt)
 {
   char try[128];
   int a, b, c, d;
@@ -18,20 +18,17 @@ make_tree (int at, int bt, int ct, int dt)
   msg ("creating /0/0/0/0 through /%d/%d/%d/%d...",
        at - 1, bt - 1, ct - 1, dt - 1);
   quiet = true;
-  for (a = 0; a < at; a++) 
-    {
-      do_mkdir ("/%d", a);
-      for (b = 0; b < bt; b++) 
-        {
-          do_mkdir ("/%d/%d", a, b);
-          for (c = 0; c < ct; c++) 
-            {
-              do_mkdir ("/%d/%d/%d", a, b, c);
-              for (d = 0; d < dt; d++)
-                do_touch ("/%d/%d/%d/%d", a, b, c, d);
-            }
-        }
+  for (a = 0; a < at; a++) {
+    do_mkdir ("/%d", a);
+    for (b = 0; b < bt; b++) {
+      do_mkdir ("/%d/%d", a, b);
+      for (c = 0; c < ct; c++) {
+        do_mkdir ("/%d/%d/%d", a, b, c);
+        for (d = 0; d < dt; d++)
+        { do_touch ("/%d/%d/%d/%d", a, b, c, d); }
+      }
     }
+  }
   quiet = false;
 
   snprintf (try, sizeof try, "/%d/%d/%d/%d", 0, bt - 1, 0, dt - 1);
@@ -41,7 +38,7 @@ make_tree (int at, int bt, int ct, int dt)
 }
 
 static void
-do_mkdir (const char *format, ...) 
+do_mkdir (const char* format, ...)
 {
   char dir[128];
   va_list args;
@@ -54,7 +51,7 @@ do_mkdir (const char *format, ...)
 }
 
 static void
-do_touch (const char *format, ...)
+do_touch (const char* format, ...)
 {
   char file[128];
   va_list args;
