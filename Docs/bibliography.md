@@ -24,12 +24,13 @@
 
 ### Multi-threading
 - (pdf)["An Introduction to Programming with Threads"](https://www.hpl.hp.com/techreports/Compaq-DEC/SRC-RR-35.pdf) by Andrew Birrell <br/>
-- [PThreads tutorial](https://computing.llnl.gov/tutorials/pthreads/) <br/>
+- _"Programming With UNIX Threads"_ by Charles J Northrup <br/>
 - [The Little Book of Semaphores](https://greenteapress.com/wp/semaphores/)
 
 ### Building Tools
 - _"Professional CMake: A Practical Guid"_ by Craig Scott <br/>
-  NOTE: `CMake` could generate [Ninja](https://ninja-build.org/) build files.
+  NOTE: `CMake` could generate [Ninja](https://ninja-build.org/) build files. <br/>
+- (videos)[CMake good practices](https://www.youtube.com/playlist?list=PLJfcKimCUDGs7-BRhDsbyXa-4PeAUpbgF) <br/>
 
 ### Compiling
 - _"Advanced C and C++ Compiling"_ by Milan Stevanovic
