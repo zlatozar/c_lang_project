@@ -22,7 +22,7 @@ extern bool LStack_is_empty(LStack_T stack);
 /**
  * @brief    Push data onto stack.
  */
-extern void LStack_push(LStack_T stack, Generic_T data);
+extern void LStack_push(LStack_T stack, Object_T data);
 
 /**
  * @brief    Pop the top value of the stack and put in `p_data__`.
@@ -30,7 +30,7 @@ extern void LStack_push(LStack_T stack, Generic_T data);
  * It is checked runtime error if empty stack is passed.
  * Client code should be responsible to free poped data.
  */
-extern bool LStack_pop(LStack_T stack, Generic_T* p_data__);
+extern bool LStack_pop(LStack_T stack, Object_T* p_data__);
 
 /**
  * @brief    Return the value at the top of the stack without removing it.
@@ -38,7 +38,7 @@ extern bool LStack_pop(LStack_T stack, Generic_T* p_data__);
  * It is checked runtime error if empty stack is passed.
  * Client code should be responsible to free poped data.
  */
-extern bool LStack_peel(LStack_T stack, Generic_T* p_data__);
+extern bool LStack_peel(LStack_T stack, Object_T* p_data__);
 
 /**
  * @brief    Destroy stack as free all left data.

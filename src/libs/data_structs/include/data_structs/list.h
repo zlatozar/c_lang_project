@@ -22,12 +22,12 @@ extern bool List_is_empty(List_T list);
 /**
  * Insert a new node containing data as the first item in *p_list.
  */
-extern void List_insert(List_T* p_list, Generic_T data);
+extern void List_insert(List_T* p_list, Object_T data);
 
 /**
  * Append a new node containing data as the last item in *p_list.
  */
-extern void List_append(List_T* p_list, Generic_T data);
+extern void List_append(List_T* p_list, Object_T data);
 
 /**
  * @brief    Delete given `p_node` from `p_list`.
@@ -43,13 +43,13 @@ List_delete_node(List_T* p_list, node_t* p_node);
  * if given list is empty. Client should take care to free memory of the
  * returned data.
  */
-extern bool List_delete_head(List_T* p_list, Generic_T* p_data__);
+extern bool List_delete_head(List_T* p_list, Object_T* p_data__);
 
 /**
  * Call `apply_fn` with the DATA field of each node in `List_T`.
  * If `apply_fn` ever returns `false`, this function also returns `false`.
  */
-extern bool List_traverse(List_T list, bool (*apply_fn)(Generic_T));
+extern bool List_traverse(List_T list, bool (*apply_fn)(Object_T));
 
 /**
  * @brief    Return each item of list in turn.
@@ -71,7 +71,7 @@ extern size_t List_length(List_T list);
  * If the node is found, it is passed back in `*pp_keynode__` - `true` is returned.
  * `comp_data_fn` is a comparison function that returns `true` when there is a match.
  */
-extern bool List_find_key(List_T list, equal_data_FN comp_data_fn, Generic_T key,
+extern bool List_find_key(List_T list, equal_data_FN comp_data_fn, Object_T key,
                           node_t** pp_keynode__);
 
 /**

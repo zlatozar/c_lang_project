@@ -408,7 +408,7 @@ trie_add( *child, word + 1 );   /* OK    */
 
 ```c
 void
-List_insert(List_T* p_List, Generic_T data)
+List_insert(List_T* p_List, Object_T data)
 {
   node_t* p_node;
   List_allocate_node(&p_node, data);
@@ -425,7 +425,7 @@ List_insert(&list, data2);
 
 ```c
 List_T
-List_insert(List_T list, Generic_T data)
+List_insert(List_T list, Object_T data)
 {
   node_t* p_node;
   List_allocate_node(&p_node, data);
@@ -691,7 +691,7 @@ print_card (deck d)
 Example:
 ```c
 struct node {
-  Generic_T datapointer;
+  Object_T datapointer;
   struct node* next;
 };
 
@@ -1267,6 +1267,18 @@ extern "C" {
 #endif        /* __cplusplus */
 
 #endif  /* TEMPLATE_HDR_H */
+```
+- Header file should contain structure definitions and methods prototypes all `typedefs` that are used
+  in the implementation are not obliged let client defines its owns if needed.
+```c
+struct node {
+  Object_T datapointer;
+  struct node* next;
+};
+
+/* Not required it's a matter of taste */
+typedef struct node node_t;
+
 ```
 
 ### Header file best practices

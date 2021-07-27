@@ -20,48 +20,48 @@ Data_new(int initial_value)
   return data;
 }
 
-Generic_T
+Object_T
 Test_elm(int elm)
 {
-  return (Generic_T)Data_new(elm);
+  return (Object_T)Data_new(elm);
 }
 
 /* Any kind of stored data. */
 int
 Test_value(void* p_node)
 {
-  Generic_T* node = (Generic_T*)p_node;
+  Object_T* node = (Object_T*)p_node;
   return VALUE(*node);
 }
 
 void
-print_fn(Generic_T data)
+print_fn(Object_T data)
 {
   printf("-> %d ", VALUE(data));
 }
 
 bool
-apply_fn(Generic_T data)
+apply_fn(Object_T data)
 {
   print_fn(data);
   return true;
 }
 
 bool
-inc_value_fn(Generic_T data)
+inc_value_fn(Object_T data)
 {
   ((Data_T)data)->value++;
   return true;
 }
 
 bool
-equal_fn(Generic_T a_data, Generic_T b_data)
+equal_fn(Object_T a_data, Object_T b_data)
 {
   return VALUE(a_data) == VALUE(b_data);
 }
 
 int
-cmp_fn(Generic_T a_data, Generic_T b_data)
+cmp_fn(Object_T a_data, Object_T b_data)
 {
   int a = VALUE(a_data);
   int b = VALUE(b_data);

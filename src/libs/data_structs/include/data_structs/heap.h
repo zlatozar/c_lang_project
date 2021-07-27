@@ -27,7 +27,7 @@ extern bool Heap_is_empty(Heap_T heap);
  * first argument is less than its second, 0 if the arguments are equal.
  * Otherwise, `cmp_fn` returns a value greater than 0.
  */
-extern void Heap_insert(Heap_T heap, Generic_T data, cmp_data_FN cmp_fn);
+extern void Heap_insert(Heap_T heap, Object_T data, cmp_data_FN cmp_fn);
 
 /**
  * @breif    Delete element from heap.
@@ -38,7 +38,7 @@ extern void Heap_insert(Heap_T heap, Generic_T data, cmp_data_FN cmp_fn);
  * greater than 0.
  */
 extern bool Heap_delete(Heap_T heap, size_t elm_idx, cmp_data_FN cmp_fn,
-                        Generic_T* p_data__);
+                        Object_T* p_data__);
 
 
 #endif  /* DATA_STRUCTS_HEAP_H */

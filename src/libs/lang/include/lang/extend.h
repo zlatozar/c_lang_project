@@ -12,14 +12,14 @@
  * To emphasize that we work with raw data with no type information
  * and it's size we assume is one.
  */
-typedef char byte;
+typedef char object;
 
 /**
  * @brief    Generic pointer.
  *
- *          |-current ... |-(current + 1) ...
- *        __v_________    v
- *  T -> |char*|next*|--> ...
+ *          |-current ...   |-(current + 1) ...
+ *        __v_________      v
+ *  T -> |char*|next*|--> |...
  *        -----------
  *          |
  *          v
@@ -30,7 +30,7 @@ typedef char byte;
  * include knowledge of particular data type is done from client(wrapped)
  * functions. Because this pattern is very common this alias was created.
  */
-typedef byte* Generic_T;
+typedef object* Object_T;
 
 /* Function types */
 
@@ -38,12 +38,12 @@ typedef byte* Generic_T;
  * When working with `void*` data compare function should be passed in
  * some operations.
  */
-typedef bool equal_data_FN(Generic_T, Generic_T);
+typedef bool equal_data_FN(Object_T, Object_T);
 
 /**
  * 1 if is bigger, 0 for equality and -1 if first argument is less.
  */
-typedef int cmp_data_FN(Generic_T, Generic_T);
+typedef int cmp_data_FN(Object_T, Object_T);
 
 /**
  * Proper deallocation depends on the precise interface provided by functions.
@@ -58,7 +58,7 @@ typedef void (*free_data_FN)(void*);
  * without type information that's why additional functions with this knowledge
  * should be passed.
  */
-typedef void (*print_data_FN)(Generic_T);
+typedef void (*print_data_FN)(Object_T);
 
 /**
  * @brief    Used to indicate if allocation de-allocation succeed.

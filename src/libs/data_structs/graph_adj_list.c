@@ -16,7 +16,7 @@ struct graph_descriptor {
 };
 
 static bool
-__equal_vertex(Generic_T p_edge1, Generic_T p_edge2)
+__equal_vertex(Object_T p_edge1, Object_T p_edge2)
 {
   return
     ((edge_data*)p_edge1)->vertex_number == ((edge_data*)p_edge2)->vertex_number;
@@ -69,7 +69,7 @@ __edge_append(List_T* p_list, vertex vertex_number, int16_t weight)
 
   // *INDENT-OFF*
   TRY
-    List_append(p_list, (Generic_T) p_edgedata);
+    List_append(p_list, (Object_T) p_edgedata);
 
   CATCH(Memory_Failed)
     Log_error("Memory allocation failed. Can't append to adjacency list.");
@@ -109,7 +109,7 @@ Graph_delete_edge(Graph_T graph, vertex vertex1, vertex vertex2)
   data.vertex_number = vertex2;
 
   if (!List_find_key(graph->edge_list[vertex1], __equal_vertex,
-                     (Generic_T)&data, &p_ignored__)) {
+                     (Object_T)&data, &p_ignored__)) {
     return false;
   }
 
@@ -119,7 +119,7 @@ Graph_delete_edge(Graph_T graph, vertex vertex1, vertex vertex2)
     data.vertex_number = vertex1;
 
     if (!List_find_key(graph->edge_list[vertex2], __equal_vertex,
-                       (Generic_T)&data, &p_ignored__)) {
+                       (Object_T)&data, &p_ignored__)) {
       return false;
     }
 
@@ -141,7 +141,7 @@ Graph_is_adjacent(Graph_T graph, vertex vertex1, vertex vertex2)
   data.vertex_number = vertex2;
 
   return List_find_key(graph->edge_list[vertex1], __equal_vertex,
-                       (Generic_T)&data, &p_ignored__);
+                       (Object_T)&data, &p_ignored__);
 }
 
 void

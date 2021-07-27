@@ -45,7 +45,7 @@ TEST delete_head(void)
   ASSERT_EQ(3, DoubleList_length(list));
 
   Data_T deleted;
-  DoubleList_delete_head(&list, (Generic_T*) &deleted);
+  DoubleList_delete_head(&list, (Object_T*) &deleted);
   FREE(deleted);
 
   ASSERT_EQ(2, DoubleList_length(list));

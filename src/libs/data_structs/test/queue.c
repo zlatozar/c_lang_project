@@ -9,7 +9,7 @@ TEST new_free(void)
   ASSERT(Queue_is_empty(queue));
 
   Data_T data = Data_new(42);
-  Queue_add(queue, (Generic_T)data);
+  Queue_add(queue, (Object_T)data);
 
   ASSERT_FALSE(Queue_is_empty(queue));
 

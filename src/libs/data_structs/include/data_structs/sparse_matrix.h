@@ -22,12 +22,12 @@ extern Matrix_T Matrix_new(void);
  *   and the row list and inserting the new node (containing value)
  *   in the correct position in each of those lists.
  */
-extern void Matrix_put(Matrix_T* p_matrix, int row, int col, Generic_T value);
+extern void Matrix_put(Matrix_T* p_matrix, int row, int col, Object_T value);
 
 /**
  * Set `p_value__` to the value at p_matrix[row][col].
  */
-extern bool Matrix_get(Matrix_T* p_matirx, int row, int col, Generic_T* p_value__);
+extern bool Matrix_get(Matrix_T* p_matirx, int row, int col, Object_T* p_value__);
 
 /**
  * Free the space used by p_matrix[row][col]. This assumes the

@@ -7,7 +7,7 @@
 
 struct matrix_node {
   int row, column;
-  Generic_T datapointer;
+  Object_T datapointer;
   Matrix_T nextrow, prevrow;
   Matrix_T nextcol, prevcol;
 };
@@ -28,7 +28,7 @@ struct matrix_node {
 typedef enum { CREATE_HEADER, FIND_HEADER } oper_type_et;
 
 static void
-__allocate_matrix_node(Matrix_T* p_matrix, int row, int col, Generic_T data)
+__allocate_matrix_node(Matrix_T* p_matrix, int row, int col, Object_T data)
 {
   Matrix_T matrix;
   NEW(matrix);
@@ -165,7 +165,7 @@ Matrix_new()
 }
 
 void
-Matrix_put(Matrix_T* p_matrix, int row, int col, Generic_T value)
+Matrix_put(Matrix_T* p_matrix, int row, int col, Object_T value)
 {
   Require(row >= 0);
   Require(col >= 0);
@@ -219,7 +219,7 @@ Matrix_put(Matrix_T* p_matrix, int row, int col, Generic_T value)
 }
 
 bool
-Matrix_get(Matrix_T* p_matrix, int row, int col, Generic_T* p_value__)
+Matrix_get(Matrix_T* p_matrix, int row, int col, Object_T* p_value__)
 {
   Require(row >= 0);
   Require(col >= 0);

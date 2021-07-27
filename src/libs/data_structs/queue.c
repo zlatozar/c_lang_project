@@ -7,7 +7,7 @@
 /*                                                                        Locals  */
 
 typedef struct node {
-  Generic_T datapointer;
+  Object_T datapointer;
   struct node* next;
 } node_t;
 
@@ -23,7 +23,7 @@ struct queue {
 #define REAR(p_queue)  ((p_queue)->rear)
 
 static void
-allocate_node(node_t** pp_node, Generic_T data)
+allocate_node(node_t** pp_node, Object_T data)
 {
   node_t* p_node;
   NEW(p_node);
@@ -68,7 +68,7 @@ Queue_is_empty(Queue_T queue)
 }
 
 void
-Queue_add(Queue_T queue, Generic_T data)
+Queue_add(Queue_T queue, Object_T data)
 {
   Require(queue);
 
@@ -85,7 +85,7 @@ Queue_add(Queue_T queue, Generic_T data)
 }
 
 bool
-Queue_remove(Queue_T queue, Generic_T* p_data)
+Queue_remove(Queue_T queue, Object_T* p_data)
 {
   Require(queue);
 
@@ -131,7 +131,7 @@ Queue_destroy(Queue_T queue, free_data_FN free_data_fn)
     return;
   }
 
-  Generic_T stale_out;
+  Object_T stale_out;
   while (Queue_remove(queue, &stale_out)) {
     if (free_data_fn == NULL) {
       FREE(stale_out);

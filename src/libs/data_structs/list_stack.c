@@ -35,7 +35,7 @@ LStack_is_empty(LStack_T stack)
 }
 
 void
-LStack_push(LStack_T stack, Generic_T data)
+LStack_push(LStack_T stack, Object_T data)
 {
   Require(stack);
 
@@ -44,7 +44,7 @@ LStack_push(LStack_T stack, Generic_T data)
 }
 
 bool
-LStack_pop(LStack_T stack, Generic_T* p_data__)
+LStack_pop(LStack_T stack, Object_T* p_data__)
 {
   Require(stack);
 
@@ -58,7 +58,7 @@ LStack_pop(LStack_T stack, Generic_T* p_data__)
 }
 
 bool
-LStack_peel(LStack_T stack, Generic_T* p_data__)
+LStack_peel(LStack_T stack, Object_T* p_data__)
 {
   if (!LStack_pop(stack, p_data__))
   { return false; }

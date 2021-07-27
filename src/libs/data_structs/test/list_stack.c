@@ -12,7 +12,7 @@ TEST free_empty(void)
   ASSERT_FALSE(LStack_is_empty(stack));
 
   Data_T elm;
-  LStack_pop(stack, (Generic_T*) &elm);
+  LStack_pop(stack, (Object_T*) &elm);
   FREE(elm);
 
   ASSERT(LStack_is_empty(stack));

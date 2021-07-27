@@ -12,8 +12,8 @@
 const unsigned int k_initial_size = 50;
 
 struct stack {
-  Generic_T* storage;
-  Generic_T* top;      /* Points to next available for push. */
+  Object_T* storage;
+  Object_T* top;      /* Points to next available for push. */
   unsigned size;
 };
 
@@ -30,7 +30,7 @@ Stack_new(unsigned initial_size)
   Stack_T stack;
   NEW(stack);
 
-  stack->storage = ALLOC(initial_size * sizeof(Generic_T));
+  stack->storage = ALLOC(initial_size * sizeof(Object_T));
 
   /* 'sp' points to storage[0] so stack is empty. */
   stack->top = stack->storage;
@@ -53,13 +53,13 @@ Stack_is_empty(Stack_T stack)
 }
 
 void
-Stack_push(Stack_T stack, Generic_T data)
+Stack_push(Stack_T stack, Object_T data)
 {
   Require(stack);
 
   if (CURRENT_SIZE(stack) == stack->size) {
-    Generic_T* p_newstack = RESIZE(stack->storage,
-                                   (stack->size + RESIZE_STEP) * sizeof(Generic_T*));
+    Object_T* p_newstack = RESIZE(stack->storage,
+                                   (stack->size + RESIZE_STEP) * sizeof(Object_T*));
 
     stack->storage = p_newstack;
     stack->top = stack->storage + stack->size;
@@ -71,7 +71,7 @@ Stack_push(Stack_T stack, Generic_T data)
 }
 
 bool
-Stack_pop(Stack_T stack, Generic_T* p_data__)
+Stack_pop(Stack_T stack, Object_T* p_data__)
 {
   Require(stack);
 
@@ -87,7 +87,7 @@ Stack_pop(Stack_T stack, Generic_T* p_data__)
 
 /* Note: It is `pop` then `push` operation. */
 bool
-Stack_peel(Stack_T stack, Generic_T* p_data__)
+Stack_peel(Stack_T stack, Object_T* p_data__)
 {
   if (!Stack_pop(stack, p_data__))
   { return false; }
@@ -102,7 +102,7 @@ Stack_destroy(Stack_T stack, free_data_FN free_data_fn)
   if (!Stack_is_empty(stack)) {
     Log_warn("Stack is not empty.");
 
-    Generic_T stale_out;
+    Object_T stale_out;
     while (Stack_pop(stack, &stale_out)) {
       if (free_data_fn == NULL) {
         FREE(stale_out);

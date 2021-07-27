@@ -4,7 +4,7 @@
 #include "lang/assert.h"
 
 struct tree_node {
-  Generic_T datapointer;
+  Object_T datapointer;
   BinTree_T left;
   BinTree_T right;
 };
@@ -20,7 +20,7 @@ struct tree_node {
  * Allocate a tree node and initialize the DATA field with data.
  */
 static void
-__allocate_tree_node(btnode_t** pp_btnode, Generic_T data)
+__allocate_tree_node(btnode_t** pp_btnode, Object_T data)
 {
   btnode_t* newnode;
   NEW(newnode);
@@ -55,7 +55,7 @@ BinTree_is_empty(BinTree_T btree)
 
 /* Build like a LEGO. */
 void
-BinTree_make_root(BinTree_T* p_btree, Generic_T data, BinTree_T left, BinTree_T right)
+BinTree_make_root(BinTree_T* p_btree, Object_T data, BinTree_T left, BinTree_T right)
 {
   if (!BinTree_is_empty(*p_btree)) {
     Require(0 && "Passed tree is not empty");
@@ -68,7 +68,7 @@ BinTree_make_root(BinTree_T* p_btree, Generic_T data, BinTree_T left, BinTree_T 
 }
 
 static bool
-__preorder_traverse(BinTree_T btree, bool (*apply_fn)(Generic_T))
+__preorder_traverse(BinTree_T btree, bool (*apply_fn)(Object_T))
 {
   Require(apply_fn);
 
@@ -92,7 +92,7 @@ __preorder_traverse(BinTree_T btree, bool (*apply_fn)(Generic_T))
 }
 
 static bool
-__inorder_traverse(BinTree_T btree, bool (*apply_fn)(Generic_T))
+__inorder_traverse(BinTree_T btree, bool (*apply_fn)(Object_T))
 {
   Require(apply_fn);
 
@@ -116,7 +116,7 @@ __inorder_traverse(BinTree_T btree, bool (*apply_fn)(Generic_T))
 }
 
 static bool
-__postorder_traverse(BinTree_T btree, bool (*apply_fn)(Generic_T))
+__postorder_traverse(BinTree_T btree, bool (*apply_fn)(Object_T))
 {
   Require(apply_fn);
 
@@ -140,7 +140,7 @@ __postorder_traverse(BinTree_T btree, bool (*apply_fn)(Generic_T))
 }
 
 bool
-BinTree_traverse(BinTree_T btree, bool (*apply_fn)(Generic_T), order_et order)
+BinTree_traverse(BinTree_T btree, bool (*apply_fn)(Object_T), order_et order)
 {
   switch (order) {
     case PRE_ORDER:

@@ -23,12 +23,12 @@ extern bool Queue_is_empty(Queue_T queue);
 /**
  * Add given data to the queue.
  */
-extern void Queue_add(Queue_T queue, Generic_T data);
+extern void Queue_add(Queue_T queue, Object_T data);
 
 /**
  * Remove a value from queue and put in `p_data`.
  */
-bool Queue_remove(Queue_T queue, Generic_T* p_data);
+bool Queue_remove(Queue_T queue, Object_T* p_data);
 
 /**
  * @brief    Number of list elements.

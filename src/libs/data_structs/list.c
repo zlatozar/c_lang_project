@@ -18,7 +18,7 @@ List_is_empty(List_T list)
 }
 
 void
-List_insert(List_T* p_list, Generic_T data)
+List_insert(List_T* p_list, Object_T data)
 {
   Require(p_list);
 
@@ -30,7 +30,7 @@ List_insert(List_T* p_list, Generic_T data)
 }
 
 void
-List_append(List_T* p_list, Generic_T data)
+List_append(List_T* p_list, Object_T data)
 {
   node_t* p_node;
   List__allocate_node(&p_node, data);
@@ -71,7 +71,7 @@ List_delete_node(List_T* p_list, node_t* p_node)
 
 /* Instead return pointer to pointer it is more convenient to pass out param. */
 bool
-List_delete_head(List_T* p_list, Generic_T* p_data__)
+List_delete_head(List_T* p_list, Object_T* p_data__)
 {
   if (List_is_empty(*p_list)) {
     Log_debug("Can't delete from empty list.");
@@ -86,7 +86,7 @@ List_delete_head(List_T* p_list, Generic_T* p_data__)
 
 /* Iterate tail recursively. */
 bool
-List_traverse(List_T list, bool (*apply_fn)(Generic_T))
+List_traverse(List_T list, bool (*apply_fn)(Object_T))
 {
   Require(apply_fn);
 
@@ -120,7 +120,7 @@ List_length(List_T list)
 
 /* Searching same as `key` and if found, `pp_keynode__` is instance of it in the list. */
 bool
-List_find_key(List_T list, equal_data_FN equal_fn, Generic_T key, node_t** pp_keynode__)
+List_find_key(List_T list, equal_data_FN equal_fn, Object_T key, node_t** pp_keynode__)
 {
   Require(list);
   Require(equal_fn);

@@ -51,7 +51,7 @@ TEST delete(void)
   ASSERT_EQ(3, CircList_length(circlist));
 
   Data_T deleted;
-  CircList_delete(&circlist, (Generic_T*) &deleted);
+  CircList_delete(&circlist, (Object_T*) &deleted);
   FREE(deleted);
 
   ASSERT_EQ(2, CircList_length(circlist));

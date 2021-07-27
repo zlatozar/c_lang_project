@@ -14,7 +14,7 @@ TEST create_add_delete(void)
 
   ASSERT_FALSE(Heap_is_empty(heap));
 
-  Generic_T deleted;
+  Object_T deleted;
   Heap_delete(heap, 0, cmp_fn, &deleted);
 
   ASSERT_EQ(40, VALUE(deleted));

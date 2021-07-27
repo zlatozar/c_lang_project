@@ -6,7 +6,7 @@
 const size_t k_resize_step = 128;
 
 struct heap {
-  Generic_T* storage;
+  Object_T* storage;
   size_t nextelement_idx;  /* In this index will be placed next element. */
   size_t size;             /* Current size of the `storage`. */
 };
@@ -35,7 +35,7 @@ __siftup(Heap_T heap, size_t elm_idx, cmp_data_FN cmp_fn)
     return;
   }
 
-  Generic_T tmpvalue;
+  Object_T tmpvalue;
 
   /* Switch with parent. */
   tmpvalue = heap->storage[elm_idx];
@@ -63,7 +63,7 @@ __siftdown(Heap_T heap, size_t parent_idx, cmp_data_FN cmp_fn)
   if (leftchild >= heap->nextelement_idx)
   { return; }
 
-  Generic_T tmpvalue;
+  Object_T tmpvalue;
 
   /* No right child. */
   int left_cmp = cmp_fn(heap->storage[parent_idx], heap->storage[leftchild]);
@@ -104,7 +104,7 @@ Heap_new()
   Heap_T heap;
   NEW(heap);
 
-  heap->storage = ALLOC(k_resize_step * sizeof(Generic_T));
+  heap->storage = ALLOC(k_resize_step * sizeof(Object_T));
 
   heap->nextelement_idx = 0;
   heap->size = k_resize_step;
@@ -123,12 +123,12 @@ Heap_is_empty(Heap_T heap)
  * `__siftupf` to find its proper position.
  */
 void
-Heap_insert(Heap_T heap, Generic_T data, cmp_data_FN cmp_fn)
+Heap_insert(Heap_T heap, Object_T data, cmp_data_FN cmp_fn)
 {
   /* Not enough space in the array, so more must be allocated. */
   if (heap->nextelement_idx == heap->size) {
 
-    Generic_T* newstorage =
+    Object_T* newstorage =
       RESIZE(heap->storage,
              (heap->size + k_resize_step) * sizeof(*newstorage));
 
@@ -148,7 +148,7 @@ Heap_insert(Heap_T heap, Generic_T data, cmp_data_FN cmp_fn)
  * `__siftdown` to find its proper position.
  */
 bool
-Heap_delete(Heap_T heap, size_t elm_idx, cmp_data_FN cmp_fn, Generic_T* p_data__)
+Heap_delete(Heap_T heap, size_t elm_idx, cmp_data_FN cmp_fn, Object_T* p_data__)
 {
   if (elm_idx >= heap->nextelement_idx) {
     Log_error("Given elm_idx=%zd is out of heap scope.", elm_idx);

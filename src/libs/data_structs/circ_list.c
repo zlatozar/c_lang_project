@@ -53,7 +53,7 @@ CircList_is_empty(CircList_T circlist)
 
 /* Every time insert after current first element. First element remains fist. */
 void
-CircList_insert(CircList_T* p_circlist, Generic_T data)
+CircList_insert(CircList_T* p_circlist, Object_T data)
 {
   Require(p_circlist);
 
@@ -73,14 +73,14 @@ CircList_insert(CircList_T* p_circlist, Generic_T data)
 }
 
 void
-CircList_append(CircList_T* p_circlist, Generic_T data)
+CircList_append(CircList_T* p_circlist, Object_T data)
 {
   CircList_insert(p_circlist, data);
   *p_circlist = NEXT(*p_circlist);
 }
 
 bool
-CircList_delete(CircList_T* p_circlist, Generic_T* p_data__)
+CircList_delete(CircList_T* p_circlist, Object_T* p_data__)
 {
   if (CircList_is_empty(*p_circlist)) {
     Log_debug("Can't delete from empty list.");
@@ -94,7 +94,7 @@ CircList_delete(CircList_T* p_circlist, Generic_T* p_data__)
 }
 
 bool
-CircList_traverse(CircList_T circlist, bool (*apply_fn)(Generic_T))
+CircList_traverse(CircList_T circlist, bool (*apply_fn)(Object_T))
 {
   node_t* tmp;
   if (CircList_is_empty(circlist)) {

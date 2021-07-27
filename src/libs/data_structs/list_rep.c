@@ -4,7 +4,7 @@
 
 /* `pp_node` points position where node should be situated. */
 void
-List__allocate_node(node_t** pp_node, Generic_T data)
+List__allocate_node(node_t** pp_node, Object_T data)
 {
   node_t* p_node;
   NEW(p_node);

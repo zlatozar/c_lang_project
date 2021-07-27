@@ -29,12 +29,12 @@ extern bool DoubleList_is_empty(DoubleList_T list);
  * Note that `p_list` could point at any element of the list, not
  * just beginning of the list.
  */
-extern void DoubleList_insert(DoubleList_T* p_list, Generic_T data);
+extern void DoubleList_insert(DoubleList_T* p_list, Object_T data);
 
 /**
  * Append a new node containing data as the last item in list.
  */
-extern void DoubleList_append(DoubleList_T* p_list, Generic_T data);
+extern void DoubleList_append(DoubleList_T* p_list, Object_T data);
 
 /**
  * @brief    Number of double list elements.
@@ -54,13 +54,13 @@ extern doublenode_t* DoubleList_nth(DoubleList_T list, int idx);
  * if given list is empty. Client should take care to free memory of the
  * returned data.
  */
-extern bool DoubleList_delete_head(DoubleList_T* p_list, Generic_T* p_data__);
+extern bool DoubleList_delete_head(DoubleList_T* p_list, Object_T* p_data__);
 
 /**
  * Call `apply_fn` with the DATA field of each node in `List_T`.
  * If `apply_fn` ever returns `false`, this function also returns `false`.
  */
-extern bool DoubleList_traverse(DoubleList_T list, bool (*apply_fn)(Generic_T));
+extern bool DoubleList_traverse(DoubleList_T list, bool (*apply_fn)(Object_T));
 
 /**
  * Extract the range of nodes `p_start` -- `p_end` including from given double

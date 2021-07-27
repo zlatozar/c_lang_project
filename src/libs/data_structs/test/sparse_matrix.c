@@ -10,7 +10,7 @@ matrix_put_int(Matrix_T* p_matrix, int row, int col, int value)
 
    /* No place for zeros in sparse matrix. */
    if (value == 0) {
-     if (Matrix_get(p_matrix, row, col, (Generic_T*) &p_i)) {
+     if (Matrix_get(p_matrix, row, col, (Object_T*) &p_i)) {
        Matrix_clear(p_matrix, row, col);
        FREE(p_i);
      }
@@ -19,14 +19,14 @@ matrix_put_int(Matrix_T* p_matrix, int row, int col, int value)
    p_i = ALLOC(sizeof(*p_i));
    *p_i = value;
 
-   Matrix_put(p_matrix, row, col, (Generic_T) p_i);
+   Matrix_put(p_matrix, row, col, (Object_T) p_i);
 }
 
 static void
 matrix_get_int(Matrix_T* p_matrix, int row, int col, int* p_value__)
 {
    int *p_i;
-   if (!Matrix_get(p_matrix, row, col, (Generic_T*) &p_i))
+   if (!Matrix_get(p_matrix, row, col, (Object_T*) &p_i))
      *p_value__ = 0;
    else
      *p_value__ = *p_i;

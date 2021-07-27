@@ -42,7 +42,7 @@ TEST delete_head(void)
 
   /* Common pattern when work with pointer to pointer. */
   Data_T deleted;
-  List_delete_head(&list, (Generic_T*) &deleted);
+  List_delete_head(&list, (Object_T*) &deleted);
   FREE(deleted);
 
   ASSERT_EQ(2, List_length(list));
@@ -97,7 +97,7 @@ TEST find_key(void)
   /* Contains found node. */
   node_t* match_node;
 
-  ASSERT(List_find_key(list, equal_fn, (Generic_T)key, &match_node));
+  ASSERT(List_find_key(list, equal_fn, (Object_T)key, &match_node));
 
   Data_T match_node_data = (Data_T)DATA(match_node);
   ASSERT(match_node_data->value == 42);

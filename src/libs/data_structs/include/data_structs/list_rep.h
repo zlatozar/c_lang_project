@@ -8,7 +8,7 @@
 #include "lang/extend.h"
 
 struct node {
-  Generic_T datapointer;
+  Object_T datapointer;
   struct node* next;
 };
 
@@ -30,7 +30,7 @@ typedef node_t* CircList_T;
 /* __________________________________________________________________________ */
 /*                                                          Helper functions  */
 
-extern void List__allocate_node(node_t** pp_node, Generic_T data);
+extern void List__allocate_node(node_t** pp_node, Object_T data);
 
 extern void List__free_node(node_t** PP_nod);
 

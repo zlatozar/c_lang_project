@@ -8,7 +8,7 @@
 /*                                                                     Local  */
 
 struct double_node {
-  Generic_T datapointer;
+  Object_T datapointer;
   struct double_node* next;
   struct double_node* prev;
 };
@@ -19,7 +19,7 @@ struct double_node {
 
 /* `pp_node` points position where node should be situated. */
 static void
-__allocate_double_node(doublenode_t** pp_node, Generic_T data)
+__allocate_double_node(doublenode_t** pp_node, Object_T data)
 {
   doublenode_t* p_node;
   NEW(p_node);
@@ -80,7 +80,7 @@ DoubleList_is_empty(DoubleList_T list)
 }
 
 void
-DoubleList_insert(DoubleList_T* p_list, Generic_T data)
+DoubleList_insert(DoubleList_T* p_list, Object_T data)
 {
   Require(p_list);
 
@@ -105,7 +105,7 @@ DoubleList_insert(DoubleList_T* p_list, Generic_T data)
 }
 
 void
-DoubleList_append(DoubleList_T* p_list, Generic_T data)
+DoubleList_append(DoubleList_T* p_list, Object_T data)
 {
   doublenode_t* p_node;
   __allocate_double_node(&p_node, data);
@@ -169,7 +169,7 @@ DoubleList_nth(DoubleList_T list, int idx)
 }
 
 bool
-DoubleList_delete_head(DoubleList_T* p_list, Generic_T* p_data__)
+DoubleList_delete_head(DoubleList_T* p_list, Object_T* p_data__)
 {
   if (DoubleList_is_empty(*p_list)) {
     Log_debug("Can't delete from empty double list.");
@@ -183,7 +183,7 @@ DoubleList_delete_head(DoubleList_T* p_list, Generic_T* p_data__)
 }
 
 bool
-DoubleList_traverse(DoubleList_T list, bool (*apply_fn)(Generic_T))
+DoubleList_traverse(DoubleList_T list, bool (*apply_fn)(Object_T))
 {
   Require(apply_fn);
 

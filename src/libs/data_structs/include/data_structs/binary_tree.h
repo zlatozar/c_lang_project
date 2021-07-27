@@ -25,12 +25,12 @@ extern bool BinTree_is_empty(BinTree_T btree);
 /**
  * Allocate a new node and make that the root of a tree.
  */
-extern void BinTree_make_root(BinTree_T* p_btree, Generic_T data, BinTree_T left, BinTree_T right);
+extern void BinTree_make_root(BinTree_T* p_btree, Object_T data, BinTree_T left, BinTree_T right);
 
 /**
  * Traverse a tree in preorder, postorder, or inorder using DFS.
  */
-extern bool BinTree_traverse(BinTree_T btree, bool (*apply_fn)(Generic_T), order_et order);
+extern bool BinTree_traverse(BinTree_T btree, bool (*apply_fn)(Object_T), order_et order);
 
 /*
  * Delete an entire tree (uses a postorder traversal), calling
