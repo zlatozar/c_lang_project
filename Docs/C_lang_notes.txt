@@ -1201,16 +1201,15 @@
           struct example* ptr = malloc(sizeof example);
           if(!ptr)
             return ptr;
-
           *ptr = example_DEFAULT;
           return ptr;
         }
         struct example* on_heap = example_new();
 %
-[LANG] If the operand of the unary & operator is the result of a [] operator,
-       the result is as if the & operator were removed and the [] operator were
-       changed to a + operator. For example, &str[5] is the same as str + 5.
-       Which means that &str[5] points to array as a whole and in pointer
+[LANG] If the operand of the unary `&` operator is the result of a [] operator,
+       the result is as if the `&` operator were removed and the [] operator were
+       changed to a `+` operator. For example, &str[5] is the same as `str + 5`.
+       Which means that `&str[5]` points to array as a whole and in pointer
        arithmetic this size will be used.
 %
 [LANG] Strict aliasing is an assumption, made by the C (or C++) compiler, that
@@ -1234,7 +1233,7 @@
        they are not explicitly defined and the compiler needs to know their type
        and offset from the beginning of the structure to generate the
        corresponding code. Most probably your data structure is hidden
-       in the .c file.
+       in the `.c` file.
 %
 [LANG] When you know that a pointer A is the only pointer to some region of
        memory, that is, it doesn't have aliases (that is, any other pointer B
@@ -1243,3 +1242,9 @@
 %
 [TIP] Log massages should create a log that is highly informative but also like
       a novel.
+%
+[TIP] If you want your function to be called from higher layer, parameters should be
+      pointers(references).
+%
+[TIP] Instead of `valgrind` you can use sanitizers.
+          gcc -ggdb -o test_exe test.c -fsanitize=address -fno-omit-frame-pointer
