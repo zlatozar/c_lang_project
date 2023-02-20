@@ -11,6 +11,7 @@
 - (video) [Introduction to C](http://ix.cs.uoregon.edu/~norris/cis330books/ThinkingInC/Index.html) <br/>
 - _"The C Programming Language"_ by Kernighan, Ritchie <br/>
 - (video) [Programming Paradigms lectures from Stanford](https://www.youtube.com/watch?v=Ps8jOj7diA0&list=PL5BD86273FEF4DB0B)
+- [Yale C course notes](http://cs.yale.edu/homes/aspnes/classes/223/notes.html#c)
 
 #### Advanced
 - [C advanced tips and tricks](https://blog.joren.ga/less-known-c)

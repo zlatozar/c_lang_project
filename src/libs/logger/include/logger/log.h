@@ -15,25 +15,25 @@
 #define DEBUG_LEVEL    0x04
 
 #if !defined(DEBUG)
-#define LOG_COLOR    0
-#define LOG_LEVEL    ERROR_LEVEL
+#  define LOG_COLOR    0
+#  define LOG_LEVEL    ERROR_LEVEL
 #else
-#define LOG_COLOR    1
-#define LOG_LEVEL    DEBUG_LEVEL
+#  define LOG_COLOR    1
+#  define LOG_LEVEL    DEBUG_LEVEL
 #endif
 
 #if LOG_COLOR
-#define COLOR_BLACK  "\033[0;30m"
-#define COLOR_RED    "\033[0;31m"
-#define COLOR_BLUE   "\033[1;34m"
-#define COLOR_GREEN  "\033[0;32m"
-#define COLOR_RESET  "\033[0m"
+#  define COLOR_BLACK  "\033[0;30m"
+#  define COLOR_RED    "\033[0;31m"
+#  define COLOR_BLUE   "\033[1;34m"
+#  define COLOR_GREEN  "\033[0;32m"
+#  define COLOR_RESET  "\033[0m"
 #else
-#define COLOR_BLACK
-#define COLOR_RED
-#define COLOR_BLUE
-#define COLOR_GREEN
-#define COLOR_RESET
+#  define COLOR_BLACK
+#  define COLOR_RED
+#  define COLOR_BLUE
+#  define COLOR_GREEN
+#  define COLOR_RESET
 #endif
 
 /* Forward declaration */

@@ -28,7 +28,7 @@ Key&nbsp;Binding   | Description
 Key&nbsp;Binding   | Description
 ---------   | --------------
 `M-m w m`   | Toggle many to one windows
-`Alt-1, 2..9 | Jump window
+`Alt-1, 2..9` | Jump window
 
 #### Jumps
 

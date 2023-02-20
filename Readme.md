@@ -17,7 +17,7 @@
 
 Require `autotools` and `libtools`.
 ```text
-$sudo dnf install autoconf automake libtool
+$ sudo dnf install autoconf automake libtool
 ```
 
 ```text

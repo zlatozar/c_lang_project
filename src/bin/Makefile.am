@@ -5,10 +5,10 @@ ACLOCAL_AMFLAGS = -I m4
 bin_PROGRAMS = c-lang-project
 c_lang_project_SOURCES = main.c
 
-c_lang_project_CFLAGS = -I$(top_srcdir)/src/libs/logger/include          \
-												-I$(top_srcdir)/src/libs/lang/include            \
-												-I$(top_builddir)/src/libs/data_structs/include  \
-												-I$(top_builddir)/src/libs/algorithms/include
+c_lang_project_CFLAGS = -I$(top_srcdir)/src/libs/logger/include        \
+												-I$(top_srcdir)/src/libs/lang/include          \
+												-I$(top_srcdir)/src/libs/data_structs/include  \
+												-I$(top_srcdir)/src/libs/algorithms/include
 
 c_lang_project_LDADD = $(top_builddir)/src/libs/lang/liblang.la                 \
 											 $(top_builddir)/src/libs/logger/liblogger.la             \

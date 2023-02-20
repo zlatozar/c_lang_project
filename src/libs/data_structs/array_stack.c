@@ -59,7 +59,7 @@ Stack_push(Stack_T stack, Object_T data)
 
   if (CURRENT_SIZE(stack) == stack->size) {
     Object_T* p_newstack = RESIZE(stack->storage,
-                                   (stack->size + RESIZE_STEP) * sizeof(Object_T*));
+                                  (stack->size + RESIZE_STEP) * sizeof(Object_T*));
 
     stack->storage = p_newstack;
     stack->top = stack->storage + stack->size;

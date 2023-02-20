@@ -536,6 +536,27 @@ Matrix_get(Matrix_T m, int row, int col, void* p_value_) {
   *p_value_ = DATA(rowprev);
 }
 ```
+- Named functions parameters:
+```c
+struct _foo_args {
+    int arg1;
+    const char* arg2;
+    void* arg3;
+};
+
+#define foo(...) _foo((struct _foo_args){__VA_ARGS__})
+int _foo(struct _foo_args args) {
+    /* Use arguments as args.arg1, args.arg2 and args.arg3 */
+    /* Do some other things etc etc */
+    return 0;
+}
+
+int main(void) {
+    int result = foo(.arg2 = "Hello!");   // !!
+    /* In the call above, arg1 is 0 and arg3 is NULL */
+    return result;
+}
+```
 
 ## Variables
 
@@ -1305,3 +1326,11 @@ help with formatting the code based on input configuration.
 
 This repository contains `tools-setup/astylerc` file which can be used to
 setup `AStyle` software.
+
+## Useful libraries
+
+- [libtab](https://github.com/zorgnax/libtap)
+- [mps](https://github.com/orangeduck/mpc)
+- [coroutine](https://github.com/cloudwu/coroutine)
+- [Thread pool](https://github.com/Pithikos/C-Thread-Pool)
+- [AVL implementation](https://github.com/etherealvisage/avl)
