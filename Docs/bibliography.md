@@ -12,6 +12,9 @@
 - _"The C Programming Language"_ by Kernighan, Ritchie <br/>
 - (video) [Programming Paradigms lectures from Stanford](https://www.youtube.com/watch?v=Ps8jOj7diA0&list=PL5BD86273FEF4DB0B)
 
+#### Advanced
+- [C advanced tips and tricks](https://blog.joren.ga/less-known-c)
+
 ### Standard Library Reference
 
 [C Standard Library Headers](https://en.cppreference.com/w/c/header)

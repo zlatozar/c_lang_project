@@ -1248,3 +1248,8 @@
 %
 [TIP] Instead of `valgrind` you can use sanitizers.
           gcc -ggdb -o test_exe test.c -fsanitize=address -fno-omit-frame-pointer
+%
+[LANG]                 int x = 42;         // not 'const'
+                       const int* p = &x   // pointer to 'const int', indirect access to x
+                       x++;                // direct change is still possible
+                       (*p)++              // ERROR: Can't change through const pointer
