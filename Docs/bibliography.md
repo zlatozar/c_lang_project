@@ -20,11 +20,15 @@
 
 [C Standard Library Headers](https://en.cppreference.com/w/c/header)
 
-#### C Philosophy
+### C Philosophy
 - [C exercism](https://exercism.io/tracks/c)
 - _"Reusable Data Structures for C"_ by Robert Sessions <br/>
 - _"Data Structures: An Advanced Approach Using C"_ by Jeffry Esakov <br/>
 - _"C Interfaces and Implementations: Techniques for Creating Reusable Software"_ by David Hanson
+
+### Bitwise operations
+
+- [Demystifying bitwise operations](https://www.andreinc.net/2023/02/01/demystifying-bitwise-ops)
 
 ### Multi-threading
 - (pdf)["An Introduction to Programming with Threads"](https://www.hpl.hp.com/techreports/Compaq-DEC/SRC-RR-35.pdf) by Andrew Birrell <br/>
@@ -55,7 +59,7 @@
 - _"Patterns, Principles, and Practices of Domain-Driven Design"_ by Scott Millett and Nick Tune
 
 ### OS
-- _"Understanding UNIX/LINUX Programming: A Guide to Theory and Practice"_ by Bruce Molay <br/>
+- _"Understanding UNIX\/LINUX Programming: A Guide to Theory and Practice"_ by Bruce Molay <br/>
 - _"Unix System Programming"_ by Keith Haviland
 
 ### OS Advanced Level
