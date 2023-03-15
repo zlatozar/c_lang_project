@@ -2,6 +2,7 @@
 
 SUBDIRS = polymorphic \
 					flex_array  \
-					oop
+					oop         \
+					tiny_c
 
 MAINTAINERCLEANFILES = Makefile.in
