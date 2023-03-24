@@ -82,48 +82,60 @@ next_sym()
 again:
   switch (ch) {
     case ' ':
+
     case '\n':
       next_ch();
       goto again;
+
     case EOF:
       sym = EOI;
       break;
+
     case '{':
       next_ch();
       sym = LBRA;
       break;
+
     case '}':
       next_ch();
       sym = RBRA;
       break;
+
     case '(':
       next_ch();
       sym = LPAR;
       break;
+
     case ')':
       next_ch();
       sym = RPAR;
       break;
+
     case '+':
       next_ch();
       sym = PLUS;
       break;
+
     case '-':
       next_ch();
       sym = MINUS;
       break;
+
     case '<':
       next_ch();
       sym = LESS;
       break;
+
     case ';':
       next_ch();
       sym = SEMI;
       break;
+
     case '=':
       next_ch();
       sym = EQUAL;
       break;
+
     default:
       if (ch >= '0' && ch <= '9') {
         int_val = 0; /* missing overflow check */
@@ -132,21 +144,28 @@ again:
         { int_val = int_val * 10 + (ch - '0'); next_ch(); }
 
         sym = INT;
+
       } else if (ch >= 'a' && ch <= 'z') {
         int i = 0; /* missing overflow check */
+
         while ((ch >= 'a' && ch <= 'z') || ch == '_')
         { id_name[i++] = ch; next_ch(); }
 
         id_name[i] = '\0';
         sym = 0;
+
         while (words[sym] != NULL && strcmp(words[sym], id_name) != 0)
         { sym++; }
 
-        if (words[sym] == NULL)
+        if (words[sym] == NULL) {
           if (id_name[1] == '\0') { sym = ID; }
           else { syntax_error(); }
-      } else
-      { syntax_error(); }
+        }
+
+      } else {
+        // Not a symbol
+        syntax_error();
+      }
   }
 }
 
@@ -159,6 +178,7 @@ enum { VAR, CST, ADD, SUB, LT, SET,
      };
 
 struct node { int kind; struct node* o1, *o2, *o3; int val; };
+
 typedef struct node node;
 
 node*
@@ -203,9 +223,11 @@ expr()  /* <expr> ::= <test> | <id> "=" <expr> */
 {
   node* t, *x;
   if (sym != ID) { return test(); }
+
   x = test();
   if (x->kind == VAR && sym == EQUAL)
   { t = x; x = new_node(SET); next_sym(); x->o1 = t; x->o2 = expr(); }
+
   return x;
 }
 
@@ -238,12 +260,14 @@ statement()
       next_sym();
       x->o3 = statement();
     }
+
   } else if (sym == WHILE_SYM) { /* "while" <paren_expr> <statement> */
     x = new_node(WHILE);
     next_sym();
 
     x->o1 = paren_expr();
     x->o2 = statement();
+
   } else if (sym == DO_SYM) { /* "do" <statement> "while" <paren_expr> ";" */
     x = new_node(DO);
     next_sym();
@@ -257,7 +281,8 @@ statement()
     else { syntax_error(); }
 
   } else if (sym == SEMI) /* ";" */
-  { x = new_node(EMPTY); next_sym(); }
+
+    { x = new_node(EMPTY); next_sym(); }
 
   else if (sym == LBRA) { /* "{" { <statement> } "}" */
     x = new_node(EMPTY);
@@ -270,9 +295,11 @@ statement()
   } else { /* <expr> ";" */
     x = new_node(EXPR);
     x->o1 = expr();
+
     if (sym == SEMI) { next_sym(); }
     else { syntax_error(); }
   }
+
   return x;
 }
 
@@ -283,6 +310,7 @@ program()  /* <program> ::= <statement> */
   next_sym();
   x->o1 = statement();
   if (sym != EOI) { syntax_error(); }
+
   return x;
 }
 
@@ -313,30 +341,36 @@ c(node* x)
       g(IFETCH);
       g(x->val);
       break;
+
     case CST  :
       g(IPUSH);
       g(x->val);
       break;
+
     case ADD  :
       c(x->o1);
       c(x->o2);
       g(IADD);
       break;
+
     case SUB  :
       c(x->o1);
       c(x->o2);
       g(ISUB);
       break;
+
     case LT   :
       c(x->o1);
       c(x->o2);
       g(ILT);
       break;
+
     case SET  :
       c(x->o2);
       g(ISTORE);
       g(x->o1->val);
       break;
+
     case IF1  :
       c(x->o1);
       g(JZ);
@@ -344,6 +378,7 @@ c(node* x)
       c(x->o2);
       fix(p1, here);
       break;
+
     case IF2  :
       c(x->o1);
       g(JZ);
@@ -355,6 +390,7 @@ c(node* x)
       c(x->o3);
       fix(p2, here);
       break;
+
     case WHILE:
       p1 = here;
       c(x->o1);
@@ -365,6 +401,7 @@ c(node* x)
       fix(hole(), p1);
       fix(p2, here);
       break;
+
     case DO   :
       p1 = here;
       c(x->o1);
@@ -372,16 +409,20 @@ c(node* x)
       g(JNZ);
       fix(hole(), p1);
       break;
+
     case EMPTY:
       break;
+
     case SEQ  :
       c(x->o1);
       c(x->o2);
       break;
+
     case EXPR :
       c(x->o1);
       g(IPOP);
       break;
+
     case PROG :
       c(x->o1);
       g(HALT);
@@ -406,34 +447,43 @@ run()
     case IFETCH:
       *sp++ = globals[*pc++];
       goto again;
+
     case ISTORE:
       globals[*pc++] = sp[-1];
       goto again;
+
     case IPUSH :
       *sp++ = *pc++;
       goto again;
+
     case IPOP  :
       --sp;
       goto again;
+
     case IADD  :
       sp[-2] = sp[-2] + sp[-1];
       --sp;
       goto again;
+
     case ISUB  :
       sp[-2] = sp[-2] - sp[-1];
       --sp;
       goto again;
+
     case ILT   :
       sp[-2] = sp[-2] < sp[-1];
       --sp;
       goto again;
+
     case JMP   :
       pc += *pc;
       goto again;
+
     case JZ    :
       if (*--sp == 0) { pc += *pc; }
       else { pc++; }
       goto again;
+
     case JNZ   :
       if (*--sp != 0) { pc += *pc; }
       else { pc++; }
@@ -454,7 +504,9 @@ main()
 
   for (i = 0; i < 26; i++)
   { globals[i] = 0; }
+
   run();
+
   for (i = 0; i < 26; i++)
     if (globals[i] != 0)
     { printf("%c = %d\n", 'a' + i, globals[i]); }

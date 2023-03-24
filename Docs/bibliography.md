@@ -39,6 +39,7 @@
 - _"Professional CMake: A Practical Guid"_ by Craig Scott <br/>
   NOTE: `CMake` could generate [Ninja](https://ninja-build.org/) build files. <br/>
 - (videos)[CMake good practices](https://www.youtube.com/playlist?list=PLJfcKimCUDGs7-BRhDsbyXa-4PeAUpbgF) <br/>
+- [NixOS setup](https://github.com/nixvital/nix-based-cpp-starterkit)
 
 ### Compiling
 - _"Advanced C and C++ Compiling"_ by Milan Stevanovic
@@ -57,6 +58,9 @@
          introduce dependency injection using substitution of the dependent functions.<br/>
          See [following series of articles](https://fsharpforfunandprofit.com/posts/dependencies)
 - _"Patterns, Principles, and Practices of Domain-Driven Design"_ by Scott Millett and Nick Tune
+
+### Assembler
+- [Beginners](https://cs.lmu.edu/~ray/notes/nasmtutorial/)
 
 ### OS
 - _"Understanding UNIX\/LINUX Programming: A Guide to Theory and Practice"_ by Bruce Molay <br/>
