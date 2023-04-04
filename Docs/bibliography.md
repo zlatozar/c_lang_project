@@ -39,7 +39,7 @@
 - _"Professional CMake: A Practical Guid"_ by Craig Scott <br/>
   NOTE: `CMake` could generate [Ninja](https://ninja-build.org/) build files. <br/>
 - (videos)[CMake good practices](https://www.youtube.com/playlist?list=PLJfcKimCUDGs7-BRhDsbyXa-4PeAUpbgF) <br/>
-- [NixOS setup](https://github.com/nixvital/nix-based-cpp-starterkit)
+- [Guix setup](https://guix.gnu.org/en/blog/2020/reproducible-computations-with-guix/)
 
 ### Compiling
 - _"Advanced C and C++ Compiling"_ by Milan Stevanovic
