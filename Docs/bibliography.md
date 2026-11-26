@@ -41,7 +41,7 @@
 - (videos)[CMake good practices](https://www.youtube.com/playlist?list=PLJfcKimCUDGs7-BRhDsbyXa-4PeAUpbgF) <br/>
 - [Guix setup](https://guix.gnu.org/en/blog/2020/reproducible-computations-with-guix/)
 
-### Compiling
+### Compiling techniques
 - _"Advanced C and C++ Compiling"_ by Milan Stevanovic
 
 ### Shell
@@ -60,7 +60,7 @@
 - _"Patterns, Principles, and Practices of Domain-Driven Design"_ by Scott Millett and Nick Tune
 
 ### Assembler
-- [Beginners](https://cs.lmu.edu/~ray/notes/nasmtutorial/)
+- _"Learn to Program with Assembly: Foundational Learning for New Programmers"_ by Jonathan Bartlett
 
 ### OS
 - _"Understanding UNIX\/LINUX Programming: A Guide to Theory and Practice"_ by Bruce Molay <br/>
